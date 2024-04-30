@@ -1,95 +1,79 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
+      <div className={styles.header}>
+        <h1>Architektoniczna Rewolta 🇵🇱</h1>
+      </div>
+      <div className={styles.content}>
+        <div className={styles.grid}>
           <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            href="https://www.facebook.com/groups/691257419756556/"
+            className={styles.card}
             target="_blank"
-            rel="noopener noreferrer"
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
+            <h2>Dołącz do nas <span>-&gt;</span></h2>
+            <p>Aktywna grupa na Facebooku.</p>
           </a>
+
+          <a
+            href="https://www.architecturaluprising.com/"
+            className={styles.card}
+            target="_blank"
+          >
+            <h2>Więcej o rewolcie<span>-&gt;</span></h2>
+            <p>🇬🇧 Gdzie wszystko się zaczęło!</p>
+          </a>
+
         </div>
+
+        <div className={styles.center}>
+          <div className={styles.map}>
+              <div className={styles.emblems}>
+                <a href="#">
+                  <Image
+                    src="/emblem/wro.png"
+                    alt="Wrocław"
+                    id="emblemWro"
+                    className={styles.emblem}
+                    width={78}
+                    height={78}
+                  />
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61556982112973" target="_blank">
+                  <Image
+                    src="/emblem/stettin.png"
+                    alt="Szczecin"
+                    id="emblemStettin"
+                    className={styles.emblem}
+                    width={78}
+                    height={78}
+                  />
+                </a>
+                <a href="https://www.facebook.com/groups/691257419756556" target="_blank">
+                  <Image
+                    src="/emblem/polska.png"
+                    alt="Polska"
+                    id="emblemPolska"
+                    className={styles.emblem}
+                    width={112}
+                    height={112}
+                  />
+                </a>
+              </div>
+              <Image
+                src="/polska.svg"
+                alt="Polska"
+                className={styles.polandMap}
+                width={640}
+                height={640}
+              />
+            </div>
+        </div>
+
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      
     </main>
   );
 }

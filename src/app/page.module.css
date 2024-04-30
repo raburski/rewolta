@@ -1,49 +1,71 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 6rem;
+  padding: 2rem;
   min-height: 100vh;
 }
 
-.description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
+.header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+
+  padding: 1em;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-.description a {
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-self: center;
+  max-width: 1200px;
+}
+
+.center {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.description p {
   position: relative;
-  margin: 0;
-  padding: 1rem;
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  border-radius: var(--border-radius);
+  min-height: 200px;
 }
 
-.code {
-  font-weight: 700;
-  font-family: var(--font-mono);
+.map {
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  margin-right: 50px;
+}
+
+.emblems {
+  position: relative;
+  left: 50%;
+  top: 50%;
+}
+
+.emblem {
+  position: absolute;
+  transition: all .2s ease-in-out;
+  transform: scale(0.8);
+  cursor: pointer;
+}
+
+.emblem:hover {
+  transform: scale(1.1);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
-  max-width: 100%;
-  width: var(--max-width);
+  margin-bottom: 44px;
+  width: 300px;
+  margin-right: 44px;
 }
 
 .card {
@@ -52,6 +74,7 @@
   background: rgba(var(--card-rgb), 0);
   border: 1px solid rgba(var(--card-border-rgb), 0);
   transition: background 200ms, border 200ms;
+  margin-bottom: 12px;
 }
 
 .card span {
@@ -61,7 +84,7 @@
 
 .card h2 {
   font-weight: 600;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
 }
 
 .card p {
@@ -73,41 +96,6 @@
   text-wrap: balance;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  padding: 4rem 0;
-}
-
-.center::before {
-  background: var(--secondary-glow);
-  border-radius: 50%;
-  width: 480px;
-  height: 360px;
-  margin-left: -400px;
-}
-
-.center::after {
-  background: var(--primary-glow);
-  width: 240px;
-  height: 180px;
-  z-index: -1;
-}
-
-.center::before,
-.center::after {
-  content: "";
-  left: 50%;
-  position: absolute;
-  filter: blur(45px);
-  transform: translateZ(0);
-}
-
-.logo {
-  position: relative;
-}
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
