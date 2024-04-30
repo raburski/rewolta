@@ -4,7 +4,10 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.header}>
-        <h1>Architektoniczna Rewolta 🇵🇱</h1>
+        <div className={styles.headerContent}>
+          <h1>Architektoniczna Rewolta</h1>
+          <span>Pospolite ruszenie przeciwko dalszemu oszpecaniu naszych miast</span>
+        </div>
       </div>
       <div className={styles.content}>
         <div className={styles.grid}>
@@ -14,7 +17,16 @@ export default function Home() {
             target="_blank"
           >
             <h2>Dołącz do nas <span>-&gt;</span></h2>
-            <p>Aktywna grupa na Facebooku.</p>
+            <p>🇵🇱&nbsp;&nbsp;Aktywna grupa na facebooku.</p>
+          </a>
+
+          <a
+            href="https://www.facebook.com/groups/ArchitecturalUprising"
+            className={styles.card}
+            target="_blank"
+          >
+            <h2>Za granicą <span>-&gt;</span></h2>
+            <p>🌐&nbsp;&nbsp;Międzynarodowa grupa na fb.</p>
           </a>
 
           <a
@@ -22,8 +34,8 @@ export default function Home() {
             className={styles.card}
             target="_blank"
           >
-            <h2>Więcej o rewolcie<span>-&gt;</span></h2>
-            <p>🇬🇧 Gdzie wszystko się zaczęło!</p>
+            <h2>Więcej o rewolcie <span>-&gt;</span></h2>
+            <p>🇬🇧&nbsp;&nbsp;Gdzie wszystko się zaczęło!</p>
           </a>
 
         </div>
