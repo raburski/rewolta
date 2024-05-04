@@ -6,6 +6,7 @@
   align-items: center;
   overflow: hidden;
   min-height: 100vh;
+  padding-top: 80px;
 }
 
 .header {
@@ -34,6 +35,7 @@
 .headerContent > span {
   padding-top: 4px;
   font-size: 14px;
+  opacity: 0.6;
 }
 
 .content {
@@ -69,12 +71,12 @@
 .emblem {
   position: absolute;
   transition: all .2s ease-in-out;
-  transform: scale(0.8);
+  transform: scale(1);
   cursor: pointer;
 }
 
 .emblem:hover {
-  transform: scale(1);
+  transform: scale(1.2);
 }
 
 .grid {
