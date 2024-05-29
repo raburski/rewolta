@@ -43,16 +43,16 @@ export default function Home() {
         <div className={styles.center}>
           <div className={styles.map}>
               <div className={styles.emblems}>
-                {/* <a href="#">
+                <a href="#">
                   <Image
-                    src="/emblem/vectr.svg"
+                    src="/emblem/wro6.png"
                     alt="Wrocław"
                     id="emblemWro"
                     className={styles.emblem}
                     width={78}
                     height={78}
                   />
-                </a> */}
+                </a>
                 <a href="https://www.facebook.com/profile.php?id=61556982112973" target="_blank">
                   <Image
                     src="/emblem/stettin.png"
