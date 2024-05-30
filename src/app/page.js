@@ -43,7 +43,7 @@ export default function Home() {
         <div className={styles.center}>
           <div className={styles.map}>
               <div className={styles.emblems}>
-                <a href="#">
+                <a href="https://www.facebook.com/profile.php?id=61559270555090" target="_blank">
                   <Image
                     src="/emblem/wro6.png"
                     alt="Wrocław"
