@@ -11,33 +11,25 @@ export default function Home() {
       </div>
       <div className={styles.content}>
         <div className={styles.grid}>
-          <a
-            href="https://www.facebook.com/groups/691257419756556/"
-            className={styles.card}
-            target="_blank"
-          >
+          <a href="https://www.facebook.com/groups/691257419756556/" className={styles.card} target="_blank">
             <h2>Dołącz do nas <span>-&gt;</span></h2>
             <p>🇵🇱&nbsp;&nbsp;Aktywna grupa na facebooku.</p>
           </a>
 
-          <a
-            href="https://www.facebook.com/groups/ArchitecturalUprising"
-            className={styles.card}
-            target="_blank"
-          >
+          <a href="https://www.facebook.com/groups/ArchitecturalUprising" className={styles.card} target="_blank">
             <h2>Za granicą <span>-&gt;</span></h2>
             <p>🌐&nbsp;&nbsp;Międzynarodowa grupa na fb.</p>
           </a>
 
-          <a
-            href="https://www.architecturaluprising.com/"
-            className={styles.card}
-            target="_blank"
-          >
+          <a href="https://www.architecturaluprising.com/" className={styles.card} target="_blank">
             <h2>Więcej o rewolcie <span>-&gt;</span></h2>
             <p>🇬🇧&nbsp;&nbsp;Gdzie wszystko się zaczęło!</p>
           </a>
 
+          <a href="https://mapa.rewolta.org/" className={styles.card} target="_blank">
+            <h2>Mapa świata <span>-&gt;</span></h2>
+            <p>🌍&nbsp;&nbsp;Wszystkie lokalne rewolty</p>
+          </a>
         </div>
 
         <div className={styles.center}>
