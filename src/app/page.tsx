@@ -1,5 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className={styles.main}>
@@ -30,6 +32,11 @@ export default function Home() {
             <h2>Mapa świata <span>-&gt;</span></h2>
             <p>🌍&nbsp;&nbsp;Wszystkie lokalne rewolty</p>
           </a>
+
+          <Link href="/meme" className={styles.card}>
+            <h2>Memy <span>-&gt;</span></h2>
+            <p>🎨&nbsp;&nbsp;Stwórz rewoltowego mema</p>
+          </Link>
         </div>
 
         <div className={styles.center}>
@@ -75,9 +82,7 @@ export default function Home() {
               />
             </div>
         </div>
-
       </div>
-      
     </main>
   );
 }

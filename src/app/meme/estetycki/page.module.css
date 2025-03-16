@@ -1,0 +1,28 @@
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 1rem;
+}
+
+.text {
+	font-size: 1rem;
+	margin-bottom: 2rem;
+}
+
+.generatorWrapper {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+    margin-bottom: 64px;
+} 
