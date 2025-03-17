@@ -5,7 +5,7 @@ import styles from "./page.module.css"
 import MemeGenerator from "../../components/MemeGenerator/MemeGenerator"
 
 const MARGINS = {
-	bottom: 40,
+	bottom: 32,
 	left: 10,
 	right: 10,
 }

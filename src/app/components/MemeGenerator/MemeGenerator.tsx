@@ -74,12 +74,16 @@ const MemeGenerator: FC<MemeGeneratorProps> = ({
 		const ctx = canvas.getContext('2d')
 		if (!ctx) return
 
-		const CANVAS_WIDTH = 500
-		const CANVAS_HEIGHT = 500
+		const CANVAS_WIDTH = 1080
+		const CANVAS_HEIGHT = 1080
 		const SECTION_HEIGHT = CANVAS_HEIGHT / 2
 
 		canvas.width = CANVAS_WIDTH
 		canvas.height = CANVAS_HEIGHT
+
+		// Set canvas background to white
+		ctx.fillStyle = 'white'
+		ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 
 		// Load all images first
 		const loadImage = (src: string): Promise<HTMLImageElement> => {
@@ -160,7 +164,7 @@ const MemeGenerator: FC<MemeGeneratorProps> = ({
 
 			// Convert to blob and download
 			const blob = await new Promise<Blob>((resolve) => 
-				canvas.toBlob((blob) => resolve(blob as Blob), 'image/png')
+				canvas.toBlob((blob) => resolve(blob as Blob), 'image/png', 1.0)
 			)
 			
 			const url = URL.createObjectURL(blob)
@@ -257,7 +261,7 @@ const MemeGenerator: FC<MemeGeneratorProps> = ({
 				onClick={downloadMeme}
 				disabled={!canDownload}
 			>
-				Download
+				Pobierz
 			</button>
 		</div>
 	)

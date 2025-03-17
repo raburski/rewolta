@@ -10,7 +10,7 @@
 .section {
 	flex: 1;
 	position: relative;
-	background-color: #f5f5f5;
+	background-color: white;
 	display: flex;
 	align-items: center;
 	justify-content: center;
