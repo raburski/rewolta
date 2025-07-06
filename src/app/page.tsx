@@ -28,7 +28,7 @@ export default function Home() {
             <p>🇬🇧&nbsp;&nbsp;Gdzie wszystko się zaczęło!</p>
           </a>
 
-          <a href="https://mapa.rewolta.org/" className={styles.card} target="_blank">
+          <a href="https://uprisingmap.com/" className={styles.card} target="_blank">
             <h2>Mapa świata <span>-&gt;</span></h2>
             <p>🌍&nbsp;&nbsp;Wszystkie lokalne rewolty</p>
           </a>
