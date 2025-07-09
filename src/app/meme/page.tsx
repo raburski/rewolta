@@ -3,6 +3,7 @@
 import { useState } from "react"
 import styles from "./page.module.css"
 import MemeGenerator from "../components/MemeGenerator/MemeGenerator"
+import Header from "@/app/components/Header/Header"
 
 const MARGINS = {
 	bottom: 32,
@@ -24,12 +25,10 @@ export default function MemePage() {
 
 	return (
 		<main className={styles.main}>
-			<div className={styles.header}>
-				<div className={styles.headerContent}>
-					<h1>Generator Memów</h1>
-					<span>Stwórz własnego rewoltowego mema</span>
-				</div>
-			</div>
+			<Header 
+				title="Generator Memów"
+				subtitle="Stwórz własnego rewoltowego mema"
+			/>
 			<div className={styles.content}>
 				<div className={styles.grid}>
 					{MENU_ITEMS.map(item => (

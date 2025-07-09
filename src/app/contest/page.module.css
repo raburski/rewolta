@@ -1,0 +1,151 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background: rgb(var(--background-start-rgb));
+}
+
+
+
+
+
+.content {
+	flex: 1;
+	padding: 2rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.section {
+	margin-bottom: 3rem;
+}
+
+.section h2 {
+	color: rgb(var(--foreground-rgb));
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+}
+
+.contestGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+	gap: 1rem;
+}
+
+.contestCard {
+	padding: 1rem 1.2rem;
+	border-radius: var(--border-radius);
+	background: white;
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	transition: background 200ms, border 200ms;
+	text-decoration: none;
+	color: inherit;
+}
+
+.contestCard:hover {
+	background: white;
+	border: 1px solid rgba(var(--card-border-rgb), 0.5);
+	background-color: rgb(250, 250, 250);
+}
+
+.contestHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 0.5rem;
+}
+
+.contestHeader h3 {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	flex: 1;
+}
+
+.contestCard p {
+	margin: 0 0 0.5rem 0;
+	opacity: 0.6;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	max-width: 30ch;
+	text-wrap: balance;
+}
+
+.contestMeta {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.8rem;
+	opacity: 0.6;
+}
+
+.statusActive {
+	background: #10b981;
+	color: white;
+	padding: 0.2rem 0.6rem;
+	border-radius: 12px;
+	font-size: 0.7rem;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.statusUpcoming {
+	background: #f59e0b;
+	color: white;
+	padding: 0.2rem 0.6rem;
+	border-radius: 12px;
+	font-size: 0.7rem;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.statusPast {
+	background: #6b7280;
+	color: white;
+	padding: 0.2rem 0.6rem;
+	border-radius: 12px;
+	font-size: 0.7rem;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.emptyState {
+	text-align: center;
+	color: rgb(var(--foreground-rgb));
+	padding: 3rem;
+	opacity: 0.6;
+}
+
+.emptyState h2 {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.emptyState p {
+	font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+	.content {
+		padding: 1rem;
+	}
+
+	.contestGrid {
+		grid-template-columns: 1fr;
+		max-width: 320px;
+		margin: 0 auto;
+	}
+
+	.contestCard {
+		padding: 1rem 2.5rem;
+	}
+
+	.contestHeader {
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: flex-start;
+	}
+} 
