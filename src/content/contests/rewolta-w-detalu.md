@@ -7,6 +7,7 @@ status: "active"
 email: "wroclaw@rewolta.org"
 emailSubject: "Konkurs: Rewolta w detalu"
 image: "/assets/rewolta-w-detalu.png"
+facebookPost: ""
 ---
 
 Nie wszystko w architekturze musi być gładką ścianą i plastikowym oknem. Szukamy detali, które wciąż przypominają, że miasto może być piękne - wystarczy dobrze się rozejrzeć.
@@ -17,7 +18,7 @@ Nie wszystko w architekturze musi być gładką ścianą i plastikowym oknem. Sz
 2. Dodaj **krótki opis** (max 2 zdania): co przedstawia, dlaczego Cię porusza
 3. Dodaj **lokalizację budynku** ze zdjęcia
 4. Napisz, **jak chcesz być podpisany jako autor/ka** (imię, pseudonim lub anonimowo)  
-4. Prześlij pracę na nasz adres email: **[wroclaw@rewolta.org](mailto:wroclaw@rewolta.org?subject=Konkurs)** lub oznacz nas **@ArchitektonicznaRewoltaWroclaw** pod twoim postem ze zdjęciem na Facebooku
+5. Prześlij pracę na nasz adres email: **[wroclaw@rewolta.org](mailto:wroclaw@rewolta.org?subject=Konkurs)** lub oznacz nas **@ArchitektonicznaRewoltaWroclaw** pod twoim postem ze zdjęciem na Facebooku
 
 ## Termin
 
@@ -32,8 +33,8 @@ Nie wszystko w architekturze musi być gładką ścianą i plastikowym oknem. Sz
 
 ## Wybór zwycięzcy
 
-W pierwszym etapie jury Architektonicznej Rewolty wybierze min 3 najlepsze zgłoszenia.
-W drugim etapie zwycięzcę wyłoni głosowanie społeczności na naszym profilu Facebookowym trwające 3 dni.
+W pierwszym etapie jury Architektonicznej Rewolty wybierze min 3 najlepsze zgłoszenia spośród prac nadesłanych mailem i opublikowanych na Facebooku.  
+W drugim etapie zwycięzcę wyłoni głosowanie społeczności na naszym profilu Facebookowym (trwające 3 dni).
 
 ## Dlaczego warto?
 
@@ -46,10 +47,12 @@ Bo **architektura zaczyna się od uważności**. I to detale - nie slogany - pok
 3. Zgłoszenie pracy oznacza, że uczestnik:
    - jest autorem przesłanego zdjęcia,
    - posiada pełne prawa autorskie do fotografii,
-   - wyraża zgodę na nieodpłatne wykorzystanie zdjęcia przez organizatora w celach promocyjnych, edukacyjnych i dokumentacyjnych, m.in. w mediach społecznościowych,
+   – wyraża zgodę na nieodpłatne wykorzystanie zdjęcia przez organizatora w celach promocyjnych, edukacyjnych i dokumentacyjnych, m.in. w mediach społecznościowych, stronie internetowej i materiałach drukowanych, bez ograniczeń czasowych i terytorialnych,
    - wyraża zgodę na przetwarzanie swoich danych osobowych.
 4. Uczestnik zachowuje pełne prawa autorskie do swojej pracy, a organizator zobowiązuje się każdorazowo oznaczać autora w przypadku publikacji.
 6. Termin nadsyłania prac upływa 8 sierpnia 2025 roku o godz. 23:59.
 7. Wyniki konkursu zostaną ogłoszone po zakończeniu głosowania w mediach społecznościowych.
 8. Organizator zastrzega sobie prawo do: przerwania Konkursu, zmiany regulaminu Konkursu lub unieważnienia Konkursu bez podania przyczyn.
-9. Odbiór nagrody jedynie osobisty w miejscu (na terenie Wrocławia) i czasie ustalonym ze zwycięzcą.
+9. Odbiór nagrody możliwy jest wyłącznie osobiście, w miejscu i czasie ustalonym indywidualnie ze zwycięzcą na terenie Wrocławia.
+10.	Dane osobowe uczestników będą przetwarzane wyłącznie w celu organizacji i promocji konkursu zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 (RODO). Administratorem danych jest Architektoniczna Rewolta Wrocław. Dane nie będą przekazywane osobom trzecim.
+11.	Uczestnikiem konkursu może być każda osoba powyżej 16. roku życia.
