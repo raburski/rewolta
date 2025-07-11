@@ -7,15 +7,17 @@ status: "active"
 email: "wroclaw@rewolta.org"
 emailSubject: "Konkurs: Rewolta w detalu"
 image: "/assets/rewolta-w-detalu.png"
-facebookPost: ""
+facebookPost: "https://www.facebook.com/ArchitektonicznaRewoltaWroclaw/posts/pfbid02mgiJBSfLkywk4nfesq6ZG4jm4XKErFCKrfSKKaSkJSYRz9M98B3L9TVPJq754251l"
 ---
 
-Nie wszystko w architekturze musi być gładką ścianą i plastikowym oknem. Szukamy detali, które wciąż przypominają, że miasto może być piękne - wystarczy dobrze się rozejrzeć.
+Zapraszamy Was do udziału w konkursie fotograficznym, w którym szukamy architektonicznych detali Wrocławia - tych pięknych, tych zapomnianych i tych, które zasługują na więcej uwagi.
+
+Szukamy tego, co wciąż przypomina, że miasto może być piękne - wystarczy dobrze się rozejrzeć. Pokaż fragment, który przykuł Twoją uwagę. Może coś małego, niepozornego, ale z wrocławskim klimatem. Poszukujemy lokalnego charakteru!
 
 ## Co trzeba zrobić?
 
 1. Zrób zdjęcie **detalu architektonicznego** z Wrocławia  
-2. Dodaj **krótki opis** (max 2 zdania): co przedstawia, dlaczego Cię porusza
+2. Dodaj **krótki opis** (max 2 zdania): co przedstawia, co Ci się w nim podoba
 3. Dodaj **lokalizację budynku** ze zdjęcia
 4. Napisz, **jak chcesz być podpisany jako autor/ka** (imię, pseudonim lub anonimowo)  
 5. Prześlij pracę na nasz adres email: **[wroclaw@rewolta.org](mailto:wroclaw@rewolta.org?subject=Konkurs)** lub oznacz nas **@ArchitektonicznaRewoltaWroclaw** pod twoim postem ze zdjęciem na Facebooku
