@@ -152,5 +152,29 @@
 	padding: 2rem;
 	border-top: 1px solid #e5e7eb;
 	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	align-items: center;
+}
+
+.secondaryButton {
+	display: inline-flex;
 	justify-content: center;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #374151;
+	background: white;
+	transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+	background: #f9fafb;
+	border-color: #9ca3af;
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 } 

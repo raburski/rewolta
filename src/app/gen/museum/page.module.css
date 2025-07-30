@@ -6,9 +6,11 @@
 
 .content {
 	flex: 1;
-	padding: 2rem 1rem;
-	max-width: 800px;
-	margin: 0 auto;
+	padding: 0.5rem 1rem;
+	width: 100%;
+}
+
+.generatorContainer {
 	width: 100%;
 }
 
@@ -16,21 +18,27 @@
 	display: inline-flex;
 	align-items: center;
 	padding: 0.5rem 1rem;
-	border: 1px solid #d1d5db;
+	border: 1px solid rgb(var(--card-border-rgb));
 	border-radius: 6px;
 	text-decoration: none;
 	font-size: 0.875rem;
 	font-weight: 500;
-	color: #374151;
-	background: white;
+	color: rgb(var(--foreground-rgb));
+	background: rgb(var(--card-rgb));
 	transition: all 0.2s;
 }
 
 .profileLink:hover {
-	background: #f9fafb;
-	border-color: #9ca3af;
+	background: rgb(var(--callout-rgb));
+	border-color: rgb(var(--callout-border-rgb));
 	transform: translateY(-1px);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+	.profileLink:hover {
+		box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+	}
 }
 
 .profileIcon {
@@ -40,17 +48,23 @@
 }
 
 .contentCard {
-	background: white;
+	background: rgb(var(--card-rgb));
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+	.contentCard {
+		box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+	}
 }
 
 .userWelcome {
 	display: flex;
 	align-items: center;
 	padding: 1.5rem;
-	border-bottom: 1px solid #e5e7eb;
+	border-bottom: 1px solid rgb(var(--callout-border-rgb));
 	gap: 1rem;
 }
 
@@ -66,13 +80,13 @@
 
 .welcomeText {
 	font-size: 1.125rem;
-	color: #111827;
+	color: rgb(var(--foreground-rgb));
 	margin: 0 0 0.25rem 0;
 }
 
 .userEmail {
 	font-size: 0.875rem;
-	color: #6b7280;
+	color: rgb(var(--callout-border-rgb));
 	margin: 0;
 }
 
@@ -82,7 +96,7 @@
 
 .contentBody p {
 	margin: 0 0 1rem 0;
-	color: #374151;
+	color: rgb(var(--foreground-rgb));
 	line-height: 1.6;
 }
 
@@ -93,24 +107,24 @@
 .sessionInfo {
 	margin-top: 1.5rem;
 	padding: 1rem;
-	background: #f9fafb;
+	background: rgb(var(--callout-rgb));
 	border-radius: 6px;
 }
 
 .sessionTitle {
 	font-size: 1rem;
 	font-weight: 600;
-	color: #111827;
+	color: rgb(var(--foreground-rgb));
 	margin: 0 0 0.75rem 0;
 }
 
 .sessionData {
 	font-size: 0.875rem;
-	background: #f3f4f6;
+	background: rgb(var(--tile-start-rgb));
 	padding: 0.75rem;
 	border-radius: 4px;
 	overflow: auto;
 	margin: 0;
 	white-space: pre-wrap;
-	color: #374151;
+	color: rgb(var(--foreground-rgb));
 } 
