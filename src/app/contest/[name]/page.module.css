@@ -82,76 +82,7 @@
 }
 
 .articleContent {
-	color: rgb(var(--foreground-rgb));
-	line-height: 1.7;
-}
-
-.articleContent img {
-	display: flex;
-	flex: 1;
-	max-width: 612px;
-}
-
-.articleContent h2 {
-	font-size: 1.5rem;
-	font-weight: 600;
-	color: rgb(var(--foreground-rgb));
-	margin: 2rem 0 1rem 0;
-}
-
-.articleContent h3 {
-	font-size: 1.2rem;
-	font-weight: 600;
-	color: rgb(var(--foreground-rgb));
-	margin: 1.5rem 0 0.75rem 0;
-}
-
-.articleContent p {
-	margin: 0 0 1rem 0;
-	opacity: 0.8;
-}
-
-.articleContent ul,
-.articleContent ol {
-	margin: 1rem 0;
-	padding-left: 1.5rem;
-	opacity: 0.8;
-}
-
-.articleContent li {
-	margin: 0.5rem 0;
-}
-
-.articleContent blockquote {
-	border-left: 4px solid rgba(var(--card-border-rgb), 0.3);
-	padding-left: 1rem;
-	margin: 1.5rem 0;
-	font-style: italic;
-	opacity: 0.6;
-}
-
-.articleContent code {
-	background: rgba(var(--card-rgb), 0.1);
-	padding: 0.2rem 0.4rem;
-	border-radius: 4px;
-	font-family: var(--font-mono);
-	font-size: 0.9em;
-}
-
-.articleContent pre {
-	background: rgba(var(--card-rgb), 0.1);
-	color: rgb(var(--foreground-rgb));
-	padding: 1rem;
-	border-radius: var(--border-radius);
-	overflow-x: auto;
-	margin: 1rem 0;
-	border: 1px solid rgba(var(--card-border-rgb), 0.15);
-}
-
-.articleContent pre code {
-	background: none;
-	padding: 0;
-	color: inherit;
+	/* Styles are now handled by MarkdownContent component */
 }
 
 .sidebar {

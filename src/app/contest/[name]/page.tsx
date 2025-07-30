@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getContestData, getContestContent, getAllContestIds } from '@/lib/markdown'
 import Header from '@/app/components/Header/Header'
 import Footer from '@/app/components/Footer/Footer'
+import MarkdownContent from '@/app/components/MarkdownContent/MarkdownContent'
 import styles from './page.module.css'
 
 export async function generateStaticParams() {
@@ -19,9 +20,9 @@ export default async function ContestDetailPage({ params }: { params: { name: st
 
 			<div className={styles.content}>
 				<article className={styles.article}>
-					<div 
+					<MarkdownContent 
+						content={content}
 						className={styles.articleContent}
-						dangerouslySetInnerHTML={{ __html: content }}
 					/>
 				</article>
 

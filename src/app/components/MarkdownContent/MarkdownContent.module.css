@@ -1,0 +1,86 @@
+.markdownContent {
+	color: rgb(var(--foreground-rgb));
+	line-height: 1.7;
+}
+
+.markdownContent img {
+	display: flex;
+	flex: 1;
+	max-width: 612px;
+}
+
+.markdownContent h2 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 2rem 0 1rem 0;
+}
+
+.markdownContent h3 {
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 1.5rem 0 0.75rem 0;
+}
+
+.markdownContent p {
+	margin: 0 0 1rem 0;
+	opacity: 0.8;
+}
+
+.markdownContent ul,
+.markdownContent ol {
+	margin: 1rem 0;
+	padding-left: 1.5rem;
+	opacity: 0.8;
+}
+
+.markdownContent li {
+	margin: 0.5rem 0;
+}
+
+.markdownContent blockquote {
+	border-left: 4px solid rgba(var(--card-border-rgb), 0.3);
+	padding-left: 1rem;
+	margin: 1.5rem 0;
+	font-style: italic;
+	opacity: 0.6;
+}
+
+.markdownContent code {
+	background: rgba(var(--card-rgb), 0.1);
+	padding: 0.2rem 0.4rem;
+	border-radius: 4px;
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+}
+
+.markdownContent pre {
+	background: rgba(var(--card-rgb), 0.1);
+	color: rgb(var(--foreground-rgb));
+	padding: 1rem;
+	border-radius: var(--border-radius);
+	overflow-x: auto;
+	margin: 1rem 0;
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+}
+
+.markdownContent pre code {
+	background: none;
+	padding: 0;
+	color: inherit;
+}
+
+.markdownContent strong {
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+}
+
+.markdownContent a {
+	color: #3b82f6;
+	text-decoration: none;
+}
+
+.markdownContent a:hover {
+	text-decoration: underline;
+} 
