@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
-import SignInButton from './SignInButton'
+import SignInButtons from './SignInButtons'
 
 export default async function SignInPage() {
 	const session = await getServerSession(authOptions)
@@ -18,11 +18,11 @@ export default async function SignInPage() {
 						Sign in to your account
 					</h2>
 					<p className="mt-2 text-center text-sm text-gray-600">
-						Access protected content by signing in with Facebook
+						Access protected content by signing in with your preferred provider
 					</p>
 				</div>
-				<div className="mt-8 space-y-6">
-					<SignInButton />
+				<div className="mt-8 space-y-4">
+					<SignInButtons />
 				</div>
 			</div>
 		</div>

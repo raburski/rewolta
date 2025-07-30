@@ -1,6 +1,9 @@
 import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
 import { authOptions } from '@/lib/auth'
+import Header from '@/app/components/Header/Header'
+import Footer from '@/app/components/Footer/Footer'
+import styles from './page.module.css'
 
 interface GenPageProps {
 	params: {
@@ -16,40 +19,54 @@ export default async function GenPage({ params }: GenPageProps) {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			<div className="max-w-4xl mx-auto">
-				<h1 className="text-3xl font-bold mb-6">
-					Protected Content for: {params.name}
-				</h1>
-				
-				<div className="bg-white rounded-lg shadow-md p-6">
-					<div className="flex items-center mb-4">
+		<main className={styles.main}>
+			<Header 
+				title={`Chroniona zawartość: ${params.name}`}
+				subtitle="Dostęp tylko dla uwierzytelnionych użytkowników"
+			>
+				<div className={styles.headerActions}>
+					<a
+						href="/profile"
+						className={styles.profileLink}
+					>
+						<svg className={styles.profileIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+						</svg>
+						Profil
+					</a>
+				</div>
+			</Header>
+
+			<div className={styles.content}>
+				<div className={styles.contentCard}>
+					<div className={styles.userWelcome}>
 						{session.user?.image && (
 							<img 
 								src={session.user.image} 
 								alt="Profile" 
-								className="w-10 h-10 rounded-full mr-3"
+								className={styles.userAvatar}
 							/>
 						)}
-						<div>
-							<p className="font-semibold">Welcome, {session.user?.name}!</p>
-							<p className="text-sm text-gray-600">{session.user?.email}</p>
+						<div className={styles.userInfo}>
+							<p className={styles.welcomeText}>Witaj, <strong>{session.user?.name}</strong>!</p>
+							<p className={styles.userEmail}>{session.user?.email}</p>
 						</div>
 					</div>
 					
-					<div className="prose max-w-none">
-						<p>This is protected content that only authenticated users can see.</p>
-						<p>The route parameter is: <strong>{params.name}</strong></p>
+					<div className={styles.contentBody}>
+						<p>To jest chroniona zawartość dostępna tylko dla uwierzytelnionych użytkowników.</p>
+						<p>Parametr trasy: <strong>{params.name}</strong></p>
 						
-						<div className="mt-6 p-4 bg-gray-50 rounded-lg">
-							<h3 className="text-lg font-semibold mb-2">Session Information:</h3>
-							<pre className="text-sm bg-gray-100 p-2 rounded overflow-auto">
+						<div className={styles.sessionInfo}>
+							<h3 className={styles.sessionTitle}>Informacje o sesji:</h3>
+							<pre className={styles.sessionData}>
 								{JSON.stringify(session, null, 2)}
 							</pre>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+			<Footer />
+		</main>
 	)
 } 

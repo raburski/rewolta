@@ -29,13 +29,12 @@ export default function Header({ title = 'Architektoniczna Rewolta', subtitle, c
 						</div>
 					</div>
 				)}
+				{children && (
+					<div className={styles.headerActions}>
+						{children}
+					</div>
+				)}
 			</div>
-			
-			{children && (
-				<div className={styles.headerContent}>
-					{children}
-				</div>
-			)}
 		</header>
 	)
 } 

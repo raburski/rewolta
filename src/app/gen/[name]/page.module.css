@@ -1,0 +1,116 @@
+.main {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1;
+	padding: 2rem 1rem;
+	max-width: 800px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.profileLink {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	text-decoration: none;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: #374151;
+	background: white;
+	transition: all 0.2s;
+}
+
+.profileLink:hover {
+	background: #f9fafb;
+	border-color: #9ca3af;
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profileIcon {
+	width: 1rem;
+	height: 1rem;
+	margin-right: 0.5rem;
+}
+
+.contentCard {
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.userWelcome {
+	display: flex;
+	align-items: center;
+	padding: 1.5rem;
+	border-bottom: 1px solid #e5e7eb;
+	gap: 1rem;
+}
+
+.userAvatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+
+.userInfo {
+	flex: 1;
+}
+
+.welcomeText {
+	font-size: 1.125rem;
+	color: #111827;
+	margin: 0 0 0.25rem 0;
+}
+
+.userEmail {
+	font-size: 0.875rem;
+	color: #6b7280;
+	margin: 0;
+}
+
+.contentBody {
+	padding: 1.5rem;
+}
+
+.contentBody p {
+	margin: 0 0 1rem 0;
+	color: #374151;
+	line-height: 1.6;
+}
+
+.contentBody p:last-of-type {
+	margin-bottom: 1.5rem;
+}
+
+.sessionInfo {
+	margin-top: 1.5rem;
+	padding: 1rem;
+	background: #f9fafb;
+	border-radius: 6px;
+}
+
+.sessionTitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #111827;
+	margin: 0 0 0.75rem 0;
+}
+
+.sessionData {
+	font-size: 0.875rem;
+	background: #f3f4f6;
+	padding: 0.75rem;
+	border-radius: 4px;
+	overflow: auto;
+	margin: 0;
+	white-space: pre-wrap;
+	color: #374151;
+} 
