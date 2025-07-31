@@ -46,7 +46,7 @@ export default function LoadingAnimation({ isLoading, size = 'medium' }: Loading
 		]
 
 		// Calculate target particle count
-		targetParticleCountRef.current = Math.floor((rect.width * rect.height) / 1000) + 30
+		targetParticleCountRef.current = Math.floor((rect.width * rect.height) / 1200) + 20
 
 		// Initialize particles array (empty to start)
 		particlesRef.current = []
@@ -225,7 +225,10 @@ export default function LoadingAnimation({ isLoading, size = 'medium' }: Loading
 					
 					if (distance < 80) {
 						const opacity = (80 - distance) / 80 * 0.4
-						ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`
+						// Use CSS custom properties for dark mode adaptation
+						const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+						const connectionColor = isDarkMode ? 'rgba(255, 255, 255, ' : 'rgba(75, 85, 99, '
+						ctx.strokeStyle = connectionColor + opacity + ')'
 						ctx.lineWidth = 1
 						ctx.beginPath()
 						ctx.moveTo(particle.x, particle.y)

@@ -1,0 +1,149 @@
+.modalOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	opacity: 0;
+	animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.modalContent {
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgb(var(--card-border-rgb));
+	border-radius: 12px;
+	padding: 2rem;
+	max-width: 400px;
+	width: 90%;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	transform: scale(0.85) translateY(30px);
+	opacity: 0;
+	animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideIn {
+	from {
+		transform: scale(0.9) translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: scale(1) translateY(0);
+		opacity: 1;
+	}
+}
+
+.modalHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0;
+}
+
+.closeButton {
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	color: rgb(var(--foreground-rgb));
+	cursor: pointer;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+	background: rgb(var(--callout-rgb));
+}
+
+.modalBody {
+	text-align: center;
+}
+
+.modalDescription {
+	color: rgb(var(--foreground-rgb));
+	margin-bottom: 1.5rem;
+	line-height: 1.5;
+}
+
+.buttonContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.facebookButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	width: 100%;
+	padding: 0.75rem 1.5rem;
+	background: #1877f2;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.facebookButton:hover {
+	background: #166fe5;
+}
+
+.discordButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	width: 100%;
+	padding: 0.75rem 1.5rem;
+	background: #5865f2;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.discordButton:hover {
+	background: #4752c4;
+}
+
+.facebookIcon {
+	width: 20px;
+	height: 20px;
+}
+
+.discordIcon {
+	width: 20px;
+	height: 20px;
+} 
