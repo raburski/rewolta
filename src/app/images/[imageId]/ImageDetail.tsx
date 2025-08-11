@@ -4,7 +4,13 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
+import { downloadImage } from '@/lib/download'
 import styles from './ImageDetail.module.css'
+
+// Product to original image mapping
+const PRODUCT_ORIGINAL_IMAGES = {
+	museum: '/assets/museum-small.png'
+} as const
 
 interface ImageDetailProps {
 	imageId: string
@@ -63,15 +69,10 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
 	}
 
-	const handleDownload = () => {
+	const handleDownload = async () => {
 		if (!imageData?.imageUrl) return
 
-		const link = document.createElement('a')
-		link.href = imageData.imageUrl
-		link.download = `generated-image-${imageId}.png`
-		document.body.appendChild(link)
-		link.click()
-		document.body.removeChild(link)
+		await downloadImage(imageData.imageUrl, `generated-image-${imageId}.png`)
 	}
 
 	const handleBack = () => {
@@ -123,21 +124,19 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 
 			<div className={styles.sidebar}>
 				<div className={styles.infoContainer}>
-					<div className={styles.infoItem}>
-						<strong>ID obrazu:</strong>
-						<span>{imageData.imageId}</span>
-					</div>
-					<div className={styles.infoItem}>
-						<strong>Produkt:</strong>
-						<span>{imageData.productId}</span>
+					<div className={styles.originalBuildingSection}>
+						<strong>Modyfikowany budynek:</strong>
+						<div className={styles.originalImageContainer}>
+							<img 
+								src={PRODUCT_ORIGINAL_IMAGES[imageData.productId as keyof typeof PRODUCT_ORIGINAL_IMAGES] || '/assets/museum-small.png'} 
+								alt="Original building" 
+								className={styles.originalImage}
+							/>
+						</div>
 					</div>
 					<div className={styles.infoItem}>
 						<strong>Utworzono:</strong>
 						<span>{new Date(imageData.createdAt).toLocaleString('pl-PL')}</span>
-					</div>
-					<div className={styles.infoItem}>
-						<strong>Zaktualizowano:</strong>
-						<span>{new Date(imageData.updatedAt).toLocaleString('pl-PL')}</span>
 					</div>
 				</div>
 
