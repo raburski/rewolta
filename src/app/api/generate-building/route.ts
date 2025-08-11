@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { callOpenAI } from '@/lib/openai'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
+
+const IMGEN_PROXY_URL = process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com'
+const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
+const PRODUCT_ID = 'museum'
 
 const CALL_PROMPT = `You are an expert in architectural visualization.
 
-Your task is to apply the visual style of Image B (facade material, textures, window style, surface detailing) to the structure of Image A, while strictly preserving all aspects of Image A’s physical form.
+Your task is to apply the visual style of Image B (facade material, textures, window style, surface detailing) to the structure of Image A, while strictly preserving all aspects of Image A's physical form.
 
 Instructions:
 	•	Use Image A (the museum render) as the base.
@@ -19,6 +24,15 @@ Keep the lighting, camera perspective, and urban context from Image A. The resul
 
 export async function POST(request: NextRequest) {
 	try {
+		// Check authentication
+		const session = await getServerSession(authOptions)
+		if (!session) {
+			return NextResponse.json(
+				{ error: 'Authentication required' },
+				{ status: 401 }
+			)
+		}
+
 		const { inputBase64Image, enhancedPrompt } = await request.json()
 
 		if (!inputBase64Image) {
@@ -28,16 +42,36 @@ export async function POST(request: NextRequest) {
 			)
 		}
 
+		if (!IMGEN_PROXY_API_KEY) {
+			console.error('IMGEN_PROXY_API_KEY not configured')
+			return NextResponse.json(
+				{ error: 'Image generation service not configured' },
+				{ status: 500 }
+			)
+		}
+
 		// Use default prompt if none provided
-		const prompt = CALL_PROMPT
+		const prompt = enhancedPrompt || CALL_PROMPT
 
 		// Get museum image URL
-		const baseUrl = process.env.NEXTAUTH_URL || 'https://rewolta.org'
+		const baseUrl = 'https://rewolta.org' //process.env.NEXTAUTH_URL || 'https://rewolta.org'
 		const museumImageUrl = `${baseUrl}/assets/museum-small.png`
 		console.log('Using museum image URL:', museumImageUrl)
 
-		const gptRequest = {
+		// Sanitize ownerId
+		const rawOwnerId = session.user?.id || session.user?.email || 'unknown'
+		const ownerId = rawOwnerId
+			.replace(/[^a-zA-Z0-9@._-]/g, '') // Remove special characters except email-safe ones
+			.replace(/@/g, '_') // Replace @ with _
+			.replace(/\./g, '_') // Replace . with _
+			.substring(0, 100) // Limit length
+			.toLowerCase() // Normalize to lowercase
+
+		// Prepare the request for imgen-proxy using GPT-4.1 with image generation
+		const imgenRequest = {
 			model: 'gpt-4.1',
+			ownerId: ownerId,
+			productId: PRODUCT_ID,
 			input: [
 				{
 					role: "system",
@@ -55,37 +89,39 @@ export async function POST(request: NextRequest) {
 			tools: [{ type: 'image_generation' }]
 		}
 
-		console.log('Making OpenAI API call...')
-		const gptData = await callOpenAI({
-			endpoint: 'https://api.openai.com/v1/responses',
-			apiKey: process.env.OPENAI_API_KEY,
-			body: gptRequest
+		console.log('Starting image generation job with imgen-proxy...')
+		
+		const response = await fetch(`${IMGEN_PROXY_URL}/api/v1/images/generate`, {
+			method: 'POST',
+			headers: {
+				'x-api-key': IMGEN_PROXY_API_KEY,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(imgenRequest)
 		})
 
-		console.log('OpenAI response received:', Object.keys(gptData))
-
-		const imageData = gptData.output
-			?.filter((output: any) => output.type === 'image_generation_call')
-			?.map((output: any) => output.result)
-
-		if (!imageData || imageData.length === 0) {
-			console.error('❌ No image generated in GPT-4.1 response')
-			return NextResponse.json(
-				{ error: 'No image generated in response' },
-				{ status: 500 }
-			)
+		if (!response.ok) {
+			const errorData = await response.json()
+			console.error('imgen-proxy error:', errorData)
+			throw new Error(`imgen-proxy error: ${response.status}`)
 		}
 
-		const imageBase64 = imageData[0]
-		const dataUrl = `data:image/png;base64,${imageBase64}`
+		const data = await response.json()
+		console.log('Job started successfully:', data)
 
-		console.log('✅ Image generated successfully')
+		if (!data.success || !data.data?.jobId) {
+			throw new Error('Invalid response from imgen-proxy')
+		}
 
-		return NextResponse.json({ result: dataUrl })
+		return NextResponse.json({ 
+			jobId: data.data.jobId,
+			status: data.data.status,
+			message: data.data.message
+		})
 	} catch (error) {
-		console.error('Error in generate-building API:', error)
+		console.error('Error in generate-building API:', `${IMGEN_PROXY_URL}/api/v1/images/generate`, error)
 		return NextResponse.json(
-			{ error: 'Failed to generate building' },
+			{ error: 'Failed to start image generation' },
 			{ status: 500 }
 		)
 	}

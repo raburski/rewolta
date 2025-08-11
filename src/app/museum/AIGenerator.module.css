@@ -120,12 +120,26 @@
 	font-family: var(--font-mono);
 }
 
+.historyLink {
+	color: #3b82f6;
+	text-decoration: none;
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.historyLink:hover {
+	color: #1d4ed8;
+	text-decoration: underline;
+}
+
 .shareCard {
 	padding: 1rem 1.2rem;
 	border-radius: var(--border-radius);
 	background: rgb(var(--card-rgb));
 	border: 1px solid rgba(var(--card-border-rgb), 0.15);
 	animation: shake 0.8s ease-in-out;
+    margin-top: 100px;
 }
 
 @keyframes shake {

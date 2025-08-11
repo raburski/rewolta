@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
@@ -16,15 +16,84 @@ export default function AIGenerator() {
 	const [isGenerating, setIsGenerating] = useState(false)
 	const [generatedImage, setGeneratedImage] = useState<string>('')
 	const [showLoginModal, setShowLoginModal] = useState(false)
+	const [jobId, setJobId] = useState<string>('')
+	const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	const onCloseLoginModal = () => setShowLoginModal(false)
 	const onOpenLoginModal = () => setShowLoginModal(true)
 
-	const handleShare = (platform: 'facebook') => {
-		if (!generatedImage) return
+	// Cleanup polling interval on unmount
+	useEffect(() => {
+		return () => {
+			if (pollingInterval) {
+				clearInterval(pollingInterval)
+			}
+		}
+	}, [pollingInterval])
 
-		const shareUrl = window.location.href
+	const startPolling = (jobId: string) => {
+		let pollCount = 0
+		const maxPolls = 40 // 10 minutes maximum (40 * 15 seconds)
+		
+		const interval = setInterval(async () => {
+			pollCount++
+			
+			// Stop polling if we've exceeded the maximum number of polls
+			if (pollCount > maxPolls) {
+				console.error('Polling timeout reached')
+				setIsGenerating(false)
+				setJobId('')
+				clearInterval(interval)
+				setPollingInterval(null)
+				// TODO: Show timeout error message to user
+				return
+			}
+			try {
+				const response = await fetch(`/api/generate-building/status/${jobId}`)
+				if (!response.ok) {
+					throw new Error('Failed to check job status')
+				}
+
+				const data = await response.json()
+				console.log('Polling result:', data)
+
+				if (data.status === 'completed' && data.imageUrl) {
+					setGeneratedImage(data.imageUrl)
+					setIsGenerating(false)
+					setJobId('')
+					clearInterval(interval)
+					setPollingInterval(null)
+				} else if (data.status === 'failed') {
+					console.error('Job failed:', data)
+					setIsGenerating(false)
+					setJobId('')
+					clearInterval(interval)
+					setPollingInterval(null)
+					// TODO: Show error message to user
+				} else if (data.status === 'pending' || data.status === 'processing') {
+					// Continue polling
+					console.log(`Job still in progress: ${data.status}`)
+				} else {
+					console.warn('Unknown job status:', data.status)
+				}
+			} catch (error) {
+				console.error('Error polling job status:', error)
+				setIsGenerating(false)
+				setJobId('')
+				clearInterval(interval)
+				setPollingInterval(null)
+				// TODO: Show error message to user
+			}
+		}, 15000) // Poll every 15 seconds
+
+		setPollingInterval(interval)
+	}
+
+	const handleShare = (platform: 'facebook') => {
+		if (!generatedImage || !jobId) return
+
+		const shareUrl = `${window.location.origin}/images/${jobId}`
 		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(FACEBOOK_SHARE_TEXT)}`
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
 	}
@@ -36,10 +105,19 @@ export default function AIGenerator() {
 				onOpenLoginModal()
 				return
 			}
+			
+			// Stop any existing polling
+			if (pollingInterval) {
+				clearInterval(pollingInterval)
+				setPollingInterval(null)
+			}
+			
 			const imageUrl = URL.createObjectURL(file)
 			setSelectedImage(imageUrl)
-			// Clear previously generated image when new image is selected
+			// Clear previously generated image and job when new image is selected
 			setGeneratedImage('')
+			setJobId('')
+			setIsGenerating(false)
 		}
 	}
 
@@ -53,6 +131,12 @@ export default function AIGenerator() {
 
 	const handleGenerate = async () => {
 		if (!selectedImage) return
+		
+		// Stop any existing polling
+		if (pollingInterval) {
+			clearInterval(pollingInterval)
+			setPollingInterval(null)
+		}
 		
 		setIsGenerating(true)
 		
@@ -71,7 +155,7 @@ export default function AIGenerator() {
 				reader.readAsDataURL(blob)
 			})
 
-			// Make API call
+			// Start image generation job
 			const apiResponse = await fetch('/api/generate-building', {
 				method: 'POST',
 				headers: {
@@ -83,22 +167,25 @@ export default function AIGenerator() {
 			})
 
 			if (!apiResponse.ok) {
-				throw new Error('Failed to generate building')
+				throw new Error('Failed to start image generation')
 			}
 
 			const data = await apiResponse.json()
-			console.log('Generated result:', data)
+			console.log('Job started:', data)
 			
-			// Handle the generated image result
-			if (data.result) {
-				setGeneratedImage(data.result)
+			if (data.jobId) {
+				setJobId(data.jobId)
+				console.log('Started job with ID:', data.jobId)
+				// Start polling for job completion
+				startPolling(data.jobId)
+			} else {
+				throw new Error('No job ID received')
 			}
 			
 		} catch (error) {
-			console.error('Error generating building:', error)
-			// TODO: Show error message to user
-		} finally {
+			console.error('Error starting image generation:', error)
 			setIsGenerating(false)
+			// TODO: Show error message to user
 		}
 	}
 
@@ -193,7 +280,9 @@ export default function AIGenerator() {
 						</div>
 					</div>
 					<p className={styles.resultLabel}>Wygenerowany obraz</p>
-					<p className={styles.resultSubtitle}>Może zająć 1-5min</p>
+					<p className={styles.resultSubtitle}>
+						{isGenerating ? 'Generowanie w toku...' : 'Może zająć 1-5min'}
+					</p>
 				</div>
 			</div>
 
@@ -226,6 +315,11 @@ export default function AIGenerator() {
 					<div className={styles.infoItem}>
 						<strong>Zostało generowań</strong>
 						<span>4</span>
+					</div>
+					<div className={styles.infoItem}>
+						<a href="/profile/images/museum" className={styles.historyLink}>
+							Historia generowań
+						</a>
 					</div>
 				</div>
 

@@ -16,11 +16,11 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 	const isDevelopment = process.env.NODE_ENV === 'development'
 
 	const handleFacebookLogin = () => {
-		signIn('facebook', { callbackUrl: '/gen/museum' })
+		signIn('facebook', { callbackUrl: '/museum' })
 	}
 
 	const handleDiscordLogin = () => {
-		signIn('discord', { callbackUrl: '/gen/museum' })
+		signIn('discord', { callbackUrl: '/museum' })
 	}
 
 	return (
