@@ -4,6 +4,7 @@ import { useState } from "react"
 import styles from "./page.module.css"
 import MemeGenerator from "../components/MemeGenerator/MemeGenerator"
 import Header from "@/app/components/Header/Header"
+import Footer from "@/app/components/Footer/Footer"
 
 const MARGINS = {
 	bottom: 32,
@@ -50,6 +51,7 @@ export default function MemePage() {
 					/>
 				</div>
 			</div>
+			<Footer />
 		</main>
 	)
 }
