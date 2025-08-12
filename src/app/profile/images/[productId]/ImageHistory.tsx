@@ -68,9 +68,18 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 
 	if (loading) {
 		return (
-			<div className={styles.loadingContainer}>
-				<FaWandMagicSparkles className={styles.loadingIcon} />
-				<p>Ładowanie historii generowań...</p>
+			<div className={styles.container}>
+				<div className={styles.imageGrid}>
+					{Array.from({ length: 4 }).map((_, index) => (
+						<div key={index} className={styles.skeletonCard}>
+							<div className={styles.skeletonImage}></div>
+							<div className={styles.skeletonInfo}>
+								<div className={styles.skeletonDate}></div>
+								<div className={styles.skeletonButton}></div>
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 		)
 	}

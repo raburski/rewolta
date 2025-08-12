@@ -215,12 +215,14 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 0.5rem;
+	min-height: 250px;
 }
 
 .plusContainer {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-bottom: 42px;
 }
 
 .plusSymbol {
@@ -324,6 +326,18 @@
 	color: rgb(var(--foreground-rgb));
 	margin: 0;
 	text-align: center;
+}
+
+.fileInfo {
+	font-size: 0.75rem;
+	color: #6b7280;
+	margin: 0;
+	text-align: center;
+}
+
+.resizeNote {
+	color: #059669;
+	font-weight: 500;
 }
 
 .fileInput {

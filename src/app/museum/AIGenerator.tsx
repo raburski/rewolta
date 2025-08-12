@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
+import { processImageFile } from '@/lib/imageUtils'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
@@ -13,11 +14,14 @@ const FACEBOOK_SHARE_TEXT = 'Sprawdź mój wygenerowany budynek! 🏛️✨'
 export default function AIGenerator() {
 	const { data: session, status } = useSession()
 	const [selectedImage, setSelectedImage] = useState<string>('')
+	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [isGenerating, setIsGenerating] = useState(false)
 	const [generatedImage, setGeneratedImage] = useState<string>('')
 	const [showLoginModal, setShowLoginModal] = useState(false)
 	const [jobId, setJobId] = useState<string>('')
 	const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null)
+	const [imageProcessing, setImageProcessing] = useState(false)
+	const [wasResized, setWasResized] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	const onCloseLoginModal = () => setShowLoginModal(false)
@@ -98,7 +102,7 @@ export default function AIGenerator() {
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
 	}
 
-	const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleImageSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (file) {
 			if (status !== 'authenticated') {
@@ -112,12 +116,38 @@ export default function AIGenerator() {
 				setPollingInterval(null)
 			}
 			
-			const imageUrl = URL.createObjectURL(file)
-			setSelectedImage(imageUrl)
-			// Clear previously generated image and job when new image is selected
-			setGeneratedImage('')
-			setJobId('')
-			setIsGenerating(false)
+			setImageProcessing(true)
+			
+			try {
+				// Process the image (resize if needed)
+				const { blob, wasResized: resized } = await processImageFile(file)
+				
+				// Create a new file object from the processed blob
+				const processedFile = new File([blob], file.name, {
+					type: 'image/jpeg',
+					lastModified: Date.now()
+				})
+				
+				setSelectedFile(processedFile)
+				setWasResized(resized)
+				
+				// Create object URL for display
+				const imageUrl = URL.createObjectURL(blob)
+				setSelectedImage(imageUrl)
+				
+				// Clear previously generated image and job when new image is selected
+				setGeneratedImage('')
+				setJobId('')
+				setIsGenerating(false)
+				
+				if (resized) {
+					console.log('Image was automatically resized to reduce file size')
+				}
+			} catch (error) {
+				console.error('Error processing image:', error)
+			} finally {
+				setImageProcessing(false)
+			}
 		}
 	}
 
@@ -130,7 +160,7 @@ export default function AIGenerator() {
 	}
 
 	const handleGenerate = async () => {
-		if (!selectedImage) return
+		if (!selectedImage || !selectedFile) return
 		
 		// Stop any existing polling
 		if (pollingInterval) {
@@ -142,8 +172,6 @@ export default function AIGenerator() {
 		
 		try {
 			// Convert selected image to base64
-			const response = await fetch(selectedImage)
-			const blob = await response.blob()
 			const base64 = await new Promise<string>((resolve) => {
 				const reader = new FileReader()
 				reader.onloadend = () => {
@@ -152,7 +180,7 @@ export default function AIGenerator() {
 					const base64Data = result.split(',')[1]
 					resolve(base64Data)
 				}
-				reader.readAsDataURL(blob)
+				reader.readAsDataURL(selectedFile)
 			})
 
 			// Start image generation job
@@ -227,14 +255,26 @@ export default function AIGenerator() {
 								<button 
 									className={styles.addButton}
 									onClick={handleImageClick}
-									disabled={isGenerating}
+									disabled={isGenerating || imageProcessing}
 								>
-									<IoAdd className={styles.plusIcon} />
-									Dodaj obraz
+									{imageProcessing ? (
+										<LoadingAnimation isLoading={true} size="small" />
+									) : (
+										<IoAdd className={styles.plusIcon} />
+									)}
+									{imageProcessing ? 'Przetwarzanie...' : 'Dodaj obraz'}
 								</button>
 							)}
 						</div>
 						<p className={styles.imageLabel}>Twój budynek-inspiracja</p>
+						{selectedFile && (
+							<p className={styles.fileInfo}>
+								Rozmiar: {(selectedFile.size / 1024 / 1024).toFixed(2)}MB
+								{wasResized && (
+									<span className={styles.resizeNote}> (zoptymalizowany)</span>
+								)}
+							</p>
+						)}
 						<input
 							ref={fileInputRef}
 							type="file"

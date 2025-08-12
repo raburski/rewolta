@@ -79,11 +79,35 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 		router.back()
 	}
 
+	const handleOriginalImageClick = () => {
+		if (imageData?.productId) {
+			router.push(`/${imageData.productId}`)
+		}
+	}
+
 	if (loading) {
 		return (
-			<div className={styles.loadingContainer}>
-				<div className={styles.loadingSpinner}></div>
-				<p>Ładowanie obrazu...</p>
+			<div className={styles.skeletonContainer}>
+				<div className={styles.skeletonImageContainer}></div>
+				
+				<div className={styles.skeletonSidebar}>
+					<div className={styles.skeletonInfoContainer}>
+						<div className={styles.skeletonOriginalBuildingSection}>
+							<div className={styles.skeletonOriginalBuildingLabel}></div>
+							<div className={styles.skeletonOriginalImageContainer}></div>
+						</div>
+						
+						<div className={styles.skeletonInfoItem}>
+							<div className={styles.skeletonInfoLabel}></div>
+							<div className={styles.skeletonInfoValue}></div>
+						</div>
+					</div>
+
+					<div className={styles.skeletonActionsContainer}>
+						<div className={styles.skeletonActionButton}></div>
+						<div className={styles.skeletonActionButton}></div>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -131,6 +155,8 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 								src={PRODUCT_ORIGINAL_IMAGES[imageData.productId as keyof typeof PRODUCT_ORIGINAL_IMAGES] || '/assets/museum-small.png'} 
 								alt="Original building" 
 								className={styles.originalImage}
+								onClick={handleOriginalImageClick}
+								title="Kliknij aby przejść do generatora"
 							/>
 						</div>
 					</div>
