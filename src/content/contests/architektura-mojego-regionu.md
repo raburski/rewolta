@@ -67,9 +67,7 @@ Niedozwolone są treści wulgarne, obraźliwe lub dyskryminujące.
 
 ### III. Rozstrzygnięcie konkursu
 
-1. Zwycięski cykl zostanie wyłoniony przez Organizatora lub powołaną przez niego komisję.
-
-Decyzja o wyborze zwycięzcy jest ostateczna i nieodwołalna.
+1. Zwycięski cykl zostanie wyłoniony przez Organizatora lub powołaną przez niego komisję.Decyzja o wyborze zwycięzcy jest ostateczna i nieodwołalna.
 
 2. Wyniki zostaną ogłoszone do **31 sierpnia 2025 r.** w mediach społecznościowych Organizatora.
 
