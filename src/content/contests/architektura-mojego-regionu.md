@@ -97,6 +97,7 @@ Link: [The Aesthetic City Academy](https://aesthetic-city-academy.thinkific.com/
 
 2. Sprawy nieuregulowane w regulaminie rozstrzyga Organizator.
 
-3. Pytania dotyczące konkursu należy kierować na adres: **architektoniczna@rewolta.org**.
+3. Pytania dotyczące konkursu należy kierować na adres: [architektoniczna@rewolta.org](mailto:architektoniczna@rewolta.org?subject=Konkurs)
+.
 
 4. Organizator zastrzega sobie prawo do wprowadzenia zmian w regulaminie.
