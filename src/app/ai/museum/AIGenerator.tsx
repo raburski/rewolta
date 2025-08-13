@@ -325,12 +325,12 @@ export default function AIGenerator() {
 							<LoadingAnimation isLoading={isGenerating} size="medium" />
 							{!isGenerating && !generatedImageData && status === 'authenticated' && (
 								<button
-									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''} ${userCredits === 0 ? styles.noCreditsButton : ''}`}
+									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''} ${userCredits === 0 && !creditsLoading ? styles.noCreditsButton : ''}`}
 									onClick={handleGenerate}
-									disabled={isGenerating || !selectedImage || userCredits === 0}
+									disabled={isGenerating || !selectedImage || userCredits === 0 || creditsLoading}
 								>
 									<FaWandMagicSparkles className={styles.magicWandIcon} />
-									{userCredits === 0 ? 'Brak kredytów' : selectedImage ? 'Generuj' : 'Dodaj obraz aby generować'}
+									{creditsLoading ? 'Ładowanie...' : userCredits === 0 ? 'Brak kredytów' : selectedImage ? 'Generuj' : 'Dodaj obraz aby generować'}
 								</button>
 							)}
 							{!isGenerating && !generatedImageData && status === 'unauthenticated' && (
@@ -402,14 +402,14 @@ export default function AIGenerator() {
 					</div>
 				</div>
 
-				{/* No credits card - only show when user has 0 credits */}
-				{userCredits === 0 && status === 'authenticated' && (
+				{/* No credits card - only show when user has 0 credits and not loading */}
+				{userCredits === 0 && !creditsLoading && status === 'authenticated' && (
 					<div className={styles.noCreditsCard}>
 						<h3 className={styles.noCreditsTitle}>Brak kredytów</h3>
 						<p className={styles.noCreditsDescription}>
-							Jeśli chcesz trochę więcej pogenerować, napisz do nas na{' '}
+							Napisz do nas, jeśli chciałbyś pobawić się generatorem trochę dłuej: {' '}
 							<a 
-								href="mailto:wroclaw@rewolta.org?subject=Museum%20Generator" 
+								href={`mailto:wroclaw@rewolta.org?subject=Museum%20Generator:%20${session.user?.email || 'user'}`}
 								className={styles.noCreditsEmail}
 							>
 								wroclaw@rewolta.org
@@ -423,7 +423,7 @@ export default function AIGenerator() {
 					<div className={styles.publicPageCard}>
 						<h3 className={styles.publicPageTitle}>Publiczna strona</h3>
 						<p className={styles.publicPageDescription}>
-							Otwórz publiczną stronę z Twoim obrazem
+							Możesz podzielić się twoją grafiką ze znajomymi!
 						</p>
 						<a 
 							href={`/images/${generatedImageData.id}`}
@@ -432,7 +432,7 @@ export default function AIGenerator() {
 							className={styles.publicPageLink}
 						>
 							<FaExternalLinkAlt className={styles.externalLinkIcon} />
-							Otwórz publiczną stronę grafiki
+							Otwórz w nowym oknie
 						</a>
 					</div>
 				)}

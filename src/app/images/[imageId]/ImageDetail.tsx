@@ -43,7 +43,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 
 	const handleOriginalImageClick = () => {
 		if (imageData?.productId) {
-			router.push(`/${imageData.productId}`)
+			router.push(`/ai/${imageData.productId}`)
 		}
 	}
 

@@ -76,7 +76,7 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 				<FaWandMagicSparkles className={styles.emptyIcon} />
 				<h3>Brak wygenerowanych obrazów</h3>
 				<p>Nie masz jeszcze żadnych wygenerowanych obrazów dla tego produktu.</p>
-				<a href="/museum" className={styles.generateButton}>
+				<a href="/ai/museum" className={styles.generateButton}>
 					Generuj pierwszy obraz
 				</a>
 			</div>

@@ -67,6 +67,7 @@ export async function GET(
 			// Handle imgen-proxy format with imageUrl
 			if (jobData.result.imageUrl) {
 				return NextResponse.json({
+					id: jobData.result.id,
 					status: jobData.status,
 					imageUrl: jobData.result.imageUrl
 				})
@@ -82,6 +83,7 @@ export async function GET(
 				const dataUrl = `data:image/png;base64,${imageBase64}`
 				
 				return NextResponse.json({
+					id: jobData.id,
 					status: jobData.status,
 					imageUrl: dataUrl
 				})

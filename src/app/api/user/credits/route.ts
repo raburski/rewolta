@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 
 		// Return the credits data
 		return NextResponse.json({ 
-			credits: data.data?.credits || 0,
+			credits: data.data?.remainingCredits || 0,
 			success: true
 		})
 

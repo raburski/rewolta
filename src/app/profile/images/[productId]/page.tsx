@@ -24,7 +24,7 @@ export default async function ImageHistoryPage({ params }: PageProps) {
 	// Validate productId
 	const validProductIds = ['museum']
 	if (!validProductIds.includes(productId)) {
-		redirect('/museum')
+		redirect('/ai/museum')
 	}
 
 	return (
