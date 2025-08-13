@@ -101,7 +101,6 @@ export async function GET(
 		// If job is still in progress
 		return NextResponse.json({
 			status: jobData.status,
-			progress: jobData.progress || 0
 		})
 
 	} catch (error) {

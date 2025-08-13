@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
+import { FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
 import { useUserCredits } from '@/lib/hooks/useUserCredits'
+import { downloadImage } from '@/lib/download'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
@@ -24,6 +25,7 @@ export default function AIGenerator() {
 	const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null)
 	const [imageProcessing, setImageProcessing] = useState(false)
 	const [wasResized, setWasResized] = useState(false)
+	const [copySuccess, setCopySuccess] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
 	// Use SWR for credits management
@@ -126,6 +128,12 @@ export default function AIGenerator() {
 		const shareUrl = `${window.location.origin}/images/${generatedImageData.id}`
 		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(FACEBOOK_SHARE_TEXT)}`
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
+	}
+
+	const handleDownload = async () => {
+		if (!generatedImageData?.imageUrl) return
+
+		await downloadImage(generatedImageData.imageUrl, `generated-building-${generatedImageData.id}.png`)
 	}
 
 	const handleImageSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -395,6 +403,22 @@ export default function AIGenerator() {
 								{session?.user?.email || 'user@example.com'}
 							</p>
 						</div>
+						<button 
+							className={styles.copyIdButton}
+							onClick={async () => {
+								const userId = session?.user?.id || session?.user?.email || 'unknown'
+								try {
+									await navigator.clipboard.writeText(userId)
+									setCopySuccess(true)
+									setTimeout(() => setCopySuccess(false), 2000) // Reset after 2 seconds
+								} catch (error) {
+									console.error('Failed to copy to clipboard:', error)
+								}
+							}}
+							title={copySuccess ? "Skopiowano!" : "Kopiuj ID użytkownika"}
+						>
+							<FaClipboard className={`${styles.copyIcon} ${copySuccess ? styles.copySuccess : ''}`} />
+						</button>
 					</div>
 					<div className={styles.infoItem}>
 						<strong>Zostało generowań</strong>
@@ -461,6 +485,20 @@ export default function AIGenerator() {
 								Facebook
 							</button>
 						</div>
+					</div>
+				)}
+
+				{/* Download card - only show when image is generated */}
+				{generatedImageData && (
+					<div className={styles.downloadCard}>
+						<h3 className={styles.downloadTitle}>Pobierz obraz</h3>
+						<p className={styles.downloadDescription}>
+							Zapisz swój wygenerowany budynek na komputerze!
+						</p>
+						<button className={styles.downloadButton} onClick={handleDownload}>
+							<FaDownload className={styles.downloadIcon} />
+							Pobierz PNG
+						</button>
 					</div>
 				)}
 			</div>

@@ -25,6 +25,7 @@
 	border-radius: var(--border-radius);
 	background: rgb(var(--card-rgb));
 	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	position: relative;
 }
 
 .userHeader {
@@ -92,6 +93,49 @@
 	opacity: 0.6;
 	color: rgb(var(--foreground-rgb));
 	margin: 0;
+}
+
+.copyIdButton {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: var(--border-radius);
+	transition: all 0.2s ease;
+	color: rgb(var(--foreground-rgb));
+	opacity: 0.6;
+}
+
+.copyIdButton:hover {
+	opacity: 1;
+	background: rgba(var(--card-border-rgb), 0.1);
+}
+
+.copyIcon {
+	width: 16px;
+	height: 16px;
+	transition: all 0.3s ease;
+}
+
+.copyIcon.copySuccess {
+	color: #059669;
+	transform: scale(1.2);
+	animation: copySuccessPulse 0.4s ease-in-out;
+}
+
+@keyframes copySuccessPulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.3);
+	}
+	100% {
+		transform: scale(1.2);
+	}
 }
 
 .infoItem {
@@ -263,6 +307,54 @@
 }
 
 .shareIcon {
+	width: 16px;
+	height: 16px;
+}
+
+.downloadCard {
+	padding: 1rem 1.2rem;
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+}
+
+.downloadTitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 0.5rem 0;
+}
+
+.downloadDescription {
+	font-size: 0.875rem;
+	opacity: 0.6;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 1rem 0;
+	line-height: 1.4;
+}
+
+.downloadButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: none;
+	border-radius: var(--border-radius);
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	background: #059669;
+	color: white;
+}
+
+.downloadButton:hover {
+	background: #047857;
+}
+
+.downloadIcon {
 	width: 16px;
 	height: 16px;
 }

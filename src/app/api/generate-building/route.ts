@@ -86,7 +86,8 @@ export async function POST(request: NextRequest) {
 					]
 				}
 			],
-			tools: [{ type: 'image_generation' }]
+			tools: [{ type: 'image_generation' }],
+			aspectRatio: '3:2' // Set aspect ratio to 3:2 (landscape)
 		}
 
 		console.log('Starting image generation job with imgen-proxy...')
