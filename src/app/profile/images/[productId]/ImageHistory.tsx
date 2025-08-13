@@ -1,59 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
+import { useUserImages } from '@/lib/hooks/useUserImages'
 import styles from './ImageHistory.module.css'
 
 interface ImageHistoryProps {
 	productId: string
 }
 
-interface GeneratedImage {
-	id: string
-	imageUrl: string
-	createdAt: string
-	status: string
-	productId: string
-}
-
 export default function ImageHistory({ productId }: ImageHistoryProps) {
-	const { data: session } = useSession()
+	const { data: session, status } = useSession()
 	const router = useRouter()
-	const [images, setImages] = useState<GeneratedImage[]>([])
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
-
-	useEffect(() => {
-		const fetchImages = async () => {
-			try {
-				setLoading(true)
-				const response = await fetch(`/api/profile/images/${productId}`)
-				
-				if (!response.ok) {
-					if (response.status === 401) {
-						setError('Authentication required')
-					} else {
-						setError('Failed to load images')
-					}
-					return
-				}
-				
-				const data = await response.json()
-				setImages(data.images || [])
-			} catch (err) {
-				setError('Failed to load images')
-				console.error('Error fetching images:', err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		if (session?.user?.name) {
-			fetchImages()
-		}
-	}, [session?.user?.name, productId])
+	const isAuthenticated = !!session?.user?.name
+	const isSessionLoading = status === 'loading'
+	
+	// Use SWR for data fetching
+	const { images, isLoading, hasError, error, mutate } = useUserImages(productId, isAuthenticated)
 
 	const handleShare = (imageId: string) => {
 		const shareUrl = `${window.location.origin}/images/${imageId}`
@@ -66,7 +30,7 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 		router.push(`/images/${imageId}`)
 	}
 
-	if (loading) {
+	if (isSessionLoading || isLoading) {
 		return (
 			<div className={styles.container}>
 				<div className={styles.imageGrid}>
@@ -84,7 +48,7 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 		)
 	}
 
-	if (error) {
+	if (hasError) {
 		return (
 			<div className={styles.errorContainer}>
 				<p className={styles.errorText}>{error}</p>
@@ -92,7 +56,21 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 		)
 	}
 
-	if (images.length === 0) {
+	// Show authentication required message if not authenticated and session is loaded
+	if (!isSessionLoading && !isAuthenticated) {
+		return (
+			<div className={styles.emptyContainer}>
+				<FaWandMagicSparkles className={styles.emptyIcon} />
+				<h3>Wymagane logowanie</h3>
+				<p>Zaloguj się, aby zobaczyć historię generowań.</p>
+				<a href="/api/auth/signin" className={styles.generateButton}>
+					Zaloguj się
+				</a>
+			</div>
+		)
+	}
+
+	if (!isSessionLoading && !isLoading && isAuthenticated && images.length === 0) {
 		return (
 			<div className={styles.emptyContainer}>
 				<FaWandMagicSparkles className={styles.emptyIcon} />

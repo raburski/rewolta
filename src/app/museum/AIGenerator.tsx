@@ -4,7 +4,9 @@ import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
+import { useUserCredits } from '@/lib/hooks/useUserCredits'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
@@ -16,7 +18,7 @@ export default function AIGenerator() {
 	const [selectedImage, setSelectedImage] = useState<string>('')
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [isGenerating, setIsGenerating] = useState(false)
-	const [generatedImage, setGeneratedImage] = useState<string>('')
+	const [generatedImageData, setGeneratedImageData] = useState<{ imageUrl: string; id: string } | null>(null)
 	const [showLoginModal, setShowLoginModal] = useState(false)
 	const [jobId, setJobId] = useState<string>('')
 	const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null)
@@ -24,7 +26,18 @@ export default function AIGenerator() {
 	const [wasResized, setWasResized] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
-	const onCloseLoginModal = () => setShowLoginModal(false)
+	// Use SWR for credits management
+	const { credits: userCredits, isLoading: creditsLoading, mutate: refreshCredits } = useUserCredits(status === 'authenticated')
+
+	const onCloseLoginModal = () => {
+		setShowLoginModal(false)
+		// Refresh credits when modal is closed in case user just logged in
+		setTimeout(() => {
+			if (status === 'authenticated') {
+				refreshCredits()
+			}
+		}, 1000) // Small delay to ensure session is updated
+	}
 	const onOpenLoginModal = () => setShowLoginModal(true)
 
 	// Cleanup polling interval on unmount
@@ -47,6 +60,7 @@ export default function AIGenerator() {
 			if (pollCount > maxPolls) {
 				console.error('Polling timeout reached')
 				setIsGenerating(false)
+				setGeneratedImageData(null)
 				setJobId('')
 				clearInterval(interval)
 				setPollingInterval(null)
@@ -63,7 +77,17 @@ export default function AIGenerator() {
 				console.log('Polling result:', data)
 
 				if (data.status === 'completed' && data.imageUrl) {
-					setGeneratedImage(data.imageUrl)
+					setGeneratedImageData({ imageUrl: data.imageUrl, id: data.id })
+					// Subtract 1 credit when image is successfully generated
+					refreshCredits((currentData) => {
+						if (currentData) {
+							return {
+								...currentData,
+								credits: Math.max(0, currentData.credits - 1)
+							}
+						}
+						return currentData
+					}, false) // Don't revalidate, just update locally
 					setIsGenerating(false)
 					setJobId('')
 					clearInterval(interval)
@@ -71,6 +95,7 @@ export default function AIGenerator() {
 				} else if (data.status === 'failed') {
 					console.error('Job failed:', data)
 					setIsGenerating(false)
+					setGeneratedImageData(null)
 					setJobId('')
 					clearInterval(interval)
 					setPollingInterval(null)
@@ -84,6 +109,7 @@ export default function AIGenerator() {
 			} catch (error) {
 				console.error('Error polling job status:', error)
 				setIsGenerating(false)
+				setGeneratedImageData(null)
 				setJobId('')
 				clearInterval(interval)
 				setPollingInterval(null)
@@ -95,9 +121,9 @@ export default function AIGenerator() {
 	}
 
 	const handleShare = (platform: 'facebook') => {
-		if (!generatedImage || !jobId) return
+		if (!generatedImageData) return
 
-		const shareUrl = `${window.location.origin}/images/${jobId}`
+		const shareUrl = `${window.location.origin}/images/${generatedImageData.id}`
 		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(FACEBOOK_SHARE_TEXT)}`
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
 	}
@@ -136,7 +162,7 @@ export default function AIGenerator() {
 				setSelectedImage(imageUrl)
 				
 				// Clear previously generated image and job when new image is selected
-				setGeneratedImage('')
+				setGeneratedImageData(null)
 				setJobId('')
 				setIsGenerating(false)
 				
@@ -161,6 +187,12 @@ export default function AIGenerator() {
 
 	const handleGenerate = async () => {
 		if (!selectedImage || !selectedFile) return
+		
+		// Check if user has credits
+		if (userCredits === 0) {
+			console.log('No credits available for generation')
+			return
+		}
 		
 		// Stop any existing polling
 		if (pollingInterval) {
@@ -213,6 +245,7 @@ export default function AIGenerator() {
 		} catch (error) {
 			console.error('Error starting image generation:', error)
 			setIsGenerating(false)
+			setGeneratedImageData(null)
 			// TODO: Show error message to user
 		}
 	}
@@ -290,17 +323,17 @@ export default function AIGenerator() {
 					<div className={styles.resultBox}>
 						<div className={styles.generateContainer}>
 							<LoadingAnimation isLoading={isGenerating} size="medium" />
-							{!isGenerating && !generatedImage && status === 'authenticated' && (
+							{!isGenerating && !generatedImageData && status === 'authenticated' && (
 								<button
-									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''}`}
+									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''} ${userCredits === 0 ? styles.noCreditsButton : ''}`}
 									onClick={handleGenerate}
-									disabled={isGenerating || !selectedImage}
+									disabled={isGenerating || !selectedImage || userCredits === 0}
 								>
 									<FaWandMagicSparkles className={styles.magicWandIcon} />
-									{selectedImage ? 'Generuj' : 'Dodaj obraz aby generować'}
+									{userCredits === 0 ? 'Brak kredytów' : selectedImage ? 'Generuj' : 'Dodaj obraz aby generować'}
 								</button>
 							)}
-							{!isGenerating && !generatedImage && status === 'unauthenticated' && (
+							{!isGenerating && !generatedImageData && status === 'unauthenticated' && (
 								<button
 									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''}`}
 									onClick={onOpenLoginModal}
@@ -310,9 +343,9 @@ export default function AIGenerator() {
 									Zaloguj z FB
 								</button>
 							)}
-							{!isGenerating && generatedImage && (
+							{!isGenerating && generatedImageData && (
 								<img 
-									src={generatedImage} 
+									src={generatedImageData.imageUrl} 
 									alt="Generated building" 
 									className={styles.generatedImage}
 								/>
@@ -354,7 +387,13 @@ export default function AIGenerator() {
 					</div>
 					<div className={styles.infoItem}>
 						<strong>Zostało generowań</strong>
-						<span>4</span>
+						<span 
+							className={`${userCredits === 0 ? styles.noCredits : ''} ${styles.creditsDisplay} ${creditsLoading ? styles.loading : ''}`}
+							onClick={() => status === 'authenticated' && !creditsLoading && refreshCredits()}
+							title={creditsLoading ? '' : 'Kliknij aby odświeżyć'}
+						>
+							{creditsLoading ? '...' : userCredits}
+						</span>
 					</div>
 					<div className={styles.infoItem}>
 						<a href="/profile/images/museum" className={styles.historyLink}>
@@ -363,8 +402,43 @@ export default function AIGenerator() {
 					</div>
 				</div>
 
+				{/* No credits card - only show when user has 0 credits */}
+				{userCredits === 0 && status === 'authenticated' && (
+					<div className={styles.noCreditsCard}>
+						<h3 className={styles.noCreditsTitle}>Brak kredytów</h3>
+						<p className={styles.noCreditsDescription}>
+							Jeśli chcesz trochę więcej pogenerować, napisz do nas na{' '}
+							<a 
+								href="mailto:wroclaw@rewolta.org?subject=Museum%20Generator" 
+								className={styles.noCreditsEmail}
+							>
+								wroclaw@rewolta.org
+							</a>
+						</p>
+					</div>
+				)}
+
+				{/* Public page link card - only show when image is generated */}
+				{generatedImageData && (
+					<div className={styles.publicPageCard}>
+						<h3 className={styles.publicPageTitle}>Publiczna strona</h3>
+						<p className={styles.publicPageDescription}>
+							Otwórz publiczną stronę z Twoim obrazem
+						</p>
+						<a 
+							href={`/images/${generatedImageData.id}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							className={styles.publicPageLink}
+						>
+							<FaExternalLinkAlt className={styles.externalLinkIcon} />
+							Otwórz publiczną stronę grafiki
+						</a>
+					</div>
+				)}
+
 				{/* Social sharing card - only show when image is generated */}
-				{generatedImage && (
+				{generatedImageData && (
 					<div className={styles.shareCard}>
 						<h3 className={styles.shareTitle}>Udostępnij swój obraz</h3>
 						<p className={styles.shareDescription}>

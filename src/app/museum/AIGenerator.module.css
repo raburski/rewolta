@@ -120,6 +120,25 @@
 	font-family: var(--font-mono);
 }
 
+.infoItem span.noCredits {
+	color: #ef4444;
+	font-weight: 600;
+	opacity: 1;
+}
+
+.infoItem span.creditsDisplay {
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+}
+
+.infoItem span.creditsDisplay:hover {
+	opacity: 0.8;
+}
+
+.infoItem span.creditsDisplay.loading {
+	cursor: default;
+}
+
 .historyLink {
 	color: #3b82f6;
 	text-decoration: none;
@@ -131,6 +150,56 @@
 .historyLink:hover {
 	color: #1d4ed8;
 	text-decoration: underline;
+}
+
+.publicPageCard {
+	padding: 1rem 1.2rem;
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	margin-top: 1rem;
+}
+
+.publicPageTitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 0.5rem 0;
+}
+
+.publicPageDescription {
+	font-size: 0.875rem;
+	opacity: 0.6;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 1rem 0;
+	line-height: 1.4;
+}
+
+.publicPageLink {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: none;
+	border-radius: var(--border-radius);
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	background: #059669;
+	color: white;
+	text-decoration: none;
+}
+
+.publicPageLink:hover {
+	background: #047857;
+}
+
+.externalLinkIcon {
+	width: 14px;
+	height: 14px;
 }
 
 .shareCard {
@@ -422,6 +491,49 @@
 	cursor: not-allowed;
 	transform: none;
 	box-shadow: none;
+}
+
+.generateButton.noCreditsButton {
+	background: #ef4444;
+	color: white;
+}
+
+.generateButton.noCreditsButton:hover {
+	background: #dc2626;
+}
+
+.noCreditsCard {
+	padding: 1rem 1.2rem;
+	border-radius: var(--border-radius);
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	margin-top: 1rem;
+}
+
+.noCreditsTitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: #dc2626;
+	margin: 0 0 0.5rem 0;
+}
+
+.noCreditsDescription {
+	font-size: 0.875rem;
+	color: #7f1d1d;
+	margin: 0;
+	line-height: 1.4;
+}
+
+.noCreditsEmail {
+	color: #dc2626;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.noCreditsEmail:hover {
+	color: #b91c1c;
+	text-decoration: underline;
 }
 
 .generatedImage {

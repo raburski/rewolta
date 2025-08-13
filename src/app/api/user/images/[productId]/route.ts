@@ -66,7 +66,7 @@ export async function GET(
 		}
 
 		const data = await response.json()
-		console.log('Images fetched successfully:', data)
+		console.log
 
 		if (!data.success) {
 			throw new Error('Invalid response from imgen-proxy')

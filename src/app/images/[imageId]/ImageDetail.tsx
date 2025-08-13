@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { downloadImage } from '@/lib/download'
+import { useImageDetail } from '@/lib/hooks/useImageDetail'
 import styles from './ImageDetail.module.css'
 
 // Product to original image mapping
@@ -16,50 +16,12 @@ interface ImageDetailProps {
 	imageId: string
 }
 
-interface ImageData {
-	id: string
-	productId: string
-	ownerId: string
-	imageUrl: string
-	imageId: string
-	createdAt: string
-	updatedAt: string
-}
-
 export default function ImageDetail({ imageId }: ImageDetailProps) {
 	const { data: session } = useSession()
 	const router = useRouter()
-	const [imageData, setImageData] = useState<ImageData | null>(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
-
-	useEffect(() => {
-		const fetchImage = async () => {
-			try {
-				setLoading(true)
-				const response = await fetch(`/api/images/${imageId}`)
-				
-				if (!response.ok) {
-					if (response.status === 404) {
-						setError('Obraz nie został znaleziony')
-					} else {
-						setError('Nie udało się załadować obrazu')
-					}
-					return
-				}
-				
-				const data = await response.json()
-				setImageData(data)
-			} catch (err) {
-				setError('Nie udało się załadować obrazu')
-				console.error('Error fetching image:', err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		fetchImage()
-	}, [imageId])
+	
+	// Use SWR for data fetching
+	const { imageData, isLoading, hasError, error, mutate } = useImageDetail(imageId)
 
 	const handleShare = () => {
 		if (!imageData?.imageUrl) return
@@ -85,7 +47,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 		}
 	}
 
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className={styles.skeletonContainer}>
 				<div className={styles.skeletonImageContainer}></div>
@@ -112,7 +74,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 		)
 	}
 
-	if (error) {
+	if (hasError) {
 		return (
 			<div className={styles.errorContainer}>
 				<p className={styles.errorText}>{error}</p>
