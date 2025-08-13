@@ -6,7 +6,7 @@ endDate: "2025-08-08"
 status: "active"
 email: "wroclaw@rewolta.org"
 emailSubject: "Konkurs: Rewolta w detalu"
-image: "/assets/rewolta-w-detalu.png"
+image: "/assets/contest/rewolta-w-detalu.png"
 facebookPost: "https://www.facebook.com/ArchitektonicznaRewoltaWroclaw/posts/pfbid02mgiJBSfLkywk4nfesq6ZG4jm4XKErFCKrfSKKaSkJSYRz9M98B3L9TVPJq754251l"
 ---
 

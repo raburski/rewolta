@@ -13,6 +13,9 @@ description: "Krótki opis konkursu"
 startDate: "YYYY-MM-DD"
 endDate: "YYYY-MM-DD"
 status: "active|upcoming|past"
+email: "wroclaw@rewolta.org"
+emailSubject: "Konkurs: Rewolta w detalu"
+image: "/assets/rewolta-w-detalu.png"
 facebookPost: "https://www.facebook.com/groups/691257419756556/posts/1234567890123456/" (opcjonalne)
 ---
 
