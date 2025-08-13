@@ -323,6 +323,17 @@ export default function AIGenerator() {
 					<div className={styles.resultBox}>
 						<div className={styles.generateContainer}>
 							<LoadingAnimation isLoading={isGenerating} size="medium" />
+							{isGenerating && (
+								<div className={styles.generatingCard}>
+									<div className={styles.generatingIcon}>
+										<FaWandMagicSparkles className={styles.magicWandSpinning} />
+									</div>
+									<h3 className={styles.generatingTitle}>Generowanie w toku</h3>
+									<p className={styles.generatingDescription}>
+										AI będzie potrzebował nawet kilka minut, żeby narysować dla Ciebie coś fajnego.
+									</p>
+								</div>
+							)}
 							{!isGenerating && !generatedImageData && status === 'authenticated' && (
 								<button
 									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''} ${userCredits === 0 && !creditsLoading ? styles.noCreditsButton : ''}`}

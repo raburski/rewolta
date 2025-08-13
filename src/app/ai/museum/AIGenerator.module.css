@@ -156,7 +156,7 @@
 	border-radius: var(--border-radius);
 	background: rgb(var(--card-rgb));
 	border: 1px solid rgba(var(--card-border-rgb), 0.15);
-	margin-top: 1rem;
+	margin-top: 3.1rem;
 }
 
 .publicPageTitle {
@@ -531,6 +531,60 @@
 .noCreditsEmail:hover {
 	color: #b91c1c;
 	text-decoration: underline;
+}
+
+.generatingCard {
+	padding: 2rem 0.5rem;
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	text-align: center;
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 10;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.generatingIcon {
+	margin-bottom: 1rem;
+	display: flex;
+	justify-content: center;
+}
+
+.magicWandSpinning {
+	width: 32px;
+	height: 32px;
+	color: gray;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.generatingTitle {
+	font-size: 1rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 0.5rem 0;
+}
+
+.generatingDescription {
+	font-size: 0.875rem;
+	opacity: 0.6;
+	color: rgb(var(--foreground-rgb));
+	margin: 0;
+	line-height: 1.4;
 }
 
 .generatedImage {
