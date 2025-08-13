@@ -49,15 +49,11 @@ Udział jest dobrowolny i bezpłatny.
 
 5. **Nie zezwala się** na fotomontaże polegające na łączeniu elementów z różnych zdjęć.
 
-6. Uczestnik powinien podać swoje imię i nazwisko i/lub pseudonim, pod którym chce być podpisany.
+6. Uczestnik powinien podać swoje imię i nazwisko i/lub pseudonim, pod którym chce być podpisany. Może również podać tytuł cyklu oraz opis (opcjonalnie).
 
-Może również podać tytuł cyklu oraz opis (opcjonalnie).
+7. Prace należy przesłać w wersji cyfrowej na adres: [architektoniczna@rewolta.org](mailto:architektoniczna@rewolta.org?subject=Konkurs).
 
-7. Prace należy przesłać w wersji cyfrowej na adres: **architektoniczna@rewolta.org**.
-
-8. Fotografie zgłaszane na konkurs **nie mogą** naruszać prawa ani praw osób trzecich, w tym dóbr osobistych, a także norm obyczajowych.
-
-Niedozwolone są treści wulgarne, obraźliwe lub dyskryminujące.
+8. Fotografie zgłaszane na konkurs **nie mogą** naruszać prawa ani praw osób trzecich, w tym dóbr osobistych, a także norm obyczajowych. Niedozwolone są treści wulgarne, obraźliwe lub dyskryminujące.
 
 9. Zgłoszenie prac jest równoznaczne z **akceptacją regulaminu** oraz wyrażeniem zgody na przetwarzanie i udostępnianie danych osobowych w zakresie niezbędnym do realizacji konkursu.
 
@@ -67,7 +63,7 @@ Niedozwolone są treści wulgarne, obraźliwe lub dyskryminujące.
 
 ### III. Rozstrzygnięcie konkursu
 
-1. Zwycięski cykl zostanie wyłoniony przez Organizatora lub powołaną przez niego komisję.Decyzja o wyborze zwycięzcy jest ostateczna i nieodwołalna.
+1. Zwycięski cykl zostanie wyłoniony przez Organizatora lub powołaną przez niego komisję. Decyzja o wyborze zwycięzcy jest ostateczna i nieodwołalna.
 
 2. Wyniki zostaną ogłoszone do **31 sierpnia 2025 r.** w mediach społecznościowych Organizatora.
 
