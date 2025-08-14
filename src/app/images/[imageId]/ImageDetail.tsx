@@ -24,10 +24,11 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 	const { imageData, isLoading, hasError, error, mutate } = useImageDetail(imageId)
 
 	const handleShare = () => {
-		if (!imageData?.imageUrl) return
+		if (!imageData) return
 
 		const shareText = 'Sprawdź mój wygenerowany budynek! 🏛️✨'
-		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageData.imageUrl)}&quote=${encodeURIComponent(shareText)}`
+		const shareUrl = `${window.location.origin}/images/${imageId}`
+		const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
 		window.open(facebookUrl, '_blank', 'width=600,height=400')
 	}
 

@@ -54,9 +54,9 @@ export async function POST(request: NextRequest) {
 		const prompt = enhancedPrompt || CALL_PROMPT
 
 		// Get museum image URL
-		const baseUrl = 'https://rewolta.org' //process.env.NEXTAUTH_URL || 'https://rewolta.org'
-		const museumImageUrl = `${baseUrl}/assets/museum-small.png`
-		console.log('Using museum image URL:', museumImageUrl)
+		// const baseUrl = 'https://rewolta.org' //process.env.NEXTAUTH_URL || 'https://rewolta.org'
+		const museumImageUrl = `https://imgen-proxy.b-cdn.net/museum/museum-small.png`
+		// console.log('Using museum image URL:', museumImageUrl)
 
 		// Sanitize ownerId
 		const rawOwnerId = session.user?.id || session.user?.email || 'unknown'
