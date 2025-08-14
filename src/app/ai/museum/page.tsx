@@ -5,14 +5,35 @@ import Header from '@/app/components/Header/Header'
 import Footer from '@/app/components/Footer/Footer'
 import AIGenerator from './AIGenerator'
 import styles from './page.module.css'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'AI Generator: Museum - Architektoniczna Rewolta',
+	description: 'Generuj obrazy z pomocą sztucznej inteligencji.',
+	openGraph: {
+		title: 'AI Generator: Museum',
+		description: 'Generuj obrazy z pomocą sztucznej inteligencji.',
+		type: 'website',
+		url: 'https://rewolta.org/ai/museum',
+		images: [
+			{
+				url: 'https://rewolta.org/assets/museum-small.png',
+				width: 768,
+				height: 512,
+				alt: 'Muzeum Narodowe we Wrocławiu - inspiracja dla AI Generatora',
+			},
+		],
+		siteName: 'Architektoniczna Rewolta',
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: 'AI Generator: Museum',
+		description: 'Generuj obrazy z pomocą sztucznej inteligencji.',
+		images: ['https://rewolta.org/assets/museum-small.png'],
+	},
+}
 
 export default async function MuseumPage() {
-	const session = await getServerSession(authOptions)
-
-	// if (!session) {
-	// 	redirect('/api/auth/signin')
-	// }
-
 	return (
 		<main className={styles.main}>
 			<Header 
