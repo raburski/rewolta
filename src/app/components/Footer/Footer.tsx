@@ -36,6 +36,18 @@ export default function Footer() {
 						</a>
 					</div>
 				</div>
+
+				<div className={styles.footerSection}>
+					<h4>Prawne</h4>
+					<div className={styles.footerLinks}>
+						<Link href="/privacy">
+							🔒 Polityka prywatności
+						</Link>
+						<Link href="/terms">
+							📋 Regulamin
+						</Link>
+					</div>
+				</div>
 			</div>
 			
 		</footer>

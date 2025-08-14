@@ -1,0 +1,31 @@
+.main {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1;
+	padding: 0.5rem 1rem;
+	width: 100%;
+}
+
+.contentContainer {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 1rem 1.2rem;
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+}
+
+@media (max-width: 768px) {
+	.content {
+		padding: 0.5rem 0.5rem;
+	}
+	
+	.contentContainer {
+		padding: 1rem 1.2rem;
+		margin: 0 0.5rem;
+	}
+} 
