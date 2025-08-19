@@ -96,25 +96,28 @@
 	gap: 0.75rem;
 }
 
-.facebookButton {
+.googleButton {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 0.75rem;
 	width: 100%;
 	padding: 0.75rem 1.5rem;
-	background: #1877f2;
-	color: white;
-	border: none;
+	background: white;
+	color: #4285f4;
+	border: 1px solid #dadce0;
 	border-radius: 8px;
 	font-size: 1rem;
 	font-weight: 500;
 	cursor: pointer;
-	transition: background-color 0.2s;
+	transition: all 0.2s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.facebookButton:hover {
-	background: #166fe5;
+.googleButton:hover {
+	background: #f8f9fa;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
 }
 
 .discordButton {
@@ -138,7 +141,7 @@
 	background: #4752c4;
 }
 
-.facebookIcon {
+.googleIcon {
 	width: 20px;
 	height: 20px;
 }

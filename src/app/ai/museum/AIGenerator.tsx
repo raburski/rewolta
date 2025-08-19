@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard } from 'react-icons/fa6'
+import { useSession, signIn } from 'next-auth/react'
+import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
@@ -354,12 +354,12 @@ export default function AIGenerator() {
 							)}
 							{!isGenerating && !generatedImageData && status === 'unauthenticated' && (
 								<button
-									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''}`}
-									onClick={onOpenLoginModal}
+									className={`${styles.generateButton} ${styles.googleLoginButton} ${isGenerating ? styles.generating : ''}`}
+									onClick={() => signIn('google', { callbackUrl: '/ai/museum' })}
 									disabled={isGenerating}
 								>
-									<FaFacebook className={styles.facebookIcon} />
-									Zaloguj z FB
+									<FaGoogle className={styles.googleIcon} />
+									Zaloguj z Google
 								</button>
 							)}
 							{!isGenerating && generatedImageData && (
@@ -391,7 +391,7 @@ export default function AIGenerator() {
 								/>
 							) : (
 								<div className={styles.avatarPlaceholder}>
-									<FaFacebook className={styles.avatarIcon} />
+									<FaGoogle className={styles.avatarIcon} />
 								</div>
 							)}
 						</div>

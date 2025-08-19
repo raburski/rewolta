@@ -555,7 +555,7 @@
 	align-items: center;
 	gap: 0.5rem;
 	padding: 1rem 2rem;
-	background: #3b82f6;
+	background: #4285f4;
 	color: white;
 	border: none;
 	border-radius: 8px;
@@ -563,15 +563,29 @@
 	font-weight: 600;
 	cursor: pointer;
 	transition: all 0.2s ease;
-	box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+	box-shadow: 0 2px 4px rgba(66, 133, 244, 0.2);
 	position: relative;
 	z-index: 1;
 }
 
 .generateButton:hover:not(:disabled) {
-	background: #2563eb;
+	background: #3367d6;
 	transform: translateY(-1px);
-	box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+	box-shadow: 0 4px 8px rgba(66, 133, 244, 0.3);
+}
+
+/* Google login button specific styles */
+.generateButton.googleLoginButton {
+	background: white;
+	color: #4285f4;
+	border: 1px solid #dadce0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.generateButton.googleLoginButton:hover:not(:disabled) {
+	background: #f8f9fa;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+	transform: translateY(-1px);
 }
 
 .generateButton:disabled {
@@ -686,7 +700,7 @@
 	border-radius: 8px;
 }
 
-.facebookIcon {
+.googleIcon {
 	width: 16px;
 	height: 16px;
 }

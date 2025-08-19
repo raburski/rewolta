@@ -1,7 +1,7 @@
 'use client'
 
 import { signIn } from 'next-auth/react'
-import { FaFacebook } from 'react-icons/fa6'
+import { FaGoogle } from 'react-icons/fa6'
 import { FaDiscord } from 'react-icons/fa6'
 import styles from './SignInModal.module.css'
 
@@ -15,8 +15,8 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
 	const isDevelopment = process.env.NODE_ENV === 'development'
 
-	const handleFacebookLogin = () => {
-		signIn('facebook', { callbackUrl: '/ai/museum' })
+	const handleGoogleLogin = () => {
+		signIn('google', { callbackUrl: '/ai/museum' })
 	}
 
 	const handleDiscordLogin = () => {
@@ -37,9 +37,9 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 						Zaloguj się, aby korzystać z generatora AI
 					</p>
 					<div className={styles.buttonContainer}>
-						<button className={styles.facebookButton} onClick={handleFacebookLogin}>
-							<FaFacebook className={styles.facebookIcon} />
-							Zaloguj przez Facebook
+						<button className={styles.googleButton} onClick={handleGoogleLogin}>
+							<FaGoogle className={styles.googleIcon} />
+							Zaloguj przez Google
 						</button>
 						{isDevelopment && (
 							<button className={styles.discordButton} onClick={handleDiscordLogin}>
