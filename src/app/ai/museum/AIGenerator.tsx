@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard } from 'react-icons/fa6'
+import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard, FaTriangleExclamation } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
@@ -19,6 +19,7 @@ export default function AIGenerator() {
 	const [selectedImage, setSelectedImage] = useState<string>('')
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [isGenerating, setIsGenerating] = useState(false)
+	const [generationFailed, setGenerationFailed] = useState(false)
 	const [generatedImageData, setGeneratedImageData] = useState<{ imageUrl: string; id: string } | null>(null)
 	const [showLoginModal, setShowLoginModal] = useState(false)
 	const [jobId, setJobId] = useState<string>('')
@@ -62,11 +63,11 @@ export default function AIGenerator() {
 			if (pollCount > maxPolls) {
 				console.error('Polling timeout reached')
 				setIsGenerating(false)
+				setGenerationFailed(true)
 				setGeneratedImageData(null)
 				setJobId('')
 				clearInterval(interval)
 				setPollingInterval(null)
-				// TODO: Show timeout error message to user
 				return
 			}
 			try {
@@ -97,11 +98,11 @@ export default function AIGenerator() {
 				} else if (data.status === 'failed') {
 					console.error('Job failed:', data)
 					setIsGenerating(false)
+					setGenerationFailed(true)
 					setGeneratedImageData(null)
 					setJobId('')
 					clearInterval(interval)
 					setPollingInterval(null)
-					// TODO: Show error message to user
 				} else if (data.status === 'pending' || data.status === 'processing') {
 					// Continue polling
 					console.log(`Job still in progress: ${data.status}`)
@@ -111,11 +112,11 @@ export default function AIGenerator() {
 			} catch (error) {
 				console.error('Error polling job status:', error)
 				setIsGenerating(false)
+				setGenerationFailed(true)
 				setGeneratedImageData(null)
 				setJobId('')
 				clearInterval(interval)
 				setPollingInterval(null)
-				// TODO: Show error message to user
 			}
 		}, 15000) // Poll every 15 seconds
 
@@ -173,6 +174,7 @@ export default function AIGenerator() {
 				setGeneratedImageData(null)
 				setJobId('')
 				setIsGenerating(false)
+				setGenerationFailed(false)
 				
 				if (resized) {
 					console.log('Image was automatically resized to reduce file size')
@@ -209,6 +211,7 @@ export default function AIGenerator() {
 		}
 		
 		setIsGenerating(true)
+		setGenerationFailed(false)
 		
 		try {
 			// Convert selected image to base64
@@ -339,6 +342,17 @@ export default function AIGenerator() {
 									<h3 className={styles.generatingTitle}>Generowanie w toku</h3>
 									<p className={styles.generatingDescription}>
 										AI będzie potrzebował nawet kilka minut, żeby narysować dla Ciebie coś fajnego.
+									</p>
+								</div>
+							)}
+							{generationFailed && (
+								<div className={styles.failedCard}>
+									<div className={styles.failedIcon}>
+										<FaTriangleExclamation className={styles.exclamationIcon} />
+									</div>
+									<h3 className={styles.failedTitle}>Generowanie nie udało się</h3>
+									<p className={styles.failedDescription}>
+										Upewnij się, że na twojej grafice-inspiracji budynek był dobrze widoczny.
 									</p>
 								</div>
 							)}

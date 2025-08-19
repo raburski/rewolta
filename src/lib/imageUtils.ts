@@ -40,7 +40,7 @@ export const resizeImage = (file: File, maxWidth: number = 1024, maxHeight: numb
 
 // Utility function to check file size and resize if needed
 export const processImageFile = async (file: File): Promise<{ blob: Blob; wasResized: boolean }> => {
-	const MAX_SIZE = 1.5 * 1024 * 1024 // 1.5MB in bytes
+	const MAX_SIZE = 1.2 * 1024 * 1024 // 1.2MB in bytes
 	
 	if (file.size <= MAX_SIZE) {
 		return { blob: file, wasResized: false }
