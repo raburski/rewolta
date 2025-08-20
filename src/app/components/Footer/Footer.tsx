@@ -28,6 +28,9 @@ export default function Footer() {
 				<div className={styles.footerSection}>
 					<h4>Przydatne linki</h4>
 					<div className={styles.footerLinks}>
+						<Link href="/ai">
+							🤖 AI Generator budynków
+						</Link>
 						<Link href="/meme">
 							🎨 Generator memów
 						</Link>
