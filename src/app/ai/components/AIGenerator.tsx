@@ -467,7 +467,7 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 					<div className={styles.noCreditsCard}>
 						<h3 className={styles.noCreditsTitle}>Brak kredytów</h3>
 						<p className={styles.noCreditsDescription}>
-							Napisz do nas, jeśli chciałbyś pobawić się generatorem trochę dłuej: {' '}
+							Napisz do nas, jeśli chciałbyś pobawić się generatorem trochę dłużej: {' '}
 							<a 
 								href={`mailto:wroclaw@rewolta.org?subject=Museum%20Generator:%20${session.user?.id || 'unknown'}`}
 								className={styles.noCreditsEmail}
