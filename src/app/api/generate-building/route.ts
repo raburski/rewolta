@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
+import { buildingProducts } from '@/content/ai'
 
 const IMGEN_PROXY_URL = process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com'
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
-const PRODUCT_ID = 'museum'
 
 const CALL_PROMPT = `You are an expert in architectural visualization.
 
@@ -33,11 +33,27 @@ export async function POST(request: NextRequest) {
 			)
 		}
 
-		const { inputBase64Image, enhancedPrompt } = await request.json()
+		const { inputBase64Image, enhancedPrompt, productId } = await request.json()
 
 		if (!inputBase64Image) {
 			return NextResponse.json(
 				{ error: 'Missing required parameter: inputBase64Image' },
+				{ status: 400 }
+			)
+		}
+
+		if (!productId) {
+			return NextResponse.json(
+				{ error: 'Missing required parameter: productId' },
+				{ status: 400 }
+			)
+		}
+
+		// Get product data
+		const product = buildingProducts.find(p => p.id === productId)
+		if (!product) {
+			return NextResponse.json(
+				{ error: 'Invalid productId' },
 				{ status: 400 }
 			)
 		}
@@ -53,10 +69,9 @@ export async function POST(request: NextRequest) {
 		// Use default prompt if none provided
 		const prompt = enhancedPrompt || CALL_PROMPT
 
-		// Get museum image URL
-		// const baseUrl = 'https://rewolta.org' //process.env.NEXTAUTH_URL || 'https://rewolta.org'
-		const museumImageUrl = `https://imgen-proxy.b-cdn.net/museum/museum-small.png`
-		// console.log('Using museum image URL:', museumImageUrl)
+		// Use product's CDN URL
+		const referenceImageUrl = product.cdnUrl
+		console.log('Using reference image URL:', referenceImageUrl)
 
 		// Sanitize ownerId
 		const rawOwnerId = session.user?.id || session.user?.email || 'unknown'
@@ -71,7 +86,7 @@ export async function POST(request: NextRequest) {
 		const imgenRequest = {
 			model: 'gpt-4.1',
 			ownerId: ownerId,
-			productId: PRODUCT_ID,
+			productId: productId,
 			input: [
 				{
 					role: "system",
@@ -81,7 +96,7 @@ export async function POST(request: NextRequest) {
 					role: 'user',
 					content: [
 						{ type: 'input_text', text: prompt },
-						{ type: 'input_image', image_url: museumImageUrl },
+						{ type: 'input_image', image_url: referenceImageUrl },
 						{ type: 'input_image', image_url: `data:image/jpeg;base64,${inputBase64Image}` }
 					]
 				}

@@ -1,0 +1,15 @@
+.main {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1;
+	padding: 0.5rem 1rem;
+	width: 100%;
+}
+
+.generatorContainer {
+	width: 100%;
+} 

@@ -5,12 +5,8 @@ import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { downloadImage } from '@/lib/download'
 import { useImageDetail } from '@/lib/hooks/useImageDetail'
+import { buildingProducts } from '@/content/ai'
 import styles from './ImageDetail.module.css'
-
-// Product to original image mapping
-const PRODUCT_ORIGINAL_IMAGES = {
-	museum: '/assets/museum-small.png'
-} as const
 
 interface ImageDetailProps {
 	imageId: string
@@ -115,8 +111,8 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 						<strong>Modyfikowany budynek:</strong>
 						<div className={styles.originalImageContainer}>
 							<img 
-								src={PRODUCT_ORIGINAL_IMAGES[imageData.productId as keyof typeof PRODUCT_ORIGINAL_IMAGES] || '/assets/museum-small.png'} 
-								alt="Original building" 
+								src={buildingProducts.find(p => p.id === imageData.productId)?.imageUrl || '/assets/museum-small.png'} 
+								alt={`${buildingProducts.find(p => p.id === imageData.productId)?.name || 'Original'} building`} 
 								className={styles.originalImage}
 								onClick={handleOriginalImageClick}
 								title="Kliknij aby przejść do generatora"

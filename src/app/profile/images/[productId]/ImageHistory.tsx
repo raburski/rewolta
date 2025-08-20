@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { useUserImages } from '@/lib/hooks/useUserImages'
+import { buildingProducts } from '@/content/ai'
 import styles from './ImageHistory.module.css'
 
 interface ImageHistoryProps {
@@ -76,7 +77,7 @@ export default function ImageHistory({ productId }: ImageHistoryProps) {
 				<FaWandMagicSparkles className={styles.emptyIcon} />
 				<h3>Brak wygenerowanych obrazów</h3>
 				<p>Nie masz jeszcze żadnych wygenerowanych obrazów dla tego produktu.</p>
-				<a href="/ai/museum" className={styles.generateButton}>
+				<a href={`/ai/${productId}`} className={styles.generateButton}>
 					Generuj pierwszy obraz
 				</a>
 			</div>

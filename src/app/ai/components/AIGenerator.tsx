@@ -2,20 +2,27 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard, FaTriangleExclamation } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
 import { useUserCredits } from '@/lib/hooks/useUserCredits'
 import { downloadImage } from '@/lib/download'
+import { buildingProducts } from '@/content/ai'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
 
 const FACEBOOK_SHARE_TEXT = 'Sprawdź mój wygenerowany budynek! 🏛️✨'
 
-export default function AIGenerator() {
+interface AIGeneratorProps {
+	productId?: string
+}
+
+export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) {
 	const { data: session, status } = useSession()
+	const router = useRouter()
 	const [selectedImage, setSelectedImage] = useState<string>('')
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [isGenerating, setIsGenerating] = useState(false)
@@ -233,7 +240,8 @@ export default function AIGenerator() {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					inputBase64Image: base64
+					inputBase64Image: base64,
+					productId: productId
 				})
 			})
 
@@ -265,13 +273,16 @@ export default function AIGenerator() {
 		<div className={styles.container}>
 			<div className={styles.mainContent}>
 				<div className={styles.inputSection}>
-					{/* First input box with museum image */}
+					{/* First input box with reference image */}
 					<div className={styles.inputBox}>
 						<div className={styles.imageContainer}>
 							<img 
-								src="/assets/museum-small.jpg" 
-								alt="Museum reference" 
+								src={buildingProducts.find(p => p.id === productId)?.imageUrl || "/assets/museum-small.jpg"} 
+								alt={`${buildingProducts.find(p => p.id === productId)?.name || 'Reference'} building`} 
 								className={styles.referenceImage}
+								onClick={() => router.push('/ai')}
+								title="Kliknij aby wybrać inny budynek"
+								style={{ cursor: 'pointer' }}
 							/>
 						</div>
 						<p className={styles.imageLabel}>Oryginalny budynek</p>
@@ -369,7 +380,7 @@ export default function AIGenerator() {
 							{!isGenerating && !generatedImageData && status === 'unauthenticated' && (
 								<button
 									className={`${styles.generateButton} ${styles.googleLoginButton} ${isGenerating ? styles.generating : ''}`}
-									onClick={() => signIn('google', { callbackUrl: '/ai/museum' })}
+									onClick={() => signIn('google', { callbackUrl: `/ai/${productId}` })}
 									disabled={isGenerating}
 								>
 									<FaGoogle className={styles.googleIcon} />
@@ -445,7 +456,7 @@ export default function AIGenerator() {
 						</span>
 					</div>
 					<div className={styles.infoItem}>
-						<a href="/profile/images/museum" className={styles.historyLink}>
+						<a href={`/profile/images/${productId}`} className={styles.historyLink}>
 							Historia generowań
 						</a>
 					</div>

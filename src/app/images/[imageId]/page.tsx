@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
+import { buildingProducts } from '@/content/ai'
 import Header from '@/app/components/Header/Header'
 import Footer from '@/app/components/Footer/Footer'
 import ImageDetail from './ImageDetail'
@@ -25,11 +26,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		if (response.ok) {
 			const imageData = await response.json()
 			
+			// Get product name from ai.ts data
+			const product = buildingProducts.find(p => p.id === imageData.productId)
+			const productName = product?.name || imageData.productId
+			
 			return {
-				title: `Wygenerowany obraz - ${imageData.productId}`,
+				title: `Wygenerowany obraz - ${productName}`,
 				description: 'Sprawdź ten wygenerowany budynek! 🏛️✨',
 				openGraph: {
-					title: `Wygenerowany obraz - ${imageData.productId}`,
+					title: `Wygenerowany obraz - ${productName}`,
 					description: 'Sprawdź ten wygenerowany budynek! 🏛️✨',
 					url: `${baseUrl}/images/${imageId}`,
 					images: [
@@ -44,7 +49,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 				},
 				twitter: {
 					card: 'summary_large_image',
-					title: `Wygenerowany obraz - ${imageData.productId}`,
+					title: `Wygenerowany obraz - ${productName}`,
 					description: 'Sprawdź ten wygenerowany budynek! 🏛️✨',
 					images: [imageData.imageUrl]
 				}
