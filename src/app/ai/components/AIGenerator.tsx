@@ -469,7 +469,7 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 						<p className={styles.noCreditsDescription}>
 							Napisz do nas, jeśli chciałbyś pobawić się generatorem trochę dłuej: {' '}
 							<a 
-								href={`mailto:wroclaw@rewolta.org?subject=Museum%20Generator:%20${session.user?.email || 'user'}`}
+								href={`mailto:wroclaw@rewolta.org?subject=Museum%20Generator:%20${session.user?.id || 'unknown'}`}
 								className={styles.noCreditsEmail}
 							>
 								wroclaw@rewolta.org
