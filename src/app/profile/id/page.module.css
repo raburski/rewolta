@@ -1,0 +1,68 @@
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.userIdCard {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+
+.title {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 1.5rem;
+	color: #333;
+}
+
+.idContainer {
+	background: #f8f9fa;
+	border: 2px solid #e9ecef;
+	border-radius: 8px;
+	padding: 1rem;
+	margin: 1rem 0;
+	word-break: break-all;
+}
+
+.userId {
+	font-family: 'Courier New', monospace;
+	font-size: 1rem;
+	color: #495057;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	display: block;
+}
+
+.description {
+	color: #6c757d;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	margin-top: 1rem;
+}
+
+.loadingCard {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	width: 100%;
+	max-width: 300px;
+}
+
+.loadingCard p {
+	color: #6c757d;
+	font-size: 1rem;
+	margin: 0;
+} 
