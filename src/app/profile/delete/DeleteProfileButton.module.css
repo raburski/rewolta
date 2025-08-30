@@ -1,0 +1,55 @@
+.deleteButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
+	background: #dc2626;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	min-width: 160px;
+	justify-content: center;
+}
+
+.deleteButton:hover:not(:disabled) {
+	background: #b91c1c;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.deleteButton:active:not(:disabled) {
+	transform: translateY(0);
+	box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
+.deleteButton:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+	transform: none;
+	box-shadow: none;
+}
+
+.deleteIcon {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+}
+
+.cancelLink {
+	color: #6b7280;
+	text-decoration: none;
+	font-size: 0.875rem;
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+	display: inline-block;
+}
+
+.cancelLink:hover {
+	color: #374151;
+	background: #f3f4f6;
+}

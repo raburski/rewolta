@@ -177,4 +177,33 @@
 	border-color: #9ca3af;
 	transform: translateY(-1px);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deleteLink {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
+	background: transparent;
+	color: #dc2626;
+	border: 2px solid #dc2626;
+	border-radius: 8px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.deleteLink:hover {
+	background: #dc2626;
+	color: white;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.deleteIcon {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
 } 

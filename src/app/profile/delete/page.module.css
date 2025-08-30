@@ -1,0 +1,130 @@
+.main {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem 1rem;
+}
+
+.deleteCard {
+	background: var(--card-background, #ffffff);
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+	text-align: center;
+}
+
+.warningIcon {
+	margin: 0 auto 1.5rem;
+	width: 80px;
+	height: 80px;
+	color: #ef4444;
+}
+
+.icon {
+	width: 100%;
+	height: 100%;
+}
+
+.title {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--text-primary, #111827);
+	margin: 0 0 1.5rem 0;
+}
+
+.warningMessage {
+	text-align: left;
+	margin: 2rem 0;
+	padding: 1.5rem;
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	border-radius: 8px;
+}
+
+.description {
+	font-size: 1rem;
+	color: #374151;
+	margin: 0 0 1rem 0;
+	line-height: 1.6;
+}
+
+.consequencesList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.consequencesList li {
+	padding: 0.5rem 0;
+	position: relative;
+	padding-left: 1.5rem;
+	color: #dc2626;
+	font-weight: 500;
+}
+
+.consequencesList li::before {
+	content: '•';
+	position: absolute;
+	left: 0;
+	color: #dc2626;
+	font-weight: bold;
+}
+
+.userInfo {
+	margin: 2rem 0;
+	padding: 1rem;
+	background: #f9fafb;
+	border-radius: 8px;
+}
+
+.userDetails {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1rem;
+}
+
+.label {
+	font-weight: 600;
+	color: #374151;
+}
+
+.value {
+	color: #111827;
+	font-weight: 500;
+}
+
+.actions {
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+@media (max-width: 640px) {
+	.content {
+		padding: 1rem;
+	}
+	
+	.deleteCard {
+		padding: 1.5rem;
+	}
+	
+	.title {
+		font-size: 1.5rem;
+	}
+	
+	.warningIcon {
+		width: 60px;
+		height: 60px;
+	}
+}
