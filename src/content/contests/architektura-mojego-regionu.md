@@ -29,9 +29,9 @@ To szansa, by spojrzeć na swoje otoczenie nowym okiem i podzielić się nim z i
 
 1. Organizatorem konkursu jest profil **Architektoniczna Rewolta Polska**.
 
-2. Ostateczny termin nadsyłania prac: **29.08.2025, godz. 23:59.**
+2. Ostateczny termin nadsyłania prac: **12.09.2025, godz. 23:59.**
 
-3. Wyniki konkursu zostaną podane do **31.08.2025** w mediach społecznościowych Organizatora.
+3. Wyniki konkursu zostaną podane do **15.09.2025** w mediach społecznościowych Organizatora.
 
 ---
 
@@ -63,9 +63,9 @@ To szansa, by spojrzeć na swoje otoczenie nowym okiem i podzielić się nim z i
 
 1. Zwycięski cykl zostanie wyłoniony przez Organizatora lub powołaną przez niego komisję. Decyzja o wyborze zwycięzcy jest ostateczna i nieodwołalna.
 
-2. Wyniki zostaną ogłoszone do **31 sierpnia 2025 r.** w mediach społecznościowych Organizatora.
+2. Wyniki zostaną ogłoszone do **15 września 2025 r.** w mediach społecznościowych Organizatora.
 
-3. Zwycięski cykl zostanie opublikowany **w mediach społecznościowych Organizatora.**
+3. Zwycięski cykl zostanie opublikowany **w mediach społecznościowych Organizatora.**  
   
 
 ### Nagroda
