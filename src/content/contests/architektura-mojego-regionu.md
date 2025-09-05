@@ -2,7 +2,7 @@
 title: "Niezwykła Architektura mojego regionu"
 description: "Konkurs fotograficzny"
 startDate: "2025-08-15"
-endDate: "2025-08-29"
+endDate: "2025-09-12"
 status: "active"
 email: "architektoniczna@rewolta.org"
 emailSubject: "Konkurs: Niezwykła architektura mojego regionu"
