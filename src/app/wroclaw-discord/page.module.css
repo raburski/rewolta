@@ -1,0 +1,164 @@
+.main {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background: rgb(var(--background-start-rgb));
+}
+
+.content {
+	flex: 1;
+	padding: 2rem;
+	max-width: 800px;
+	margin: 0 auto;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.discordCard {
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	border-radius: var(--border-radius);
+	padding: 3rem 2rem;
+	text-align: center;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	transition: all 0.3s ease;
+	width: 100%;
+	max-width: 600px;
+}
+
+.discordIcon {
+	margin-bottom: 1.5rem;
+	display: flex;
+	justify-content: center;
+}
+
+.discordCard h2 {
+	font-size: 1.75rem;
+	font-weight: 600;
+	margin: 0 0 1rem 0;
+	color: rgb(var(--foreground-rgb));
+}
+
+.discordCard p {
+	font-size: 1rem;
+	margin: 0 0 1.5rem 0;
+	opacity: 0.8;
+	color: rgb(var(--foreground-rgb));
+	line-height: 1.6;
+}
+
+.featuresList {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 2rem 0;
+	text-align: left;
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.featuresList li {
+	padding: 0.2rem 0;
+	font-size: 0.95rem;
+	color: rgb(var(--foreground-rgb));
+	opacity: 0.9;
+	line-height: 1.5;
+}
+
+.discordButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: #5865F2;
+	color: white;
+	padding: 1rem 2rem;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 1.1rem;
+	transition: all 0.3s ease;
+	margin-bottom: 1.5rem;
+	border: none;
+	cursor: pointer;
+}
+
+.discordButton:hover {
+	background: #4752C4;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+}
+
+.discordButton:active {
+	transform: translateY(0);
+}
+
+.infoBox {
+	background: rgba(var(--callout-rgb), 0.5);
+	border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+	border-radius: 8px;
+	padding: 1rem;
+	margin-top: 1rem;
+}
+
+.infoBox p {
+	margin: 0;
+	font-size: 0.9rem;
+	opacity: 0.8;
+	color: rgb(var(--foreground-rgb));
+	line-height: 1.5;
+}
+
+.downloadLink {
+	color: #5865F2;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.downloadLink:hover {
+	color: #4752C4;
+	text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+	.content {
+		padding: 1rem;
+	}
+
+	.discordCard {
+		padding: 2rem 1.5rem;
+	}
+
+	.discordCard h2 {
+		font-size: 1.5rem;
+	}
+
+	.discordButton {
+		padding: 0.875rem 1.5rem;
+		font-size: 1rem;
+	}
+
+	.featuresList {
+		max-width: 100%;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.discordCard {
+		transition: none;
+	}
+
+	.discordCard:hover {
+		transform: none;
+	}
+
+	.discordButton {
+		transition: none;
+	}
+
+	.discordButton:hover {
+		transform: none;
+	}
+}
