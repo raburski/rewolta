@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
+import { ensureHttpsUrl } from '@/lib/urlUtils'
 
-const IMGEN_PROXY_URL = process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com'
+const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
 export async function DELETE(request: NextRequest) {
