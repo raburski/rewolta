@@ -3,7 +3,7 @@ import Footer from '@/app/components/Footer/Footer'
 import styles from './page.module.css'
 
 // Discord invitation link - fill this in later
-const DISCORD_INVITE_LINK = 'https://discord.gg/a8RXDyVV'
+const DISCORD_INVITE_LINK = 'https://discord.gg/NFZ2Zxyq'
 
 export default function WroclawDiscordPage() {
 	return (
