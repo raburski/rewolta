@@ -52,6 +52,16 @@ export default function Home() {
                     height={78}
                   />
                 </a>
+                <a href="https://www.facebook.com/profile.php?id=61580853519807" target="_blank">
+                  <Image
+                    src="/emblem/malopolska.png"
+                    alt="Małopolska"
+                    id="emblemMalopolska"
+                    className={styles.emblem}
+                    width={92}
+                    height={92}
+                  />
+                </a>
                 <a href="https://www.facebook.com/profile.php?id=61556982112973" target="_blank">
                   <Image
                     src="/emblem/stettin.png"
