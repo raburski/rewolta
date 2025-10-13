@@ -2,8 +2,7 @@ import Header from '@/app/components/Header/Header'
 import Footer from '@/app/components/Footer/Footer'
 import styles from './page.module.css'
 
-// Discord invitation link - fill this in later
-const DISCORD_INVITE_LINK = 'https://discord.gg/NFZ2Zxyq'
+const DISCORD_INVITE_LINK = 'https://discord.gg/Tbsz6UJSV6'
 
 export default function WroclawDiscordPage() {
 	return (
