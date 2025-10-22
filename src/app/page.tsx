@@ -33,16 +33,16 @@ export default function Home() {
             <p>🌍&nbsp;&nbsp;Wszystkie lokalne rewolty</p>
           </a>
 
-          <Link href="/meme" className={styles.card}>
-            <h2>Memy <span>-&gt;</span></h2>
-            <p>🎨&nbsp;&nbsp;Stwórz rewoltowego mema</p>
-          </Link>
+          <a href="https://blog.rewolta.org/" className={styles.card} target="_blank">
+            <h2>Blog <span>-&gt;</span></h2>
+            <p>📝&nbsp;&nbsp;Artykuły i analizy</p>
+          </a>
         </div>
 
         <div className={styles.center}>
           <div className={styles.map}>
               <div className={styles.emblems}>
-                <a href="https://www.facebook.com/profile.php?id=61559270555090" target="_blank">
+                <a href="https://www.facebook.com/ArchitektonicznaRewoltaWroclaw" target="_blank">
                   <Image
                     src="/emblem/wro6.png"
                     alt="Wrocław"
@@ -72,7 +72,7 @@ export default function Home() {
                     height={78}
                   />
                 </a>
-                <a href="https://www.facebook.com/groups/691257419756556" target="_blank">
+                <a href="https://www.facebook.com/ArchitektonicznaRewoltaPolska" target="_blank">
                   <Image
                     src="/emblem/polska.png"
                     alt="Polska"
