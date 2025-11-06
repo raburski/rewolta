@@ -1,8 +1,11 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import DiscordProvider from 'next-auth/providers/discord'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { prisma } from './prisma'
 
 export const authOptions = {
+	adapter: PrismaAdapter(prisma),
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -14,14 +17,10 @@ export const authOptions = {
 		}),
 	],
 	session: {
-		strategy: 'jwt' as const,
+		strategy: 'database' as const,
 		maxAge: 30 * 24 * 60 * 60, // 30 days (default is 24 hours)
 		updateAge: 24 * 60 * 60, // 24 hours (default is 1 hour)
 	},
-	jwt: {
-		maxAge: 30 * 24 * 60 * 60, // 30 days
-	},
-	// Reduce automatic session refresh frequency
 	useSecureCookies: process.env.NODE_ENV === 'production',
 	cookies: {
 		sessionToken: {
@@ -36,15 +35,9 @@ export const authOptions = {
 		}
 	},
 	callbacks: {
-		async jwt({ token, user }) {
-			if (user) {
-				token.id = user.id
-			}
-			return token
-		},
-		async session({ session, token }) {
-			if (token) {
-				session.user.id = token.id
+		async session({ session, user }) {
+			if (session.user) {
+				session.user.id = user.id
 			}
 			return session
 		}
