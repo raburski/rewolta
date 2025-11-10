@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
@@ -12,7 +11,7 @@ export async function GET(
 ) {
 	try {
 		// Check authentication
-		const session = await getServerSession(authOptions)
+		const session = await auth()
 		if (!session) {
 			return NextResponse.json(
 				{ error: 'Authentication required' },

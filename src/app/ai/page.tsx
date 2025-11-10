@@ -2,30 +2,52 @@
 
 import Link from 'next/link'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
-import Header from '@/app/components/Header/Header'
-import Footer from '@/app/components/Footer/Footer'
+import Layout from '@/app/components/Layout/Layout'
+import PageContent from '@/app/components/PageContent/PageContent'
 import styles from './page.module.css'
-import { buildingProducts } from '@/content/ai'
+import { useBuildingProducts } from '@/lib/hooks/useBuildingProducts'
+
+const layoutProps = {
+	title: 'AI Generatory',
+	subtitle: 'Wybierz jeden z naszych generatorów AI, aby stworzyć unikalne budynki'
+}
 
 export default function AIProductsPage() {
-	return (
-		<main className={styles.main}>
-			<Header 
-				title="AI Generatory"
-				subtitle="Wybierz jeden z naszych generatorów AI, aby stworzyć unikalne budynki"
-			/>
+	const { products, isLoading, hasError } = useBuildingProducts()
 
-			<div className={styles.content}>
+	if (isLoading) {
+		return (
+			<Layout {...layoutProps}>
+				<PageContent>
+					<p>Ładowanie...</p>
+				</PageContent>
+			</Layout>
+		)
+	}
+
+	if (hasError) {
+		return (
+			<Layout {...layoutProps}>
+				<PageContent>
+					<p>Wystąpił błąd podczas ładowania produktów.</p>
+				</PageContent>
+			</Layout>
+		)
+	}
+
+	return (
+		<Layout {...layoutProps}>
+			<PageContent>
 				<div className={styles.productsGrid}>
-					{buildingProducts.map((product) => (
+					{products.map((product) => (
 						<div key={product.id} className={styles.productCard}>
-							<Link 
+							<Link
 								href={`/ai/${product.id}`}
 								className={styles.cardLink}
 							>
 								<div className={styles.productImage}>
-									<img 
-										src={product.imageUrl} 
+									<img
+										src={product.imageUrl}
 										alt={product.name}
 										className={styles.image}
 									/>
@@ -47,9 +69,7 @@ export default function AIProductsPage() {
 						</div>
 					))}
 				</div>
-			</div>
-			
-			<Footer />
-		</main>
+			</PageContent>
+		</Layout>
 	)
 } 

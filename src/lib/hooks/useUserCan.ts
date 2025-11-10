@@ -1,33 +1,18 @@
-import { useSession } from "next-auth/react"
-import { Permission, userCan } from "@/lib/permissions"
+import {
+	useUserCan as baseUseUserCan,
+	useUserCanAny as baseUseUserCanAny,
+	useUserCanAll as baseUseUserCanAll,
+} from "@raburski/next-auth-permissions/client"
+import { Permission } from "@/lib/permissions"
 
 export function useUserCan(permission: Permission): boolean {
-	const { data: session } = useSession()
-	
-	if (!session?.user?.role) {
-		return false
-	}
-	
-	return userCan(session.user.role, permission)
+	return baseUseUserCan<Permission>(permission)
 }
 
 export function useUserCanAny(permissions: Permission[]): boolean {
-	const { data: session } = useSession()
-	
-	if (!session?.user?.role) {
-		return false
-	}
-	
-	return permissions.some(permission => userCan(session.user.role, permission))
+	return baseUseUserCanAny<Permission>(permissions)
 }
 
 export function useUserCanAll(permissions: Permission[]): boolean {
-	const { data: session } = useSession()
-	
-	if (!session?.user?.role) {
-		return false
-	}
-	
-	return permissions.every(permission => userCan(session.user.role, permission))
+	return baseUseUserCanAll<Permission>(permissions)
 }
-

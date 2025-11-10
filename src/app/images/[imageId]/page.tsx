@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
-import { buildingProducts } from '@/content/ai'
-import Header from '@/app/components/Header/Header'
-import Footer from '@/app/components/Footer/Footer'
+import { getBuildingProductById } from '@/lib/buildingProductUtils'
+import Layout from '@/app/components/Layout/Layout'
+import PageContent from '@/app/components/PageContent/PageContent'
 import ImageDetail from './ImageDetail'
-import styles from './page.module.css'
 
 interface PageProps {
 	params: {
@@ -26,8 +25,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		if (response.ok) {
 			const imageData = await response.json()
 			
-			// Get product name from ai.ts data
-			const product = buildingProducts.find(p => p.id === imageData.productId)
+			// Get product name from database
+			const product = await getBuildingProductById(imageData.productId)
 			const productName = product?.name || imageData.productId
 			
 			return {
@@ -80,16 +79,13 @@ export default async function ImageDetailPage({ params }: PageProps) {
 	}
 
 	return (
-		<main className={styles.main}>
-			<Header 
-				title="Szczegóły obrazu"
-				subtitle="Wygenerowany obraz"
-			/>
-
-			<div className={styles.content}>
+		<Layout
+			title="Szczegóły obrazu"
+			subtitle="Wygenerowany obraz"
+		>
+			<PageContent>
 				<ImageDetail imageId={imageId} />
-			</div>
-			<Footer />
-		</main>
+			</PageContent>
+		</Layout>
 	)
 } 

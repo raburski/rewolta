@@ -1,15 +1,3 @@
-.main {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-}
-
-.content {
-	flex: 1;
-	padding: 0.5rem 1rem;
-	width: 100%;
-}
-
 .productsGrid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -154,10 +142,6 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-	.content {
-		padding: 0.5rem 1rem;
-	}
-
 	.productsGrid {
 		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 		gap: 1rem;

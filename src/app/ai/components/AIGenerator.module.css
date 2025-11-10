@@ -3,7 +3,8 @@
 	gap: 2rem;
 	max-width: 1400px;
 	margin: 0 auto;
-	padding: 2rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 .mainContent {

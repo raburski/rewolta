@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { requireUserCan, requireAuth } from "@/lib/authUtils"
+import "@/lib/authUtils"
+import { requireAuth, requireUserCan } from "@raburski/next-auth-permissions/server"
 import { Permission } from "@/lib/permissions"
 import { Middleware, APIHandler, APIContext } from "./types"
 

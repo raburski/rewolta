@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { buildingProducts } from '@/content/ai'
-import Header from '@/app/components/Header/Header'
-import Footer from '@/app/components/Footer/Footer'
+import Layout from '@/app/components/Layout/Layout'
+import PageContent from '@/app/components/PageContent/PageContent'
+import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
 import AIGenerator from '../components/AIGenerator'
 import styles from './page.module.css'
 
@@ -17,23 +17,46 @@ interface PageProps {
 export default function AIProductPage({ params }: PageProps) {
 	const { productId } = params
 	const router = useRouter()
-	const product = buildingProducts.find(p => p.id === productId)
+	const { product, isLoading } = useBuildingProduct(productId)
 
 	// If product doesn't exist, redirect to main AI page
 	useEffect(() => {
-		if (!product) {
+		if (!isLoading && !product) {
 			router.push('/ai')
 		}
-	}, [product, router])
+	}, [product, isLoading, router])
+
+	if (isLoading) {
+		return (
+			<Layout
+				title="Ładowanie..."
+				subtitle=""
+			>
+				<PageContent>
+					<div className={styles.generatorContainer}>
+						<div style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '50vh',
+							fontSize: '1.1rem',
+							color: '#666'
+						}}>
+							Ładowanie...
+						</div>
+					</div>
+				</PageContent>
+			</Layout>
+		)
+	}
 
 	if (!product) {
 		return (
-			<main className={styles.main}>
-				<Header 
-					title="Produkt nie znaleziony"
-					subtitle="Przekierowywanie do strony głównej AI"
-				/>
-				<div className={styles.content}>
+			<Layout
+				title="Produkt nie znaleziony"
+				subtitle="Przekierowywanie do strony głównej AI"
+			>
+				<PageContent>
 					<div className={styles.generatorContainer}>
 						<div style={{
 							display: 'flex',
@@ -46,25 +69,21 @@ export default function AIProductPage({ params }: PageProps) {
 							Przekierowywanie...
 						</div>
 					</div>
-				</div>
-				<Footer />
-			</main>
+				</PageContent>
+			</Layout>
 		)
 	}
 
 	return (
-		<main className={styles.main}>
-			<Header 
-				title={`AI Generator: ${product.name}`}
-				subtitle="Generuj obrazy z pomocą sztucznej inteligencji"
-			/>
-
-			<div className={styles.content}>
+		<Layout
+			title={`AI Generator: ${product.name}`}
+			subtitle="Generuj obrazy z pomocą sztucznej inteligencji"
+		>
+			<PageContent>
 				<div className={styles.generatorContainer}>
 					<AIGenerator productId={productId} />
 				</div>
-			</div>
-			<Footer />
-		</main>
+			</PageContent>
+		</Layout>
 	)
 } 

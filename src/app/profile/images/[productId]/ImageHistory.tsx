@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react'
 import { FaFacebook, FaWandMagicSparkles } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { useUserImages } from '@/lib/hooks/useUserImages'
-import { buildingProducts } from '@/content/ai'
 import styles from './ImageHistory.module.css'
 
 interface ImageHistoryProps {

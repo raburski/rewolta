@@ -1,10 +1,10 @@
-import NextAuth from 'next-auth'
+import NextAuth, { type NextAuthConfig } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import DiscordProvider from 'next-auth/providers/discord'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from './prisma'
 
-export const authOptions = {
+export const authOptions: NextAuthConfig = {
 	adapter: PrismaAdapter(prisma),
 	providers: [
 		GoogleProvider({
@@ -17,7 +17,7 @@ export const authOptions = {
 		}),
 	],
 	session: {
-		strategy: 'database' as const,
+		strategy: 'database',
 		maxAge: 30 * 24 * 60 * 60, // 30 days (default is 24 hours)
 		updateAge: 24 * 60 * 60, // 24 hours (default is 1 hour)
 	},
@@ -46,4 +46,7 @@ export const authOptions = {
 	}
 }
 
-export default NextAuth(authOptions) 
+const authEvent = NextAuth(authOptions)
+
+export const { auth, signIn, signOut } = authEvent
+export const { GET, POST } = authEvent.handlers

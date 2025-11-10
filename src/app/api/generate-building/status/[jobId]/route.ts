@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
+import '@/lib/authUtils'
+import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { Permission } from '@/lib/permissions'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
@@ -12,9 +13,9 @@ export async function GET(
 ) {
 	try {
 		// Check authentication
-		const session = await getServerSession(authOptions)
-		if (!session) {
-			return NextResponse.json(
+		const { session, error } = await requireUserCan(Permission.IMAGE_GENERATION_EXECUTE, request)
+		if (error || !session) {
+			return error ?? NextResponse.json(
 				{ error: 'Authentication required' },
 				{ status: 401 }
 			)

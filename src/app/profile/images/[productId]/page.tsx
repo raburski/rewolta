@@ -1,11 +1,9 @@
-import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
-import { buildingProducts } from '@/content/ai'
-import Header from '@/app/components/Header/Header'
-import Footer from '@/app/components/Footer/Footer'
+import { auth } from '@/lib/auth'
+import { getBuildingProductById } from '@/lib/buildingProductUtils'
+import Layout from '@/app/components/Layout/Layout'
+import PageContent from '@/app/components/PageContent/PageContent'
 import ImageHistory from './ImageHistory'
-import styles from './page.module.css'
 
 interface PageProps {
 	params: {
@@ -14,7 +12,7 @@ interface PageProps {
 }
 
 export default async function ImageHistoryPage({ params }: PageProps) {
-	const session = await getServerSession(authOptions)
+	const session = await auth()
 
 	if (!session) {
 		redirect('/api/auth/signin')
@@ -22,23 +20,21 @@ export default async function ImageHistoryPage({ params }: PageProps) {
 
 	const { productId } = params
 
-	// Validate productId using ai.ts data
-	const product = buildingProducts.find(p => p.id === productId)
+	// Validate productId using database
+	const userRole = session.user?.role
+	const product = await getBuildingProductById(productId, userRole)
 	if (!product) {
 		redirect('/ai')
 	}
 
 	return (
-		<main className={styles.main}>
-			<Header 
-				title={`Historia generowań: ${product.name}`}
-				subtitle="Twoje wygenerowane obrazy"
-			/>
-
-			<div className={styles.content}>
+		<Layout
+			title={`Historia generowań: ${product.name}`}
+			subtitle="Twoje wygenerowane obrazy"
+		>
+			<PageContent>
 				<ImageHistory productId={productId} />
-			</div>
-			<Footer />
-		</main>
+			</PageContent>
+		</Layout>
 	)
 } 

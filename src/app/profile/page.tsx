@@ -1,13 +1,12 @@
-import { getServerSession } from 'next-auth/next'
 import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 import Header from '@/app/components/Header/Header'
 import Footer from '@/app/components/Footer/Footer'
 import SignOutButton from './SignOutButton'
 import styles from './page.module.css'
 
 export default async function ProfilePage() {
-	const session = await getServerSession(authOptions)
+	const session = await auth()
 
 	if (!session) {
 		redirect('/api/auth/signin')

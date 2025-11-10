@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
-import { buildingProducts } from '@/content/ai'
+import '@/lib/authUtils'
+import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { getBuildingProductById } from '@/lib/buildingProductUtils'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
+import { Permission } from '@/lib/permissions'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
@@ -25,10 +26,10 @@ Keep the lighting, camera perspective, and urban context from Image A. The resul
 
 export async function POST(request: NextRequest) {
 	try {
-		// Check authentication
-		const session = await getServerSession(authOptions)
-		if (!session) {
-			return NextResponse.json(
+		// Check authentication & permission
+		const { session, error } = await requireUserCan(Permission.IMAGE_GENERATION_EXECUTE, request)
+		if (error || !session) {
+			return error ?? NextResponse.json(
 				{ error: 'Authentication required' },
 				{ status: 401 }
 			)
@@ -51,7 +52,8 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Get product data
-		const product = buildingProducts.find(p => p.id === productId)
+		const userRole = session.user?.role
+		const product = await getBuildingProductById(productId, userRole)
 		if (!product) {
 			return NextResponse.json(
 				{ error: 'Invalid productId' },

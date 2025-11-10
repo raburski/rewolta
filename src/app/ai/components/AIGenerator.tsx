@@ -9,7 +9,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
 import { useUserCredits } from '@/lib/hooks/useUserCredits'
 import { downloadImage } from '@/lib/download'
-import { buildingProducts } from '@/content/ai'
+import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
@@ -38,6 +38,9 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 
 	// Use SWR for credits management
 	const { credits: userCredits, isLoading: creditsLoading, mutate: refreshCredits } = useUserCredits(status === 'authenticated')
+	
+	// Use SWR for product data
+	const { product } = useBuildingProduct(productId)
 
 	const onCloseLoginModal = () => {
 		setShowLoginModal(false)
@@ -277,8 +280,8 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 					<div className={styles.inputBox}>
 						<div className={styles.imageContainer}>
 							<img 
-								src={buildingProducts.find(p => p.id === productId)?.imageUrl || "/assets/museum-small.jpg"} 
-								alt={`${buildingProducts.find(p => p.id === productId)?.name || 'Reference'} building`} 
+								src={product?.imageUrl || "/assets/museum-small.jpg"} 
+								alt={`${product?.name || 'Reference'} building`} 
 								className={styles.referenceImage}
 								onClick={() => router.push('/ai')}
 								title="Kliknij aby wybrać inny budynek"

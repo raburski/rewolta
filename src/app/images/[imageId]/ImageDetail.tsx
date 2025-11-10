@@ -5,7 +5,7 @@ import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { downloadImage } from '@/lib/download'
 import { useImageDetail } from '@/lib/hooks/useImageDetail'
-import { buildingProducts } from '@/content/ai'
+import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
 import styles from './ImageDetail.module.css'
 
 interface ImageDetailProps {
@@ -18,6 +18,9 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 	
 	// Use SWR for data fetching
 	const { imageData, isLoading, hasError, error, mutate } = useImageDetail(imageId)
+	
+	// Use SWR for product data
+	const { product } = useBuildingProduct(imageData?.productId || null)
 
 	const handleShare = () => {
 		if (!imageData) return
@@ -111,8 +114,8 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 						<strong>Modyfikowany budynek:</strong>
 						<div className={styles.originalImageContainer}>
 							<img 
-								src={buildingProducts.find(p => p.id === imageData.productId)?.imageUrl || '/assets/museum-small.png'} 
-								alt={`${buildingProducts.find(p => p.id === imageData.productId)?.name || 'Original'} building`} 
+								src={product?.imageUrl || '/assets/museum-small.png'} 
+								alt={`${product?.name || 'Original'} building`} 
 								className={styles.originalImage}
 								onClick={handleOriginalImageClick}
 								title="Kliknij aby przejść do generatora"

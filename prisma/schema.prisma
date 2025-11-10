@@ -22,6 +22,11 @@ enum UserStatus {
 	DELETED
 }
 
+enum BuildingProductStatus {
+	ACTIVE
+	INACTIVE
+}
+
 // NextAuth.js required models
 model Account {
 	id                String  @id @default(cuid())
@@ -73,4 +78,18 @@ model VerificationToken {
 	expires    DateTime
 
 	@@unique([identifier, token])
+}
+
+model BuildingProduct {
+	id          String                @id
+	name        String
+	imageUrl    String                @db.Text
+	description String                @db.Text
+	cdnUrl      String                @db.Text
+	status      BuildingProductStatus @default(INACTIVE)
+	createdAt   DateTime              @default(now())
+	updatedAt   DateTime              @updatedAt
+
+	@@index([id])
+	@@index([status])
 }
