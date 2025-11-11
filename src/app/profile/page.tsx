@@ -68,24 +68,6 @@ export default async function ProfilePage() {
 							</dl>
 						</div>
 
-						{/* Session Information */}
-						<div className={styles.detailCard}>
-							<h3 className={styles.detailTitle}>Informacje o sesji</h3>
-							<dl className={styles.detailList}>
-								<div className={styles.detailItem}>
-									<dt className={styles.detailLabel}>Dostawca</dt>
-									<dd className={styles.detailValue}>
-										{session.provider || 'Nieznany'}
-									</dd>
-								</div>
-								<div className={styles.detailItem}>
-									<dt className={styles.detailLabel}>Sesja wygasa</dt>
-									<dd className={styles.detailValue}>
-										{session.expires ? new Date(session.expires).toLocaleString('pl-PL') : 'Nieznane'}
-									</dd>
-								</div>
-							</dl>
-						</div>
 					</div>
 
 					{/* Raw Session Data (Development Only) */}

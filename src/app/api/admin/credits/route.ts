@@ -1,20 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
 // Update credits for all users
-export async function POST(request: NextRequest) {
+const handler: APIHandler = async (request, context) => {
 	try {
-		// Require authentication and USERS_SET_CREDITS permission
-		const { error: permissionError } = await requireUserCan(Permission.USERS_SET_CREDITS, request)
-		if (permissionError) {
-			return permissionError
-		}
 
 		if (!IMGEN_PROXY_API_KEY) {
 			console.error('IMGEN_PROXY_API_KEY not configured')
@@ -71,4 +67,8 @@ export async function POST(request: NextRequest) {
 		)
 	}
 }
+
+export const POST = compose(
+	withPermission(Permission.USERS_SET_CREDITS)
+)(handler)
 

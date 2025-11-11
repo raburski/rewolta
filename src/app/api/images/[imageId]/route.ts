@@ -1,15 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { APIHandler } from '@raburski/next-api-middleware'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: { imageId: string } }
-) {
+export const GET: APIHandler = async (request, context) => {
 	try {
-		const { imageId } = params
+		const params = await context.params
+		const { imageId } = params as { imageId: string }
 
 		if (!imageId) {
 			return NextResponse.json(

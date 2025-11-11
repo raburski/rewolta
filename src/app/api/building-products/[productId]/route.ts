@@ -1,16 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { Permission } from '@/lib/permissions'
 import { checkPermission } from '@raburski/next-auth-permissions/server'
+import { APIHandler } from '@raburski/next-api-middleware'
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: { productId: string } }
-) {
+export const GET: APIHandler = async (request, context) => {
 	try {
-		const { productId } = params
+		const params = await context.params
+		const { productId } = params as { productId: string }
 		const session = await auth()
 		const canViewAll = session ? checkPermission(session, Permission.BUILDING_PRODUCTS_VIEW_ALL) : false
 

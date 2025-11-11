@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { getBuildingProductById } from '@/lib/buildingProductUtils'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
@@ -24,16 +25,9 @@ Instructions:
 
 Keep the lighting, camera perspective, and urban context from Image A. The result should look like a stylistic reinterpretation of the museum building, without altering its form or incorporating unrelated exhibit elements.`
 
-export async function POST(request: NextRequest) {
+const handler: APIHandler = async (request, context) => {
 	try {
-		// Check authentication & permission
-		const { session, error } = await requireUserCan(Permission.IMAGE_GENERATION_EXECUTE, request)
-		if (error || !session) {
-			return error ?? NextResponse.json(
-				{ error: 'Authentication required' },
-				{ status: 401 }
-			)
-		}
+		const { session } = context
 
 		const { inputBase64Image, enhancedPrompt, productId } = await request.json()
 
@@ -144,4 +138,8 @@ export async function POST(request: NextRequest) {
 			{ status: 500 }
 		)
 	}
-} 
+}
+
+export const POST = compose(
+	withPermission(Permission.IMAGE_GENERATION_EXECUTE)
+)(handler) 

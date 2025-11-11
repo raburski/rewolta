@@ -44,7 +44,7 @@ function statusBadgeClass(status: BuildingProduct['status']) {
 
 export default function BuildingsTable() {
 	const { data, error, isLoading, mutate } = useSWR<BuildingsResponse>('/api/admin/buildings', fetcher)
-	const canManage = useUserCan<Permission>(Permission.BUILDING_PRODUCTS_MANAGE)
+	const canManage = useUserCan(Permission.BUILDING_PRODUCTS_MANAGE)
 	const [selectedProduct, setSelectedProduct] = useState<BuildingProduct | null>(null)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [editName, setEditName] = useState('')

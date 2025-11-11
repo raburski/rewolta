@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { APIHandler } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(request: NextRequest) {
+export const GET: APIHandler = async (request, context) => {
 	try {
 		const products = await prisma.buildingProduct.findMany({
 			where: { status: 'ACTIVE' },

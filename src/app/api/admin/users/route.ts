@@ -2,10 +2,9 @@ import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
 import { Permission } from '@/lib/permissions'
 import { withPagination } from '@raburski/next-pagination/server'
-import { APIHandler } from '@raburski/next-api-middleware'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { prisma } from '@/lib/prisma'
-import { withPermission } from '@/lib/middleware/permissions'
-import { compose } from '@/lib/middleware/compose'
 
 const handler: APIHandler = async (request, context) => {
 	const { createPaginatedPrismaResponse } = context

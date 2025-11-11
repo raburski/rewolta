@@ -1,16 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
 import { auth } from '@/lib/auth'
 import { requireUserCan } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: Promise<{ id: string }> }
-) {
+export const GET: APIHandler = async (request, context) => {
 	try {
-		const { id } = await params
+		const params = await context.params
+		const { id } = params as { id: string }
 		const session = await auth()
 
 		// Allow unauthenticated users to view profiles, but without sensitive data
@@ -20,7 +19,7 @@ export async function GET(
 		// Check if user has permission to view users (only if authenticated)
 		let canViewUsers = false
 		if (isAuthenticated) {
-			const { error: permissionError } = await requireUserCan(Permission.USERS_VIEW, request)
+			const { error: permissionError } = await requireUserCan(Permission.USERS_VIEW)
 			canViewUsers = !permissionError
 		}
 

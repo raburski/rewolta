@@ -1,20 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { NextResponse } from 'next/server'
+import '@/lib/authUtils'
+import { withAuth } from '@raburski/next-auth-permissions/server'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
-export async function GET(request: NextRequest) {
+const handler: APIHandler = async (request, context) => {
 	try {
-		// Check authentication
-		const session = await auth()
-		if (!session) {
-			return NextResponse.json(
-				{ error: 'Authentication required' },
-				{ status: 401 }
-			)
-		}
+		const { session } = context
 
 		if (!IMGEN_PROXY_API_KEY) {
 			console.error('IMGEN_PROXY_API_KEY not configured')
@@ -71,4 +66,8 @@ export async function GET(request: NextRequest) {
 			{ status: 500 }
 		)
 	}
-} 
+}
+
+export const GET = compose(
+	withAuth
+)(handler) 

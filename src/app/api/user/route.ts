@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
+import { APIHandler } from '@raburski/next-api-middleware'
 
-export async function GET(request: NextRequest) {
+export const GET: APIHandler = async (request, context) => {
 	return NextResponse.json({
 		message: 'User API',
 		endpoints: {

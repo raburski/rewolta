@@ -1,18 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 import { UserRole, UserStatus } from '@prisma/client'
 
-export async function PUT(request: NextRequest, { params }: { params: { userId: string } }) {
-	const { userId } = params
-
-	const { error } = await requireUserCan(Permission.USERS_MANAGE, request)
-
-	if (error) {
-		return error
-	}
+const handler: APIHandler = async (request, context) => {
+	const params = await context.params
+	const { userId } = params as { userId: string }
 
 	try {
 		const body = await request.json().catch(() => null)
@@ -55,3 +51,7 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 		return NextResponse.json({ error: 'Nie udało się zaktualizować użytkownika' }, { status: 500 })
 	}
 }
+
+export const PUT = compose(
+	withPermission(Permission.USERS_MANAGE)
+)(handler)

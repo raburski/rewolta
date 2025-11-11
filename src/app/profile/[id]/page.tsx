@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useUserCan } from '@/lib/hooks/useUserCan'
+import { useUserCan } from '@raburski/next-auth-permissions/client'
 import { Permission } from '@/lib/permissions'
 import Layout from '@/app/components/Layout/Layout'
 import PageContent from '@/app/components/PageContent/PageContent'

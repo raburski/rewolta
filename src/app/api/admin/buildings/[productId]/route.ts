@@ -1,17 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 
-export async function PUT(request: NextRequest, { params }: { params: { productId: string } }) {
-	const { productId } = params
-
-	const { error } = await requireUserCan(Permission.BUILDING_PRODUCTS_MANAGE, request)
-
-	if (error) {
-		return error
-	}
+const handler: APIHandler = async (request, context) => {
+	const params = await context.params
+	const { productId } = params as { productId: string }
 
 	try {
 		const body = await request.json().catch(() => null)
@@ -48,3 +44,7 @@ export async function PUT(request: NextRequest, { params }: { params: { productI
 		return NextResponse.json({ error: 'Nie udało się zaktualizować generatora' }, { status: 500 })
 	}
 }
+
+export const PUT = compose(
+	withPermission(Permission.BUILDING_PRODUCTS_MANAGE)
+)(handler)

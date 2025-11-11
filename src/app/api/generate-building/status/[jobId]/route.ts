@@ -1,27 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: { jobId: string } }
-) {
+const handler: APIHandler = async (request, context) => {
 	try {
-		// Check authentication
-		const { session, error } = await requireUserCan(Permission.IMAGE_GENERATION_EXECUTE, request)
-		if (error || !session) {
-			return error ?? NextResponse.json(
-				{ error: 'Authentication required' },
-				{ status: 401 }
-			)
-		}
-
-		const { jobId } = params
+		const { session } = context
+		const params = await context.params
+		const { jobId } = params as { jobId: string }
 
 		if (!jobId) {
 			return NextResponse.json(
@@ -112,4 +103,8 @@ export async function GET(
 			{ status: 500 }
 		)
 	}
-} 
+}
+
+export const GET = compose(
+	withPermission(Permission.IMAGE_GENERATION_EXECUTE)
+)(handler) 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useUserCan } from '@/lib/hooks/useUserCan'
+import { useUserCan } from '@raburski/next-auth-permissions/client'
 import { Permission } from '@/lib/permissions'
 import Modal from '@/app/components/Modal/Modal'
 import styles from './page.module.css'

@@ -1,19 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 import { uploadToBunnyCDN, createThumbnail } from '@/lib/bunnyCdnUtils'
 import { BuildingProductStatus } from '@prisma/client'
 import { randomBytes } from 'crypto'
 
-export async function GET(request: NextRequest) {
-	const { session, error } = await requireUserCan(Permission.BUILDING_PRODUCTS_MANAGE, request)
-
-	if (error) {
-		return error
-	}
-
+const getHandler: APIHandler = async (request, context) => {
 	try {
 		const products = await prisma.buildingProduct.findMany({
 			orderBy: { createdAt: 'desc' },
@@ -37,13 +32,7 @@ export async function GET(request: NextRequest) {
 	}
 }
 
-export async function POST(request: NextRequest) {
-	const { session, error } = await requireUserCan(Permission.BUILDING_PRODUCTS_MANAGE, request)
-
-	if (error) {
-		return error
-	}
-
+const postHandler: APIHandler = async (request, context) => {
 	try {
 		const formData = await request.formData()
 		const name = formData.get('name') as string
@@ -128,5 +117,13 @@ export async function POST(request: NextRequest) {
 		)
 	}
 }
+
+export const GET = compose(
+	withPermission(Permission.BUILDING_PRODUCTS_MANAGE)
+)(getHandler)
+
+export const POST = compose(
+	withPermission(Permission.BUILDING_PRODUCTS_MANAGE)
+)(postHandler)
 
 

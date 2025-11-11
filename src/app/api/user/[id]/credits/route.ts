@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { auth } from '@/lib/auth'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { APIHandler, compose } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
@@ -10,23 +10,10 @@ const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://y
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
 // Get credits for a specific user
-export async function GET(
-	request: NextRequest,
-	{ params }: { params: Promise<{ id: string }> }
-) {
+const getHandler: APIHandler = async (request, context) => {
 	try {
-		const { id } = await params
-		const session = await auth()
-
-		// Require authentication and USERS_VIEW permission
-		if (!session?.user?.id) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-		}
-
-		const { error: permissionError } = await requireUserCan(Permission.USERS_VIEW, request)
-		if (permissionError) {
-			return permissionError
-		}
+		const params = await context.params
+		const { id } = params as { id: string }
 
 		if (!IMGEN_PROXY_API_KEY) {
 			console.error('IMGEN_PROXY_API_KEY not configured')
@@ -97,23 +84,10 @@ export async function GET(
 }
 
 // Update credits for a specific user
-export async function POST(
-	request: NextRequest,
-	{ params }: { params: Promise<{ id: string }> }
-) {
+const postHandler: APIHandler = async (request, context) => {
 	try {
-		const { id } = await params
-		const session = await auth()
-
-		// Require authentication and USERS_SET_CREDITS permission
-		if (!session?.user?.id) {
-			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-		}
-
-		const { error: permissionError } = await requireUserCan(Permission.USERS_SET_CREDITS, request)
-		if (permissionError) {
-			return permissionError
-		}
+		const params = await context.params
+		const { id } = params as { id: string }
 
 		if (!IMGEN_PROXY_API_KEY) {
 			console.error('IMGEN_PROXY_API_KEY not configured')
@@ -192,4 +166,12 @@ export async function POST(
 		)
 	}
 }
+
+export const GET = compose(
+	withPermission(Permission.USERS_VIEW)
+)(getHandler)
+
+export const POST = compose(
+	withPermission(Permission.USERS_SET_CREDITS)
+)(postHandler)
 
