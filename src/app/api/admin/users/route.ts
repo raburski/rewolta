@@ -1,18 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import '@/lib/authUtils'
-import { requireUserCan } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
+import { withPagination } from '@raburski/next-pagination/server'
+import { APIHandler } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
+import { withPermission } from '@/lib/middleware/permissions'
+import { compose } from '@/lib/middleware/compose'
 
-export async function GET(request: NextRequest) {
-	const { session, error } = await requireUserCan(Permission.USERS_VIEW, request)
+const handler: APIHandler = async (request, context) => {
+	const { createPaginatedPrismaResponse } = context
 
-	if (error) {
-		return error
-	}
-
-	try {
-		const users = await prisma.user.findMany({
+	return NextResponse.json(
+		await createPaginatedPrismaResponse(prisma.user, {
 			orderBy: { createdAt: 'desc' },
 			select: {
 				id: true,
@@ -23,15 +22,12 @@ export async function GET(request: NextRequest) {
 				createdAt: true,
 			}
 		})
-
-		return NextResponse.json({ users })
-	} catch (err) {
-		console.error('Error fetching admin users:', err)
-		return NextResponse.json(
-			{ error: 'Failed to load users' },
-			{ status: 500 }
-		)
-	}
+	)
 }
+
+export const GET = compose(
+	withPermission(Permission.USERS_VIEW),
+	withPagination
+)(handler)
 
 

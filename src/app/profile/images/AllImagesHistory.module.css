@@ -1,0 +1,236 @@
+.container {
+	width: 100%;
+	max-width: 1200px;
+}
+
+.imageGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 1.5rem;
+}
+
+.imageCard {
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.imageCard:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+}
+
+.image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.imageInfo {
+	padding: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.imageMeta {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.productName {
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0;
+}
+
+.imageDate {
+	font-size: 0.875rem;
+	color: #6b7280;
+	margin: 0;
+}
+
+.shareButton {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	background: #4267b2;
+	color: white;
+	border: none;
+	border-radius: var(--border-radius);
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease;
+	flex-shrink: 0;
+}
+
+.shareButton:hover {
+	background: #375899;
+}
+
+.shareIcon {
+	width: 14px;
+	height: 14px;
+}
+
+.errorContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4rem 2rem;
+	text-align: center;
+}
+
+.errorText {
+	color: #ef4444;
+	font-size: 1rem;
+}
+
+/* Skeleton Loading Styles */
+.skeletonCard {
+	background: rgb(var(--card-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.15);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.skeletonImage {
+	width: 100%;
+	height: 200px;
+	background: linear-gradient(90deg, 
+		rgba(var(--card-border-rgb), 0.1) 25%, 
+		rgba(var(--card-border-rgb), 0.2) 50%, 
+		rgba(var(--card-border-rgb), 0.1) 75%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+.skeletonInfo {
+	padding: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.skeletonDate {
+	width: 80px;
+	height: 16px;
+	background: linear-gradient(90deg, 
+		rgba(var(--card-border-rgb), 0.1) 25%, 
+		rgba(var(--card-border-rgb), 0.2) 50%, 
+		rgba(var(--card-border-rgb), 0.1) 75%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	border-radius: 4px;
+}
+
+.skeletonButton {
+	width: 100px;
+	height: 32px;
+	background: linear-gradient(90deg, 
+		rgba(var(--card-border-rgb), 0.1) 25%, 
+		rgba(var(--card-border-rgb), 0.2) 50%, 
+		rgba(var(--card-border-rgb), 0.1) 75%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	border-radius: var(--border-radius);
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.emptyContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 4rem 2rem;
+	text-align: center;
+}
+
+.emptyIcon {
+	width: 4rem;
+	height: 4rem;
+	color: #9ca3af;
+	margin-bottom: 1rem;
+}
+
+.emptyContainer h3 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 0.5rem 0;
+}
+
+.emptyContainer p {
+	font-size: 1rem;
+	color: #6b7280;
+	margin: 0 0 2rem 0;
+}
+
+.generateButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
+	background: #3b82f6;
+	color: white;
+	text-decoration: none;
+	border-radius: var(--border-radius);
+	font-size: 1rem;
+	font-weight: 500;
+	transition: background 0.2s ease;
+}
+
+.generateButton:hover {
+	background: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+	.imageGrid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.imageContainer {
+		height: 180px;
+	}
+
+	.skeletonImage {
+		height: 180px;
+	}
+
+	.imageInfo {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.shareButton {
+		width: 100%;
+		justify-content: center;
+	}
+}
+

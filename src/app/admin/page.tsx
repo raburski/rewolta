@@ -5,6 +5,7 @@ import { requireUserCan } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
 import Layout from '@/app/components/Layout/Layout'
 import PageContent from '@/app/components/PageContent/PageContent'
+import CreditsManager from './CreditsManager'
 import styles from './page.module.css'
 
 export default async function AdminDashboardPage() {
@@ -37,6 +38,7 @@ export default async function AdminDashboardPage() {
 								Zarządzaj generatorami budynków dostępnych dla użytkowników.
 							</span>
 						</Link>
+						<CreditsManager />
 					</div>
 				</div>
 			</PageContent>

@@ -1,10 +1,7 @@
 "use client"
 
-import { useState } from 'react'
-import useSWR from 'swr'
-import { useUserCan } from '@raburski/next-auth-permissions/client'
-import Modal from '@/app/components/Modal/Modal'
-import { Permission } from '@/lib/permissions'
+import { useState, useEffect } from 'react'
+import { useSWRPaginated } from '@raburski/next-pagination/client'
 import { UserRole, UserStatus } from '@prisma/client'
 import styles from './page.module.css'
 
@@ -15,20 +12,6 @@ type AdminUser = {
 	role: UserRole
 	status: UserStatus
 	createdAt: string
-}
-
-type UsersResponse = {
-	users: AdminUser[]
-}
-
-const fetcher = async (url: string) => {
-	const response = await fetch(url, { cache: 'no-store' })
-
-	if (!response.ok) {
-		throw new Error('Failed to fetch users')
-	}
-
-	return response.json()
 }
 
 function statusBadgeClass(status: UserStatus) {
@@ -43,20 +26,64 @@ function statusBadgeClass(status: UserStatus) {
 	}
 }
 
-const roleOptions: UserRole[] = ['USER', 'MODERATOR', 'ADMIN']
-const statusOptions: UserStatus[] = ['ACTIVE', 'BANNED', 'DELETED']
 
 export default function UsersTable() {
-	const { data, error, isLoading, mutate } = useSWR<UsersResponse>('/api/admin/users', fetcher)
-	const canEdit = useUserCan<Permission>(Permission.USERS_MANAGE)
-	const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null)
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [editRole, setEditRole] = useState<UserRole>('USER')
-	const [editStatus, setEditStatus] = useState<UserStatus>('ACTIVE')
-	const [saving, setSaving] = useState(false)
-	const [saveError, setSaveError] = useState<string | null>(null)
+	const limit = 20
+	const {
+		data: allUsers,
+		error,
+		isLoading,
+		totalCount,
+		page: hookPage,
+		goToPage,
+		resetPagination
+	} = useSWRPaginated<AdminUser>('/api/admin/users', { limit })
+	
+	const [targetPage, setTargetPage] = useState<number | null>(null)
+	
+	const totalPages = totalCount > 0 ? Math.ceil(totalCount / limit) : 0
+	
+	// When targetPage changes, navigate to that page
+	useEffect(() => {
+		if (targetPage !== null) {
+			if (targetPage === hookPage) {
+				// Already on target page, clear target
+				setTargetPage(null)
+				return
+			}
+			
+			if (targetPage === 1) {
+				resetPagination()
+				setTargetPage(null)
+			} else {
+				// Reset to clear accumulated data, then navigate to target page
+				resetPagination()
+				const timer = setTimeout(() => {
+					goToPage(targetPage)
+				}, 100)
+				return () => clearTimeout(timer)
+			}
+		}
+	}, [targetPage, hookPage, resetPagination, goToPage])
+	
+	// Clear targetPage when we reach it
+	useEffect(() => {
+		if (targetPage !== null && targetPage === hookPage) {
+			setTargetPage(null)
+		}
+	}, [targetPage, hookPage])
 
-	if (isLoading) {
+	// For table view, show only current page's data
+	// After reset + goToPage, allUsers should contain only that page's data
+	const users = allUsers
+
+	const handlePageChange = (newPage: number) => {
+		if (newPage >= 1 && newPage <= totalPages && newPage !== hookPage) {
+			setTargetPage(newPage)
+		}
+	}
+
+	if (isLoading && users.length === 0) {
 		return <div className={styles.emptyState}>Ładowanie użytkowników...</div>
 	}
 
@@ -64,65 +91,14 @@ export default function UsersTable() {
 		return <div className={styles.emptyState}>Nie udało się pobrać listy użytkowników.</div>
 	}
 
-	const users = data?.users ?? []
-
-	if (users.length === 0) {
+	if (users.length === 0 && !isLoading) {
 		return <div className={styles.emptyState}>Brak użytkowników do wyświetlenia.</div>
 	}
 
-	const openModal = (user: AdminUser) => {
-		if (!canEdit) {
-			return
-		}
-
-		setSelectedUser(user)
-		setEditRole(user.role)
-		setEditStatus(user.status)
-		setSaveError(null)
-		setIsModalOpen(true)
+	const openUserProfile = (user: AdminUser) => {
+		window.open(`/profile/${user.id}`, '_blank')
 	}
 
-	const closeModal = () => {
-		setIsModalOpen(false)
-		setSelectedUser(null)
-		setSaveError(null)
-	}
-
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault()
-
-		if (!selectedUser) {
-			return
-		}
-
-		try {
-			setSaving(true)
-			setSaveError(null)
-
-			const response = await fetch(`/api/admin/users/${selectedUser.id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					role: editRole,
-					status: editStatus
-				})
-			})
-
-			if (!response.ok) {
-				const body = await response.json().catch(() => null)
-				throw new Error(body?.error || 'Nie udało się zapisać zmian')
-			}
-
-			await mutate()
-			closeModal()
-		} catch (submitError) {
-			setSaveError(submitError instanceof Error ? submitError.message : 'Wystąpił błąd podczas zapisu')
-		} finally {
-			setSaving(false)
-		}
-	}
 
 	return (
 		<>
@@ -141,8 +117,8 @@ export default function UsersTable() {
 						{users.map((user) => (
 							<tr
 								key={user.id}
-								className={canEdit ? styles.clickableRow : undefined}
-								onClick={canEdit ? () => openModal(user) : undefined}
+								className={styles.clickableRow}
+								onClick={() => openUserProfile(user)}
 							>
 								<td>{user.name || '—'}</td>
 								<td>{user.email || '—'}</td>
@@ -159,65 +135,28 @@ export default function UsersTable() {
 				</table>
 			</div>
 
-			{isModalOpen && selectedUser ? (
-				<Modal
-					title="Edytuj użytkownika"
-					subtitle={selectedUser.name || selectedUser.email || 'Użytkownik'}
-					onClose={closeModal}
-				>
-					<form className={styles.modalForm} onSubmit={handleSubmit}>
-						<label className={styles.modalLabel}>
-							Rola
-							<select
-								className={styles.modalSelect}
-								value={editRole}
-								onChange={(event) => setEditRole(event.target.value as UserRole)}
-							>
-								{roleOptions.map((role) => (
-									<option key={role} value={role}>
-										{role}
-									</option>
-								))}
-							</select>
-						</label>
+			{totalPages > 1 && (
+				<div className={styles.pagination}>
+					<button
+						className={styles.paginationButton}
+						onClick={() => handlePageChange(hookPage - 1)}
+						disabled={hookPage === 1 || isLoading}
+					>
+						Poprzednia
+					</button>
+					<div className={styles.paginationInfo}>
+						Strona {hookPage} z {totalPages} ({totalCount} użytkowników)
+					</div>
+					<button
+						className={styles.paginationButton}
+						onClick={() => handlePageChange(hookPage + 1)}
+						disabled={hookPage >= totalPages || isLoading}
+					>
+						Następna
+					</button>
+				</div>
+			)}
 
-						<label className={styles.modalLabel}>
-							Status
-							<select
-								className={styles.modalSelect}
-								value={editStatus}
-								onChange={(event) => setEditStatus(event.target.value as UserStatus)}
-							>
-								{statusOptions.map((status) => (
-									<option key={status} value={status}>
-										{status}
-									</option>
-								))}
-							</select>
-						</label>
-
-						{saveError ? <p className={styles.modalError}>{saveError}</p> : null}
-
-						<div className={styles.modalActions}>
-							<button
-								type="button"
-								className={styles.modalSecondaryButton}
-								onClick={closeModal}
-								disabled={saving}
-							>
-								Anuluj
-							</button>
-							<button
-								type="submit"
-								className={styles.modalButton}
-								disabled={saving}
-							>
-								{saving ? 'Zapisywanie...' : 'Zapisz zmiany'}
-							</button>
-						</div>
-					</form>
-				</Modal>
-			) : null}
 		</>
 	)
 }

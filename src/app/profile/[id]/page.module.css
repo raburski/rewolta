@@ -1,0 +1,268 @@
+.loading,
+.error {
+	padding: 2rem;
+	text-align: center;
+}
+
+.error {
+	color: rgb(220, 38, 38);
+}
+
+.profileCard {
+	background: rgb(var(--card-rgb));
+	border-radius: var(--border-radius);
+	border: 1px solid rgba(var(--card-border-rgb), 0.2);
+	overflow: hidden;
+}
+
+.userInfo {
+	display: flex;
+	align-items: center;
+	padding: 2rem;
+	border-bottom: 1px solid rgba(var(--card-border-rgb), 0.2);
+	gap: 1.5rem;
+}
+
+.avatar {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border: 2px solid rgba(var(--card-border-rgb), 0.2);
+}
+
+.avatarPlaceholder {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: rgba(var(--card-border-rgb), 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.avatarIcon {
+	width: 40px;
+	height: 40px;
+	color: rgba(var(--foreground-rgb), 0.5);
+}
+
+.userDetails {
+	flex: 1;
+}
+
+.userName {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 0.5rem 0;
+}
+
+.userEmail {
+	color: rgba(var(--foreground-rgb), 0.7);
+	margin: 0 0 0.25rem 0;
+}
+
+.userId {
+	font-size: 0.875rem;
+	color: rgba(var(--foreground-rgb), 0.5);
+	margin: 0;
+	font-family: monospace;
+}
+
+.detailsGrid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+	padding: 2rem;
+}
+
+@media (min-width: 768px) {
+	.detailsGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.detailCard {
+	background: rgba(var(--card-border-rgb), 0.05);
+	border-radius: var(--border-radius);
+	padding: 1.5rem;
+}
+
+.detailTitle {
+	font-size: 1.125rem;
+	font-weight: 500;
+	color: rgb(var(--foreground-rgb));
+	margin: 0 0 1rem 0;
+}
+
+.detailList {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.detailItem {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.detailLabel {
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: rgba(var(--foreground-rgb), 0.7);
+}
+
+.detailValue {
+	font-size: 0.875rem;
+	color: rgb(var(--foreground-rgb));
+}
+
+.editableRole {
+	padding: 0.25rem 0.5rem;
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	color: rgb(var(--foreground-rgb));
+	font-size: 0.875rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.editableRole:hover {
+	background: rgba(var(--card-border-rgb), 0.1);
+	border-color: rgba(var(--foreground-rgb), 0.3);
+}
+
+.editableCredits {
+	padding: 0.25rem 0.5rem;
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	color: rgb(var(--foreground-rgb));
+	font-size: 0.875rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.editableCredits:hover {
+	background: rgba(var(--card-border-rgb), 0.1);
+	border-color: rgba(var(--foreground-rgb), 0.3);
+}
+
+.badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.6rem;
+	border-radius: 999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+.badgeActive {
+	background: rgba(34, 197, 94, 0.15);
+	color: rgb(21, 128, 61);
+}
+
+.badgeBanned {
+	background: rgba(239, 68, 68, 0.15);
+	color: rgb(185, 28, 28);
+}
+
+.badgePending {
+	background: rgba(59, 130, 246, 0.15);
+	color: rgb(37, 99, 235);
+}
+
+.modalForm {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.modalLabel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+.modalSelect {
+	padding: 0.6rem 0.75rem;
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	font-size: 0.9rem;
+}
+
+.modalSelect:focus {
+	outline: none;
+	border-color: rgba(var(--foreground-rgb), 0.45);
+}
+
+.modalInput {
+	padding: 0.6rem 0.75rem;
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
+	border-radius: var(--border-radius);
+	background: rgb(var(--card-rgb));
+	font-size: 0.9rem;
+}
+
+.modalInput:focus {
+	outline: none;
+	border-color: rgba(var(--foreground-rgb), 0.45);
+}
+
+.modalError {
+	background: rgba(239, 68, 68, 0.12);
+	color: rgb(220, 38, 38);
+	padding: 0.6rem 0.75rem;
+	border-radius: var(--border-radius);
+	font-size: 0.85rem;
+}
+
+.modalActions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 0.5rem;
+}
+
+.modalButton {
+	padding: 0.6rem 1.1rem;
+	border-radius: var(--border-radius);
+	background: rgb(37, 99, 235);
+	color: white;
+	font-size: 0.9rem;
+	font-weight: 500;
+	border: none;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.modalButton:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.modalButton:not(:disabled):hover {
+	background: rgb(29, 78, 216);
+}
+
+.modalSecondaryButton {
+	padding: 0.6rem 1rem;
+	border-radius: var(--border-radius);
+	border: 1px solid rgba(var(--card-border-rgb), 0.25);
+	background: transparent;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.modalSecondaryButton:hover {
+	background: rgba(var(--card-border-rgb), 0.12);
+	border-color: rgba(var(--card-border-rgb), 0.4);
+}
+

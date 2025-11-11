@@ -7,6 +7,7 @@ export enum Permission {
 	ADMIN_DASHBOARD = "admin.dashboard",
 	USERS_VIEW = "users.view",
 	USERS_MANAGE = "users.manage",
+	USERS_SET_CREDITS = "users.setCredits",
 }
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
@@ -24,6 +25,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 		Permission.ADMIN_DASHBOARD,
 		Permission.USERS_VIEW,
 		Permission.USERS_MANAGE,
+		Permission.USERS_SET_CREDITS,
 	],
 }
 
