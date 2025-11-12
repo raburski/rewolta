@@ -1,5 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { useSession, signIn } from 'next-auth/react'
+import { MdLogin } from 'react-icons/md'
 import styles from './Header.module.css'
 
 interface HeaderProps {
@@ -9,6 +13,13 @@ interface HeaderProps {
 }
 
 export default function Header({ title = 'Architektoniczna Rewolta', subtitle, children }: HeaderProps) {
+	const { data: session, status } = useSession()
+	const isAuthenticated = status === 'authenticated'
+
+	const handleSignIn = () => {
+		signIn('google', { callbackUrl: window.location.href })
+	}
+
 	return (
 		<header className={styles.siteHeader}>
 			<div className={styles.headerTop}>
@@ -29,11 +40,18 @@ export default function Header({ title = 'Architektoniczna Rewolta', subtitle, c
 						</div>
 					</div>
 				)}
-				{children && (
-					<div className={styles.headerActions}>
-						{children}
-					</div>
-				)}
+				<div className={styles.headerActions}>
+					{children}
+					{!isAuthenticated && status !== 'loading' && (
+						<button
+							onClick={handleSignIn}
+							className={styles.signInButton}
+						>
+							<MdLogin className={styles.signInIcon} />
+							Zaloguj się
+						</button>
+					)}
+				</div>
 			</div>
 		</header>
 	)

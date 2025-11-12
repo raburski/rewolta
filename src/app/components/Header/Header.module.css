@@ -20,6 +20,34 @@
 	gap: 1rem;
 }
 
+.signInButton {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
+	border-radius: var(--border-radius);
+	background: transparent;
+	color: rgb(var(--foreground-rgb));
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	opacity: 0.7;
+}
+
+.signInButton:hover {
+	opacity: 1;
+	background: rgba(var(--card-border-rgb), 0.1);
+	border-color: rgba(var(--card-border-rgb), 0.5);
+	transform: translateY(-1px);
+}
+
+.signInIcon {
+	width: 16px;
+	height: 16px;
+}
+
 .headerContent {
 	max-width: 1200px;
 	margin: 0 auto;
