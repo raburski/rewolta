@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
+import '@/lib/authUtils'
+import { auth } from '@/lib/auth'
 import { APIHandler } from '@raburski/next-api-middleware'
+import { prisma } from '@/lib/prisma'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
@@ -50,8 +53,35 @@ export const GET: APIHandler = async (request, context) => {
 			throw new Error('Invalid response from imgen-proxy')
 		}
 
-		// Return the image data
-		return NextResponse.json(data.data)
+		// Check if image is already submitted (if user is authenticated)
+		const session = await auth()
+		let submission = null
+
+		if (session?.user?.id) {
+			submission = await prisma.buildingSubmission.findFirst({
+				where: {
+					imageId: imageId,
+					userId: session.user.id
+				},
+				select: {
+					id: true,
+					status: true,
+					submittedAt: true,
+					eloRating: true
+				}
+			})
+		}
+
+		// Return the image data with submission info
+		return NextResponse.json({
+			...data.data,
+			submission: submission ? {
+				id: submission.id,
+				status: submission.status,
+				submittedAt: submission.submittedAt.toISOString(),
+				eloRating: submission.eloRating
+			} : null
+		})
 
 	} catch (error) {
 		console.error('Error fetching image:', error)

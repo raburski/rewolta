@@ -27,6 +27,13 @@ enum BuildingProductStatus {
 	INACTIVE
 }
 
+enum SubmissionStatus {
+	PENDING
+	PUBLISHED
+	WITHDRAWN
+	FLAGGED
+}
+
 // NextAuth.js required models
 model Account {
 	id                String  @id @default(cuid())
@@ -68,6 +75,8 @@ model User {
 	status        UserStatus  @default(ACTIVE)
 	accounts      Account[]
 	sessions      Session[]
+	submissions   BuildingSubmission[]
+	comparisons   Comparison[]
 	createdAt     DateTime    @default(now())
 	updatedAt     DateTime    @updatedAt
 }
@@ -89,7 +98,87 @@ model BuildingProduct {
 	status      BuildingProductStatus @default(INACTIVE)
 	createdAt   DateTime              @default(now())
 	updatedAt   DateTime              @updatedAt
+	submissions BuildingSubmission[]
 
 	@@index([id])
 	@@index([status])
+}
+
+model BuildingSubmission {
+	id               String           @id @default(cuid())
+	imageId          String
+	productId        String
+	userId           String
+	status           SubmissionStatus @default(PUBLISHED)
+	submittedAt      DateTime         @default(now())
+	publishedAt      DateTime?
+	withdrawnAt      DateTime?
+	
+	// ELO rating
+	eloRating        Int              @default(1500)
+	totalComparisons Int              @default(0)
+	wins             Int              @default(0)
+	losses           Int              @default(0)
+	
+	// Relations
+	comparisonsAsA   Comparison[]     @relation("ComparisonA")
+	comparisonsAsB   Comparison[]     @relation("ComparisonB")
+	comparisonsWon   Comparison[]     @relation("ComparisonWinner")
+	tags             SubmissionTag[]
+	user             User             @relation(fields: [userId], references: [id])
+	product          BuildingProduct  @relation(fields: [productId], references: [id])
+	
+	@@index([productId])
+	@@index([userId])
+	@@index([status])
+	@@index([publishedAt])
+	@@index([eloRating])
+}
+
+model Comparison {
+	id            String   @id @default(cuid())
+	submissionAId String
+	submissionBId String
+	userId        String
+	winnerId      String
+	createdAt     DateTime @default(now())
+	
+	// Optional tags added during comparison
+	tags          ComparisonTag[]
+	
+	submissionA   BuildingSubmission @relation("ComparisonA", fields: [submissionAId], references: [id])
+	submissionB   BuildingSubmission @relation("ComparisonB", fields: [submissionBId], references: [id])
+	winner        BuildingSubmission @relation("ComparisonWinner", fields: [winnerId], references: [id])
+	user          User               @relation(fields: [userId], references: [id])
+	
+	@@index([submissionAId])
+	@@index([submissionBId])
+	@@index([userId])
+	@@index([createdAt])
+}
+
+model ComparisonTag {
+	id            String   @id @default(cuid())
+	comparisonId  String
+	submissionId  String
+	tag           String
+	side          String   // "A" or "B" to indicate which building the tag is for
+	
+	comparison    Comparison @relation(fields: [comparisonId], references: [id], onDelete: Cascade)
+	
+	@@index([comparisonId])
+	@@index([submissionId, tag])
+}
+
+model SubmissionTag {
+	id            String   @id @default(cuid())
+	submissionId  String
+	tag           String
+	count         Int      @default(1)
+	
+	submission    BuildingSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+	
+	@@unique([submissionId, tag])
+	@@index([tag])
+	@@index([count])
 }

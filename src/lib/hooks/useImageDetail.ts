@@ -8,6 +8,12 @@ interface ImageData {
 	imageId: string
 	createdAt: string
 	updatedAt: string
+	submission?: {
+		id: string
+		status: 'PENDING' | 'PUBLISHED' | 'WITHDRAWN' | 'FLAGGED'
+		submittedAt: string
+		eloRating: number
+	} | null
 }
 
 export function useImageDetail(imageId: string) {

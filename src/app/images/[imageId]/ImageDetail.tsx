@@ -1,11 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { downloadImage } from '@/lib/download'
 import { useImageDetail } from '@/lib/hooks/useImageDetail'
 import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
+import { useSubmitBuilding } from '@/lib/hooks/useSubmitBuilding'
 import styles from './ImageDetail.module.css'
 
 interface ImageDetailProps {
@@ -21,6 +23,12 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 	
 	// Use SWR for product data
 	const { product } = useBuildingProduct(imageData?.productId || null)
+	
+	// Submit building for rating
+	const { submitBuilding, isSubmitting, error: submitError } = useSubmitBuilding()
+	
+	const submission = imageData?.submission
+	const isSubmitted = !!submission
 
 	const handleShare = () => {
 		if (!imageData) return
@@ -44,6 +52,20 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 	const handleOriginalImageClick = () => {
 		if (imageData?.productId) {
 			router.push(`/ai/${imageData.productId}`)
+		}
+	}
+
+	const handleSubmitForRating = async () => {
+		if (!imageData?.productId) return
+
+		const result = await submitBuilding({
+			imageId: imageData.id,
+			productId: imageData.productId
+		})
+
+		if (result) {
+			// Refresh image data to get updated submission status
+			mutate()
 		}
 	}
 
@@ -129,6 +151,36 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 				</div>
 
 				<div className={styles.actionsContainer}>
+					{session && !isSubmitted && (
+						<button
+							onClick={handleSubmitForRating}
+							className={styles.submitButton}
+							disabled={isSubmitting}
+						>
+							{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do oceny'}
+						</button>
+					)}
+					{isSubmitted && submission && (
+						<div className={styles.submittedMessage}>
+							{submission.status === 'PUBLISHED' && (
+								<>✓ Zgłoszono do oceny (ELO: {submission.eloRating})</>
+							)}
+							{submission.status === 'PENDING' && (
+								<>⏳ Oczekuje na moderację</>
+							)}
+							{submission.status === 'WITHDRAWN' && (
+								<>↩️ Wycofano z oceny</>
+							)}
+							{submission.status === 'FLAGGED' && (
+								<>⚠️ Zgłoszono do sprawdzenia</>
+							)}
+						</div>
+					)}
+					{submitError && (
+						<div className={styles.errorMessage}>
+							Błąd: {submitError}
+						</div>
+					)}
 					<button onClick={handleShare} className={styles.shareButton}>
 						<FaFacebook className={styles.shareIcon} />
 						Udostępnij

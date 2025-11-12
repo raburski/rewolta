@@ -8,15 +8,28 @@ export enum Permission {
 	USERS_VIEW = "users.view",
 	USERS_MANAGE = "users.manage",
 	USERS_SET_CREDITS = "users.setCredits",
+	SUBMISSIONS_CREATE = "submissions.create",
+	SUBMISSIONS_VIEW = "submissions.view",
+	SUBMISSIONS_WITHDRAW = "submissions.withdraw",
+	COMPARISONS_CREATE = "comparisons.create",
+	RANKINGS_VIEW = "rankings.view",
+	SUBMISSIONS_MODERATE = "submissions.moderate",
 }
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 	[UserRole.USER]: [
 		Permission.IMAGE_GENERATION_EXECUTE,
+		Permission.SUBMISSIONS_CREATE,
+		Permission.COMPARISONS_CREATE,
+		Permission.RANKINGS_VIEW,
 	],
 	[UserRole.MODERATOR]: [
 		Permission.IMAGE_GENERATION_EXECUTE,
 		Permission.BUILDING_PRODUCTS_VIEW_ALL,
+		Permission.SUBMISSIONS_CREATE,
+		Permission.SUBMISSIONS_VIEW,
+		Permission.COMPARISONS_CREATE,
+		Permission.RANKINGS_VIEW,
 	],
 	[UserRole.ADMIN]: [
 		Permission.IMAGE_GENERATION_EXECUTE,
@@ -26,6 +39,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 		Permission.USERS_VIEW,
 		Permission.USERS_MANAGE,
 		Permission.USERS_SET_CREDITS,
+		Permission.SUBMISSIONS_CREATE,
+		Permission.SUBMISSIONS_VIEW,
+		Permission.SUBMISSIONS_WITHDRAW,
+		Permission.COMPARISONS_CREATE,
+		Permission.RANKINGS_VIEW,
+		Permission.SUBMISSIONS_MODERATE,
 	],
 }
 

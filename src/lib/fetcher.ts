@@ -20,7 +20,18 @@ export const fetcher = async (url: string, options?: FetcherOptions) => {
 	const response = await fetch(url, config)
 	
 	if (!response.ok) {
-		throw new Error(`Failed to fetch ${url}`)
+		let errorMessage = `Failed to fetch ${url}`
+		try {
+			const errorData = await response.json()
+			errorMessage = errorData.error || errorMessage
+		} catch {
+			// If response is not JSON, use default message
+		}
+		
+		const error: any = new Error(errorMessage)
+		error.status = response.status
+		error.response = response
+		throw error
 	}
 	
 	return response.json()
