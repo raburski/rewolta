@@ -10,6 +10,7 @@ import { processImageFile } from '@/lib/imageUtils'
 import { useUserCredits } from '@/lib/hooks/useUserCredits'
 import { downloadImage } from '@/lib/download'
 import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
+import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
 import SignInModal from './SignInModal'
@@ -18,9 +19,10 @@ const FACEBOOK_SHARE_TEXT = 'Sprawdź mój wygenerowany budynek! 🏛️✨'
 
 interface AIGeneratorProps {
 	productId?: string
+	isCustomMode?: boolean
 }
 
-export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) {
+export default function AIGenerator({ productId = 'museum', isCustomMode = false }: AIGeneratorProps) {
 	const { data: session, status } = useSession()
 	const router = useRouter()
 	const [selectedImage, setSelectedImage] = useState<string>('')
@@ -35,12 +37,17 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 	const [wasResized, setWasResized] = useState(false)
 	const [copySuccess, setCopySuccess] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	
+	// Custom building image state (for custom mode)
+	const [customBuildingImage, setCustomBuildingImage] = useState<string>('')
+	const [customBuildingFile, setCustomBuildingFile] = useState<File | null>(null)
+	const customBuildingInputRef = useRef<HTMLInputElement>(null)
 
 	// Use SWR for credits management
 	const { credits: userCredits, isLoading: creditsLoading, mutate: refreshCredits } = useUserCredits(status === 'authenticated')
 	
-	// Use SWR for product data
-	const { product } = useBuildingProduct(productId)
+	// Use SWR for product data (only if not in custom mode)
+	const { product } = useBuildingProduct(isCustomMode ? undefined : productId)
 
 	const onCloseLoginModal = () => {
 		setShowLoginModal(false)
@@ -61,6 +68,15 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 			}
 		}
 	}, [pollingInterval])
+
+	// Cleanup custom building image URL on unmount or change
+	useEffect(() => {
+		return () => {
+			if (customBuildingImage) {
+				URL.revokeObjectURL(customBuildingImage)
+			}
+		}
+	}, [customBuildingImage])
 
 	const startPolling = (jobId: string) => {
 		let pollCount = 0
@@ -205,8 +221,67 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 		fileInputRef.current?.click()
 	}
 
+	const handleCustomBuildingClick = () => {
+		if (status !== 'authenticated') {
+			onOpenLoginModal()
+			return
+		}
+		customBuildingInputRef.current?.click()
+	}
+
+	const handleCustomBuildingSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		
+		// Validate file size
+		if (file.size > 10 * 1024 * 1024) {
+			alert('Plik jest za duży. Maksymalny rozmiar: 10MB')
+			return
+		}
+		
+		setImageProcessing(true)
+		
+		try {
+			// Process the image (resize if needed)
+			const { blob, wasResized: resized } = await processImageFile(file)
+			
+			// Create a new file object from the processed blob
+			const processedFile = new File([blob], file.name, {
+				type: 'image/jpeg',
+				lastModified: Date.now()
+			})
+			
+			setCustomBuildingFile(processedFile)
+			
+			// Create object URL for display
+			const imageUrl = URL.createObjectURL(blob)
+			setCustomBuildingImage(imageUrl)
+			
+			// Clear previously generated image and job when new image is selected
+			setGeneratedImageData(null)
+			setJobId('')
+			setIsGenerating(false)
+			setGenerationFailed(false)
+			
+			if (resized) {
+				console.log('Custom building image was automatically resized to reduce file size')
+			}
+		} catch (error) {
+			console.error('Error processing custom building image:', error)
+			alert('Błąd podczas przetwarzania obrazu')
+		} finally {
+			setImageProcessing(false)
+		}
+	}
+
 	const handleGenerate = async () => {
 		if (!selectedImage || !selectedFile) return
+		
+		// Validate: In custom mode, custom building image is required
+		if (isCustomMode && !customBuildingFile) {
+			alert('Proszę wybrać budynek źródłowy')
+			return
+		}
 		
 		// Check if user has credits
 		if (userCredits === 0) {
@@ -224,8 +299,8 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 		setGenerationFailed(false)
 		
 		try {
-			// Convert selected image to base64
-			const base64 = await new Promise<string>((resolve) => {
+			// Convert style image to base64
+			const styleBase64 = await new Promise<string>((resolve) => {
 				const reader = new FileReader()
 				reader.onloadend = () => {
 					const result = reader.result as string
@@ -236,6 +311,20 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 				reader.readAsDataURL(selectedFile)
 			})
 
+			// Convert custom building image to base64 (if in custom mode)
+			let customBuildingBase64: string | undefined
+			if (isCustomMode && customBuildingFile) {
+				customBuildingBase64 = await new Promise<string>((resolve) => {
+					const reader = new FileReader()
+					reader.onloadend = () => {
+						const result = reader.result as string
+						const base64Data = result.split(',')[1]
+						resolve(base64Data)
+					}
+					reader.readAsDataURL(customBuildingFile)
+				})
+			}
+
 			// Start image generation job
 			const apiResponse = await fetch('/api/generate-building', {
 				method: 'POST',
@@ -243,8 +332,9 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					inputBase64Image: base64,
-					productId: productId
+					inputBase64Image: styleBase64,
+					productId: isCustomMode ? undefined : productId,
+					customBuildingBase64Image: customBuildingBase64,
 				})
 			})
 
@@ -276,19 +366,62 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 		<div className={styles.container}>
 			<div className={styles.mainContent}>
 				<div className={styles.inputSection}>
-					{/* First input box with reference image */}
+					{/* First input box with reference image or custom building upload */}
 					<div className={styles.inputBox}>
 						<div className={styles.imageContainer}>
-							<img 
-								src={product?.imageUrl || "/assets/museum-small.jpg"} 
-								alt={`${product?.name || 'Reference'} building`} 
-								className={styles.referenceImage}
-								onClick={() => router.push('/ai')}
-								title="Kliknij aby wybrać inny budynek"
-								style={{ cursor: 'pointer' }}
-							/>
+							{isCustomMode ? (
+								// Custom mode: always show upload
+								customBuildingImage ? (
+									<img 
+										src={customBuildingImage} 
+										alt="Custom building" 
+										className={styles.selectedImage}
+										onClick={handleCustomBuildingClick}
+										title="Kliknij aby zmienić obraz"
+									/>
+								) : (
+									<button 
+										className={styles.addButton}
+										onClick={handleCustomBuildingClick}
+										disabled={isGenerating || imageProcessing}
+									>
+										{imageProcessing ? (
+											<LoadingAnimation isLoading={true} size="small" />
+										) : (
+											<IoAdd className={styles.plusIcon} />
+										)}
+										{imageProcessing ? 'Przetwarzanie...' : 'Dodaj budynek źródłowy'}
+									</button>
+								)
+							) : (
+								// Regular mode: show product image
+								<img 
+									src={product?.imageUrl || "/assets/museum-small.jpg"} 
+									alt={`${product?.name || 'Reference'} building`} 
+									className={styles.referenceImage}
+									onClick={() => router.push('/ai')}
+									title="Kliknij aby wybrać inny budynek"
+									style={{ cursor: 'pointer' }}
+								/>
+							)}
 						</div>
-						<p className={styles.imageLabel}>Oryginalny budynek</p>
+						<p className={styles.imageLabel}>
+							{isCustomMode ? 'Własny budynek źródłowy' : 'Oryginalny budynek'}
+						</p>
+						{isCustomMode && customBuildingFile && (
+							<p className={styles.fileInfo}>
+								Rozmiar: {(customBuildingFile.size / 1024 / 1024).toFixed(2)}MB
+							</p>
+						)}
+						{isCustomMode && (
+							<input
+								ref={customBuildingInputRef}
+								type="file"
+								accept="image/*"
+								className={styles.fileInput}
+								onChange={handleCustomBuildingSelect}
+							/>
+						)}
 					</div>
 
 					{/* Plus symbol */}
@@ -374,7 +507,13 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 								<button
 									className={`${styles.generateButton} ${isGenerating ? styles.generating : ''} ${userCredits === 0 && !creditsLoading ? styles.noCreditsButton : ''}`}
 									onClick={handleGenerate}
-									disabled={isGenerating || !selectedImage || userCredits === 0 || creditsLoading}
+									disabled={
+										isGenerating || 
+										!selectedImage || 
+										(isCustomMode && !customBuildingImage) || 
+										userCredits === 0 || 
+										creditsLoading
+									}
 								>
 									<FaWandMagicSparkles className={styles.magicWandIcon} />
 									{creditsLoading ? 'Ładowanie...' : userCredits === 0 ? 'Brak kredytów' : selectedImage ? 'Generuj' : 'Dodaj obraz aby generować'}
@@ -383,7 +522,7 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 							{!isGenerating && !generatedImageData && status === 'unauthenticated' && (
 								<button
 									className={`${styles.generateButton} ${styles.googleLoginButton} ${isGenerating ? styles.generating : ''}`}
-									onClick={() => signIn('google', { callbackUrl: `/ai/${productId}` })}
+									onClick={() => signIn('google', { callbackUrl: isCustomMode ? '/ai/custom' : `/ai/${productId}` })}
 									disabled={isGenerating}
 								>
 									<FaGoogle className={styles.googleIcon} />
@@ -458,11 +597,14 @@ export default function AIGenerator({ productId = 'museum' }: AIGeneratorProps) 
 							{creditsLoading ? '...' : userCredits}
 						</span>
 					</div>
-					<div className={styles.infoItem}>
-						<a href={`/profile/images/${productId}`} className={styles.historyLink}>
-							Historia generowań
-						</a>
-					</div>
+					{/* Only show history link if not using custom product */}
+					{productId !== CUSTOM_PRODUCT_ID && (
+						<div className={styles.infoItem}>
+							<a href={`/profile/images/${productId}`} className={styles.historyLink}>
+								Historia generowań
+							</a>
+						</div>
+					)}
 				</div>
 
 				{/* No credits card - only show when user has 0 credits and not loading */}

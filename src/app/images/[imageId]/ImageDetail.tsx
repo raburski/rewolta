@@ -8,6 +8,7 @@ import { downloadImage } from '@/lib/download'
 import { useImageDetail } from '@/lib/hooks/useImageDetail'
 import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
 import { useSubmitBuilding } from '@/lib/hooks/useSubmitBuilding'
+import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
 import styles from './ImageDetail.module.css'
 
 interface ImageDetailProps {
@@ -56,7 +57,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 	}
 
 	const handleSubmitForRating = async () => {
-		if (!imageData?.productId) return
+		if (!imageData?.productId || imageData.productId === CUSTOM_PRODUCT_ID) return
 
 		const result = await submitBuilding({
 			imageId: imageData.id,
@@ -132,18 +133,21 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 
 			<div className={styles.sidebar}>
 				<div className={styles.infoContainer}>
-					<div className={styles.originalBuildingSection}>
-						<strong>Modyfikowany budynek:</strong>
-						<div className={styles.originalImageContainer}>
-							<img 
-								src={product?.imageUrl || '/assets/museum-small.png'} 
-								alt={`${product?.name || 'Original'} building`} 
-								className={styles.originalImage}
-								onClick={handleOriginalImageClick}
-								title="Kliknij aby przejść do generatora"
-							/>
+					{/* Only show "Modyfikowany budynek" section if not using custom product */}
+					{imageData.productId !== CUSTOM_PRODUCT_ID && (
+						<div className={styles.originalBuildingSection}>
+							<strong>Modyfikowany budynek:</strong>
+							<div className={styles.originalImageContainer}>
+								<img 
+									src={product?.imageUrl || '/assets/museum-small.png'} 
+									alt={`${product?.name || 'Original'} building`} 
+									className={styles.originalImage}
+									onClick={handleOriginalImageClick}
+									title="Kliknij aby przejść do generatora"
+								/>
+							</div>
 						</div>
-					</div>
+					)}
 					<div className={styles.infoItem}>
 						<strong>Utworzono:</strong>
 						<span>{new Date(imageData.createdAt).toLocaleString('pl-PL')}</span>
@@ -151,7 +155,8 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 				</div>
 
 				<div className={styles.actionsContainer}>
-					{session && !isSubmitted && (
+					{/* Only show submit button if not using custom product */}
+					{session && !isSubmitted && imageData.productId !== CUSTOM_PRODUCT_ID && (
 						<button
 							onClick={handleSubmitForRating}
 							className={styles.submitButton}

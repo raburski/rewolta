@@ -5,6 +5,8 @@ import { getBuildingProductById } from '@/lib/buildingProductUtils'
 import { ensureHttpsUrl } from '@/lib/urlUtils'
 import { Permission } from '@/lib/permissions'
 import { APIHandler, compose } from '@raburski/next-api-middleware'
+import { requireUserCan } from '@raburski/next-auth-permissions/server'
+import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
@@ -25,11 +27,11 @@ Instructions:
 
 Keep the lighting, camera perspective, and urban context from Image A. The result should look like a stylistic reinterpretation of the museum building, without altering its form or incorporating unrelated exhibit elements.`
 
-const handler: APIHandler = async (request, context) => {
+	const handler: APIHandler = async (request, context) => {
 	try {
 		const { session } = context
 
-		const { inputBase64Image, enhancedPrompt, productId } = await request.json()
+		const { inputBase64Image, enhancedPrompt, productId, customBuildingBase64Image } = await request.json()
 
 		if (!inputBase64Image) {
 			return NextResponse.json(
@@ -38,21 +40,43 @@ const handler: APIHandler = async (request, context) => {
 			)
 		}
 
-		if (!productId) {
+		// Validate custom building image permission if provided
+		if (customBuildingBase64Image) {
+			const { error: permissionError } = await requireUserCan(Permission.IMAGE_GENERATION_CUSTOM, context)
+			if (permissionError) {
+				return NextResponse.json(
+					{ error: 'Unauthorized: Custom building images not allowed' },
+					{ status: 403 }
+				)
+			}
+		}
+
+		// Either productId or customBuildingBase64Image must be provided
+		if (!productId && !customBuildingBase64Image) {
 			return NextResponse.json(
-				{ error: 'Missing required parameter: productId' },
+				{ error: 'Missing required parameter: productId or customBuildingBase64Image' },
 				{ status: 400 }
 			)
 		}
 
-		// Get product data
-		const userRole = session.user?.role
-		const product = await getBuildingProductById(productId, userRole)
-		if (!product) {
-			return NextResponse.json(
-				{ error: 'Invalid productId' },
-				{ status: 400 }
-			)
+		// Get product data (only if not using custom building)
+		let product = null
+		let referenceImageUrl: string
+		
+		if (customBuildingBase64Image) {
+			// Use custom building image
+			referenceImageUrl = `data:image/jpeg;base64,${customBuildingBase64Image}`
+		} else {
+			// Use product image
+			const userRole = session.user?.role
+			product = await getBuildingProductById(productId, userRole)
+			if (!product) {
+				return NextResponse.json(
+					{ error: 'Invalid productId' },
+					{ status: 400 }
+				)
+			}
+			referenceImageUrl = product.cdnUrl
 		}
 
 		if (!IMGEN_PROXY_API_KEY) {
@@ -66,10 +90,6 @@ const handler: APIHandler = async (request, context) => {
 		// Use default prompt if none provided
 		const prompt = enhancedPrompt || CALL_PROMPT
 
-		// Use product's CDN URL
-		const referenceImageUrl = product.cdnUrl
-		console.log('Using reference image URL:', referenceImageUrl)
-
 		// Sanitize ownerId
 		const rawOwnerId = session.user?.id || session.user?.email || 'unknown'
 		const ownerId = rawOwnerId
@@ -79,11 +99,16 @@ const handler: APIHandler = async (request, context) => {
 			.substring(0, 100) // Limit length
 			.toLowerCase() // Normalize to lowercase
 
+		// Use CUSTOM_PRODUCT_ID when using custom building image, otherwise use the provided productId
+		// The imgen-proxy must accept CUSTOM_PRODUCT_ID as a valid productId value
+		const finalProductId = customBuildingBase64Image ? CUSTOM_PRODUCT_ID : productId
+
+
 		// Prepare the request for imgen-proxy using GPT-4.1 with image generation
 		const imgenRequest = {
 			model: 'gpt-4.1',
 			ownerId: ownerId,
-			productId: productId,
+			productId: finalProductId, // Will be "custom" when using custom building image
 			input: [
 				{
 					role: "system",

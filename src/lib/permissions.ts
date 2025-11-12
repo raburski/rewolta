@@ -14,11 +14,19 @@ export enum Permission {
 	COMPARISONS_CREATE = "comparisons.create",
 	RANKINGS_VIEW = "rankings.view",
 	SUBMISSIONS_MODERATE = "submissions.moderate",
+	IMAGE_GENERATION_CUSTOM = "imageGeneration.custom",
 }
 
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 	[UserRole.USER]: [
 		Permission.IMAGE_GENERATION_EXECUTE,
+		Permission.SUBMISSIONS_CREATE,
+		Permission.COMPARISONS_CREATE,
+		Permission.RANKINGS_VIEW,
+	],
+	[UserRole.CREATOR]: [
+		Permission.IMAGE_GENERATION_EXECUTE,
+		Permission.IMAGE_GENERATION_CUSTOM,
 		Permission.SUBMISSIONS_CREATE,
 		Permission.COMPARISONS_CREATE,
 		Permission.RANKINGS_VIEW,
@@ -33,6 +41,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 	],
 	[UserRole.ADMIN]: [
 		Permission.IMAGE_GENERATION_EXECUTE,
+		Permission.IMAGE_GENERATION_CUSTOM,
 		Permission.BUILDING_PRODUCTS_VIEW_ALL,
 		Permission.BUILDING_PRODUCTS_MANAGE,
 		Permission.ADMIN_DASHBOARD,
