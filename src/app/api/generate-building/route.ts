@@ -42,7 +42,7 @@ Keep the lighting, camera perspective, and urban context from Image A. The resul
 
 		// Validate custom building image permission if provided
 		if (customBuildingBase64Image) {
-			const { error: permissionError } = await requireUserCan(Permission.IMAGE_GENERATION_CUSTOM, context)
+			const { error: permissionError } = await requireUserCan(Permission.IMAGE_GENERATION_CUSTOM)
 			if (permissionError) {
 				return NextResponse.json(
 					{ error: 'Unauthorized: Custom building images not allowed' },
