@@ -39,9 +39,10 @@ export default function LoadingAnimation({ isLoading, size = 'medium' }: Loading
 		canvas.height = rect.height * window.devicePixelRatio
 		ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
 
-		// Colors for particles
+		// Colors for particles - using accent color as primary
+		const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8b6f57'
 		const colors = [
-			'#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4',
+			accentColor, '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4',
 			'#84cc16', '#f97316', '#ec4899', '#6366f1', '#14b8a6', '#f43f5e'
 		]
 

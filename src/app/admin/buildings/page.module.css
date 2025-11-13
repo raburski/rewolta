@@ -12,7 +12,7 @@
 .addButton {
 	padding: 0.6rem 1.1rem;
 	border-radius: var(--border-radius);
-	background: rgb(37, 99, 235);
+	background: var(--accent);
 	color: white;
 	font-size: 0.9rem;
 	font-weight: 500;
@@ -22,7 +22,7 @@
 }
 
 .addButton:hover {
-	background: rgb(29, 78, 216);
+	background: var(--accent-hover);
 }
 
 .tableWrapper {
@@ -171,7 +171,7 @@
 .modalSelect:focus,
 .modalTextarea:focus {
 	outline: none;
-	border-color: rgba(var(--foreground-rgb), 0.45);
+	border-color: var(--accent);
 }
 
 .modalTextarea {
@@ -190,7 +190,7 @@
 
 .modalFileInput:focus {
 	outline: none;
-	border-color: rgba(var(--foreground-rgb), 0.45);
+	border-color: var(--accent);
 }
 
 .modalImagePreview {
@@ -220,7 +220,7 @@
 .modalButton {
 	padding: 0.6rem 1.1rem;
 	border-radius: var(--border-radius);
-	background: rgb(37, 99, 235);
+	background: var(--accent);
 	color: white;
 	font-size: 0.9rem;
 	font-weight: 500;
@@ -235,7 +235,7 @@
 }
 
 .modalButton:not(:disabled):hover {
-	background: rgb(29, 78, 216);
+	background: var(--accent-hover);
 }
 
 .modalSecondaryButton {

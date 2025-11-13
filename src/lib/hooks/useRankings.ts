@@ -1,5 +1,4 @@
-import useSWR from 'swr'
-import { fetcher } from '../fetcher'
+import { useSWRPaginated } from '@raburski/next-pagination/client'
 
 interface RankingSubmission {
 	id: string
@@ -21,19 +20,11 @@ interface Ranking {
 	submission: RankingSubmission
 }
 
-interface RankingsResponse {
-	rankings: Ranking[]
-	total: number
-	hasMore: boolean
-}
-
 interface RankingsParams {
 	type?: 'global' | 'product' | 'tag' | 'time'
 	productId?: string
-	tag?: string
 	timeRange?: 'daily' | 'weekly' | 'monthly' | 'alltime'
 	limit?: number
-	offset?: number
 }
 
 function buildRankingsUrl(params: RankingsParams): string {
@@ -43,25 +34,36 @@ function buildRankingsUrl(params: RankingsParams): string {
 	if (params.productId) searchParams.set('productId', params.productId)
 	if (params.tag) searchParams.set('tag', params.tag)
 	if (params.timeRange) searchParams.set('timeRange', params.timeRange)
-	if (params.limit) searchParams.set('limit', params.limit.toString())
-	if (params.offset) searchParams.set('offset', params.offset.toString())
 
 	const queryString = searchParams.toString()
 	return `/api/rankings${queryString ? `?${queryString}` : ''}`
 }
 
 export function useRankings(params: RankingsParams = {}) {
+	const limit = params.limit || 20
 	const url = buildRankingsUrl(params)
-	const { data, error, isLoading, mutate } = useSWR<RankingsResponse>(url, fetcher)
+	
+	const {
+		data: rankings,
+		error,
+		isLoading,
+		isLoadingMore,
+		totalCount,
+		hasMore,
+		loadMore,
+		resetPagination
+	} = useSWRPaginated<Ranking>(url, { limit })
 
 	return {
-		rankings: data?.rankings || [],
-		total: data?.total || 0,
-		hasMore: data?.hasMore || false,
+		rankings: rankings || [],
+		total: totalCount || 0,
+		hasMore,
 		isLoading,
+		isLoadingMore,
 		hasError: !!error,
 		error: error?.message || null,
-		refresh: mutate
+		loadMore,
+		resetPagination
 	}
 }
 

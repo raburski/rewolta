@@ -21,13 +21,13 @@
 }
 
 .tagButton:hover:not(:disabled) {
-	border-color: #4a90e2;
-	background: #f0f7ff;
+	border-color: var(--accent);
+	background: var(--accent-lighter);
 }
 
 .tagButtonSelected {
-	border-color: #4a90e2;
-	background: #4a90e2;
+	border-color: var(--accent);
+	background: var(--accent);
 	color: white;
 }
 
@@ -75,11 +75,11 @@
 }
 
 .confirmButton {
-	background: #4a90e2;
+	background: var(--accent);
 	color: white;
 }
 
 .confirmButton:hover {
-	background: #357abd;
+	background: var(--accent-hover);
 }
 

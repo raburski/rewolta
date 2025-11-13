@@ -3,6 +3,9 @@
 import Link from 'next/link'
 import { FaWandMagicSparkles } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
+import { FaBalanceScale } from 'react-icons/fa'
+import { FaTrophy } from 'react-icons/fa'
+import { FaArrowRight } from 'react-icons/fa'
 import Layout from '@/app/components/Layout/Layout'
 import PageContent from '@/app/components/PageContent/PageContent'
 import styles from './page.module.css'
@@ -42,6 +45,38 @@ export default function AIProductsPage() {
 	return (
 		<Layout {...layoutProps}>
 			<PageContent>
+				<div className={styles.ctaWidgets}>
+					<Link href="/compare" className={styles.ctaWidget}>
+						<div className={styles.ctaIcon}>
+							<FaBalanceScale />
+						</div>
+						<div className={styles.ctaContent}>
+							<h3 className={styles.ctaTitle}>Oceń budynki</h3>
+							<p className={styles.ctaDescription}>
+								Porównaj i oceń wygenerowane budynki
+							</p>
+							<div className={styles.ctaButton}>
+								Rozpocznij
+								<FaArrowRight className={styles.ctaButtonIcon} />
+							</div>
+						</div>
+					</Link>
+					<Link href="/rankings" className={styles.ctaWidget}>
+						<div className={styles.ctaIcon}>
+							<FaTrophy />
+						</div>
+						<div className={styles.ctaContent}>
+							<h3 className={styles.ctaTitle}>Rankingi</h3>
+							<p className={styles.ctaDescription}>
+								Zobacz najlepiej oceniane budynki
+							</p>
+							<div className={styles.ctaButton}>
+								Zobacz
+								<FaArrowRight className={styles.ctaButtonIcon} />
+							</div>
+						</div>
+					</Link>
+				</div>
 				<div className={styles.productsGrid}>
 					{products.map((product) => (
 						<div key={product.id} className={styles.productCard}>
@@ -61,9 +96,6 @@ export default function AIProductsPage() {
 								</div>
 								<div className={styles.productInfo}>
 									<h3 className={styles.productName}>{product.name}</h3>
-									<p className={styles.productDescription}>
-										{product.description}
-									</p>
 									<div className={styles.tryButton}>
 										<FaWandMagicSparkles className={styles.buttonIcon} />
 										Wypróbuj
@@ -91,9 +123,6 @@ export default function AIProductsPage() {
 								</div>
 								<div className={styles.productInfo}>
 									<h3 className={styles.productName}>Własny budynek</h3>
-									<p className={styles.productDescription}>
-										Użyj własnego obrazu budynku jako źródła
-									</p>
 									<div className={styles.tryButton}>
 										<FaWandMagicSparkles className={styles.buttonIcon} />
 										Wypróbuj

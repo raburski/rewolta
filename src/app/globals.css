@@ -25,6 +25,13 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 255, 255, 255;
   --card-border-rgb: 131, 134, 135;
+
+  /* Accent color - Muted Brown (inspired by logo #643007, paled for UI) */
+  --accent-rgb: 139, 111, 87;
+  --accent: #8b6f57;
+  --accent-hover: #6b563f;
+  --accent-light: rgba(139, 111, 87, 0.1);
+  --accent-lighter: rgba(139, 111, 87, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +56,13 @@
     --callout-border-rgb: 108, 108, 108;
     --card-rgb: 40, 40, 40;
     --card-border-rgb: 200, 200, 200;
+
+    /* Accent color - Muted Brown (inspired by logo #643007, paled for UI) */
+    --accent-rgb: 139, 111, 87;
+    --accent: #8b6f57;
+    --accent-hover: #6b563f;
+    --accent-light: rgba(139, 111, 87, 0.1);
+    --accent-lighter: rgba(139, 111, 87, 0.05);
   }
 }
 

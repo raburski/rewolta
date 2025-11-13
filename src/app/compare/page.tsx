@@ -5,7 +5,7 @@ import BuildingComparison from '@/app/components/BuildingComparison/BuildingComp
 export default function ComparePage() {
 	return (
 		<Layout
-			title="Oceń budynki"
+			title="AI Generator: Oceń budynki"
 			subtitle="Porównaj i oceń wygenerowane budynki"
 		>
 			<PageContent>

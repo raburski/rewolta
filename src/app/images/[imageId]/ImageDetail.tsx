@@ -9,6 +9,7 @@ import { useImageDetail } from '@/lib/hooks/useImageDetail'
 import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
 import { useSubmitBuilding } from '@/lib/hooks/useSubmitBuilding'
 import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
+import FullscreenImage from '@/app/components/FullscreenImage/FullscreenImage'
 import styles from './ImageDetail.module.css'
 
 interface ImageDetailProps {
@@ -18,6 +19,7 @@ interface ImageDetailProps {
 export default function ImageDetail({ imageId }: ImageDetailProps) {
 	const { data: session } = useSession()
 	const router = useRouter()
+	const [isFullscreenOpen, setIsFullscreenOpen] = useState(false)
 	
 	// Use SWR for data fetching
 	const { imageData, isLoading, hasError, error, mutate } = useImageDetail(imageId)
@@ -128,8 +130,19 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 					src={imageData.imageUrl} 
 					alt="Generated image" 
 					className={styles.image}
+					onClick={() => setIsFullscreenOpen(true)}
+					style={{ cursor: 'pointer' }}
 				/>
 			</div>
+			
+			{imageData.imageUrl && (
+				<FullscreenImage
+					imageUrl={imageData.imageUrl}
+					alt="Generated image"
+					isOpen={isFullscreenOpen}
+					onClose={() => setIsFullscreenOpen(false)}
+				/>
+			)}
 
 			<div className={styles.sidebar}>
 				<div className={styles.infoContainer}>
@@ -162,7 +175,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 							className={styles.submitButton}
 							disabled={isSubmitting}
 						>
-							{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do oceny'}
+							{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do rankingów'}
 						</button>
 					)}
 					{isSubmitted && submission && (

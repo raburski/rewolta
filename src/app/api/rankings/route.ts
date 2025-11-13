@@ -3,17 +3,22 @@ import '@/lib/authUtils'
 import { withPermission } from '@raburski/next-auth-permissions/server'
 import { Permission } from '@/lib/permissions'
 import { APIHandler, compose } from '@raburski/next-api-middleware'
+import { withPagination } from '@raburski/next-pagination/server'
 import { prisma } from '@/lib/prisma'
+import { ensureHttpsUrl } from '@/lib/urlUtils'
+
+const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
+const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
 const handler: APIHandler = async (request, context) => {
 	try {
 		const { searchParams } = new URL(request.url)
 		const type = searchParams.get('type') || 'global'
 		const productId = searchParams.get('productId')
-		const tag = searchParams.get('tag')
 		const timeRange = searchParams.get('timeRange') || 'alltime'
-		const limit = parseInt(searchParams.get('limit') || '50')
-		const offset = parseInt(searchParams.get('offset') || '0')
+		
+		// Get pagination info from context (provided by withPagination middleware)
+		const { page, limit, offset } = context
 
 		// Build where clause
 		const where: any = {
@@ -48,11 +53,14 @@ const handler: APIHandler = async (request, context) => {
 			}
 		}
 
+		// Get total count
+		const totalCount = await prisma.buildingSubmission.count({ where })
+
 		// Get submissions ordered by ELO
-		let submissions = await prisma.buildingSubmission.findMany({
+		const submissions = await prisma.buildingSubmission.findMany({
 			where,
 			orderBy: { eloRating: 'desc' },
-			take: limit + 1,
+			take: limit,
 			skip: offset,
 			include: {
 				product: {
@@ -69,28 +77,34 @@ const handler: APIHandler = async (request, context) => {
 			}
 		})
 
-		// Filter by tag if specified
-		if (tag) {
-			const tagLower = tag.toLowerCase()
-			submissions = submissions.filter(sub => 
-				sub.tags.some(t => t.tag === tagLower)
-			)
-		}
+		// Fetch image URLs from imgen-proxy
+		const imageUrlPromises = submissions.map(async (sub) => {
+			if (!IMGEN_PROXY_API_KEY) return ''
+			
+			try {
+				const response = await fetch(`${IMGEN_PROXY_URL}/api/v1/images/id/${sub.imageId}`, {
+					headers: { 'x-api-key': IMGEN_PROXY_API_KEY }
+				})
+				
+				if (response.ok) {
+					const data = await response.json()
+					return data.data?.imageUrl || ''
+				}
+			} catch (error) {
+				console.error(`Error fetching image URL for ${sub.imageId}:`, error)
+			}
+			
+			return ''
+		})
 
-		const hasMore = submissions.length > limit
-		if (hasMore) {
-			submissions = submissions.slice(0, limit)
-		}
-
-		// Get total count
-		const total = await prisma.buildingSubmission.count({ where })
+		const imageUrls = await Promise.all(imageUrlPromises)
 
 		const rankings = submissions.map((sub, index) => ({
 			rank: offset + index + 1,
 			submission: {
 				id: sub.id,
 				imageId: sub.imageId,
-				imageUrl: '', // Would need to fetch from imgen-proxy
+				imageUrl: imageUrls[index],
 				productId: sub.productId,
 				productName: sub.product.name,
 				userId: sub.userId,
@@ -103,10 +117,12 @@ const handler: APIHandler = async (request, context) => {
 			}
 		}))
 
+		// Return in format expected by @raburski/next-pagination
 		return NextResponse.json({
-			rankings,
-			total,
-			hasMore
+			data: rankings,
+			totalCount,
+			page,
+			limit
 		})
 	} catch (error) {
 		console.error('Error fetching rankings:', error)
@@ -118,6 +134,7 @@ const handler: APIHandler = async (request, context) => {
 }
 
 export const GET = compose(
-	withPermission(Permission.RANKINGS_VIEW)
+	withPermission(Permission.RANKINGS_VIEW),
+	withPagination
 )(handler)
 

@@ -26,14 +26,14 @@
 }
 
 .breadcrumbLink {
-	color: #3b82f6;
+	color: var(--accent);
 	text-decoration: none;
 	font-weight: 500;
 	transition: color 0.2s ease;
 }
 
 .breadcrumbLink:hover {
-	color: #2563eb;
+	color: var(--accent-hover);
 	text-decoration: underline;
 }
 

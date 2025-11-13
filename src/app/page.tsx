@@ -13,6 +13,7 @@ export default function Home() {
       </div>
       <div className={styles.content}>
         <div className={styles.grid}>
+
           <a href="https://www.facebook.com/groups/691257419756556/" className={styles.card} target="_blank">
             <h2>Dołącz do nas <span>-&gt;</span></h2>
             <p>🇵🇱&nbsp;&nbsp;Aktywna grupa na facebooku.</p>
@@ -37,6 +38,11 @@ export default function Home() {
             <h2>Blog <span>-&gt;</span></h2>
             <p>📝&nbsp;&nbsp;Artykuły i analizy</p>
           </a>
+
+          <Link href="/ai" className={styles.card}>
+            <h2>AI Generator <span>-&gt;</span></h2>
+            <p>🤖&nbsp;&nbsp;Generuj i oceniaj budynki z AI</p>
+          </Link>
         </div>
 
         <div className={styles.center}>

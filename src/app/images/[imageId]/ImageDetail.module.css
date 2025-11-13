@@ -25,7 +25,7 @@
 	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.75rem 1rem;
-	background: #4a90e2;
+	background: var(--accent);
 	color: white;
 	border: none;
 	border-radius: var(--border-radius);
@@ -37,7 +37,7 @@
 }
 
 .submitButton:hover:not(:disabled) {
-	background: #357abd;
+	background: var(--accent-hover);
 }
 
 .submitButton:disabled {
@@ -91,7 +91,7 @@
 	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.75rem 1rem;
-	background: #059669;
+	background: var(--accent);
 	color: white;
 	border: none;
 	border-radius: var(--border-radius);
@@ -103,7 +103,7 @@
 }
 
 .downloadButton:hover {
-	background: #047857;
+	background: var(--accent-hover);
 }
 
 .shareIcon,
@@ -224,7 +224,7 @@
 	width: 3rem;
 	height: 3rem;
 	border: 3px solid #e5e7eb;
-	border-top: 3px solid #3b82f6;
+	border-top: 3px solid var(--accent);
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
 	margin-bottom: 1rem;

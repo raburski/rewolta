@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard, FaTriangleExclamation } from 'react-icons/fa6'
+import { FaGoogle, FaFacebook, FaWandMagicSparkles, FaDownload, FaClipboard, FaTriangleExclamation, FaTrophy } from 'react-icons/fa6'
 import { IoAdd } from 'react-icons/io5'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { processImageFile } from '@/lib/imageUtils'
 import { useUserCredits } from '@/lib/hooks/useUserCredits'
 import { downloadImage } from '@/lib/download'
 import { useBuildingProduct } from '@/lib/hooks/useBuildingProduct'
+import { useSubmitBuilding } from '@/lib/hooks/useSubmitBuilding'
 import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
 import styles from './AIGenerator.module.css'
 import LoadingAnimation from './LoadingAnimation'
@@ -48,6 +49,10 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 	
 	// Use SWR for product data (only if not in custom mode)
 	const { product } = useBuildingProduct(isCustomMode ? undefined : productId)
+	
+	// Submit building for rating
+	const { submitBuilding, isSubmitting, error: submitError } = useSubmitBuilding()
+	const [isSubmitted, setIsSubmitted] = useState(false)
 
 	const onCloseLoginModal = () => {
 		setShowLoginModal(false)
@@ -163,6 +168,19 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 		await downloadImage(generatedImageData.imageUrl, `generated-building-${generatedImageData.id}.png`)
 	}
 
+	const handleSubmitForRanking = async () => {
+		if (!generatedImageData || !productId || productId === CUSTOM_PRODUCT_ID) return
+
+		const result = await submitBuilding({
+			imageId: generatedImageData.id,
+			productId: productId
+		})
+
+		if (result) {
+			setIsSubmitted(true)
+		}
+	}
+
 	const handleImageSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0]
 		if (file) {
@@ -201,6 +219,7 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 				setJobId('')
 				setIsGenerating(false)
 				setGenerationFailed(false)
+				setIsSubmitted(false)
 				
 				if (resized) {
 					console.log('Image was automatically resized to reduce file size')
@@ -262,6 +281,7 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 			setJobId('')
 			setIsGenerating(false)
 			setGenerationFailed(false)
+			setIsSubmitted(false)
 			
 			if (resized) {
 				console.log('Custom building image was automatically resized to reduce file size')
@@ -669,6 +689,35 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 							<FaDownload className={styles.downloadIcon} />
 							Pobierz PNG
 						</button>
+					</div>
+				)}
+
+				{/* Submit for ranking card - only show when image is generated and not custom mode */}
+				{generatedImageData && productId && productId !== CUSTOM_PRODUCT_ID && status === 'authenticated' && (
+					<div className={styles.submitCard}>
+						<h3 className={styles.submitTitle}>Zgłoś do rankingu</h3>
+						<p className={styles.submitDescription}>
+							Udostępnij swój budynek innym użytkownikom do oceny i zobacz jak wypada w rankingu!
+						</p>
+						{!isSubmitted ? (
+							<button 
+								className={styles.submitButton} 
+								onClick={handleSubmitForRanking}
+								disabled={isSubmitting}
+							>
+								<FaTrophy className={styles.submitIcon} />
+								{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do oceny'}
+							</button>
+						) : (
+							<div className={styles.submittedMessage}>
+								✓ Zgłoszono do rankingu
+							</div>
+						)}
+						{submitError && (
+							<div className={styles.submitError}>
+								Błąd: {submitError}
+							</div>
+						)}
 					</div>
 				)}
 			</div>

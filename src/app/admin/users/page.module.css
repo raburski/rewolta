@@ -63,8 +63,8 @@
 }
 
 .badgePending {
-	background: rgba(59, 130, 246, 0.15);
-	color: rgb(37, 99, 235);
+	background: var(--accent-light);
+	color: var(--accent);
 }
 
 .emptyState {
@@ -97,7 +97,7 @@
 
 .modalSelect:focus {
 	outline: none;
-	border-color: rgba(var(--foreground-rgb), 0.45);
+	border-color: var(--accent);
 }
 
 .modalError {
@@ -118,7 +118,7 @@
 .modalButton {
 	padding: 0.6rem 1.1rem;
 	border-radius: var(--border-radius);
-	background: rgb(37, 99, 235);
+	background: var(--accent);
 	color: white;
 	font-size: 0.9rem;
 	font-weight: 500;
@@ -133,7 +133,7 @@
 }
 
 .modalButton:not(:disabled):hover {
-	background: rgb(29, 78, 216);
+	background: var(--accent-hover);
 }
 
 .modalSecondaryButton {
