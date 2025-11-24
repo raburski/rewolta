@@ -32,7 +32,6 @@ function buildRankingsUrl(params: RankingsParams): string {
 	
 	if (params.type) searchParams.set('type', params.type)
 	if (params.productId) searchParams.set('productId', params.productId)
-	if (params.tag) searchParams.set('tag', params.tag)
 	if (params.timeRange) searchParams.set('timeRange', params.timeRange)
 
 	const queryString = searchParams.toString()
