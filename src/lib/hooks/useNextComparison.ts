@@ -16,12 +16,20 @@ interface NextComparisonResponse {
 	submissionB: Submission
 }
 
-export function useNextComparison(excludeIds: string[] = []) {
-	const excludeIdsParam = excludeIds.length > 0 ? excludeIds.join(',') : ''
+export function useNextComparison(excludeIds: string[] = [], productId?: string | null) {
+	const params = new URLSearchParams()
+	if (excludeIds.length > 0) {
+		params.set('excludeIds', excludeIds.join(','))
+	}
+	if (productId) {
+		params.set('product', productId)
+	}
+	
+	const queryString = params.toString()
+	const url = queryString ? `/api/comparisons/next?${queryString}` : '/api/comparisons/next'
+	
 	const { data, error, isLoading, mutate } = useSWR<NextComparisonResponse>(
-		excludeIdsParam 
-			? `/api/comparisons/next?excludeIds=${excludeIdsParam}`
-			: '/api/comparisons/next',
+		url,
 		fetcher,
 		{
 			shouldRetryOnError: false,

@@ -643,55 +643,6 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 					</div>
 				)}
 
-				{/* Public page link card - only show when image is generated */}
-				{generatedImageData && (
-					<div className={styles.publicPageCard}>
-						<h3 className={styles.publicPageTitle}>Publiczna strona</h3>
-						<p className={styles.publicPageDescription}>
-							Możesz podzielić się twoją grafiką ze znajomymi!
-						</p>
-						<a 
-							href={`/images/${generatedImageData.id}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							className={styles.publicPageLink}
-						>
-							<FaExternalLinkAlt className={styles.externalLinkIcon} />
-							Otwórz w nowym oknie
-						</a>
-					</div>
-				)}
-
-				{/* Social sharing card - only show when image is generated */}
-				{generatedImageData && (
-					<div className={styles.shareCard}>
-						<h3 className={styles.shareTitle}>Udostępnij swój obraz</h3>
-						<p className={styles.shareDescription}>
-							Pokaż światu swój wygenerowany budynek!
-						</p>
-						<div className={styles.shareButtons}>
-							<button className={styles.shareButton} onClick={() => handleShare('facebook')}>
-								<FaFacebook className={styles.shareIcon} />
-								Facebook
-							</button>
-						</div>
-					</div>
-				)}
-
-				{/* Download card - only show when image is generated */}
-				{generatedImageData && (
-					<div className={styles.downloadCard}>
-						<h3 className={styles.downloadTitle}>Pobierz obraz</h3>
-						<p className={styles.downloadDescription}>
-							Zapisz swój wygenerowany budynek na komputerze!
-						</p>
-						<button className={styles.downloadButton} onClick={handleDownload}>
-							<FaDownload className={styles.downloadIcon} />
-							Pobierz PNG
-						</button>
-					</div>
-				)}
-
 				{/* Submit for ranking card - only show when image is generated and not custom mode */}
 				{generatedImageData && productId && productId !== CUSTOM_PRODUCT_ID && status === 'authenticated' && (
 					<div className={styles.submitCard}>
@@ -710,7 +661,7 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 							</button>
 						) : (
 							<div className={styles.submittedMessage}>
-								✓ Zgłoszono do rankingu
+								✅ Zgłoszono do rankingu
 							</div>
 						)}
 						{submitError && (
@@ -719,6 +670,35 @@ export default function AIGenerator({ productId = 'museum', isCustomMode = false
 							</div>
 						)}
 					</div>
+				)}
+
+				{/* Social sharing button - only show when image is generated */}
+				{generatedImageData && (
+					<button className={styles.shareButton} onClick={() => handleShare('facebook')}>
+						<FaFacebook className={styles.shareIcon} />
+						Facebook
+					</button>
+				)}
+
+				{/* Public page link button - only show when image is generated */}
+				{generatedImageData && (
+					<a 
+						href={`/images/${generatedImageData.id}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={styles.publicPageLink}
+					>
+						<FaExternalLinkAlt className={styles.externalLinkIcon} />
+						Otwórz w nowym oknie
+					</a>
+				)}
+
+				{/* Download button - only show when image is generated */}
+				{generatedImageData && (
+					<button className={styles.downloadButton} onClick={handleDownload}>
+						<FaDownload className={styles.downloadIcon} />
+						Pobierz PNG
+					</button>
 				)}
 			</div>
 

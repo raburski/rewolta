@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { FaFacebook, FaArrowLeft, FaDownload } from 'react-icons/fa6'
+import { FaFacebook, FaArrowLeft, FaDownload, FaTrophy } from 'react-icons/fa6'
 import { useRouter } from 'next/navigation'
 import { downloadImage } from '@/lib/download'
 import { useImageDetail } from '@/lib/hooks/useImageDetail'
@@ -152,7 +152,7 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 							<strong>Modyfikowany budynek:</strong>
 							<div className={styles.originalImageContainer}>
 								<img 
-									src={product?.imageUrl || '/assets/museum-small.png'} 
+									src={product?.imageUrl} 
 									alt={`${product?.name || 'Original'} building`} 
 									className={styles.originalImage}
 									onClick={handleOriginalImageClick}
@@ -170,18 +170,24 @@ export default function ImageDetail({ imageId }: ImageDetailProps) {
 				<div className={styles.actionsContainer}>
 					{/* Only show submit button if not using custom product */}
 					{session && !isSubmitted && imageData.productId !== CUSTOM_PRODUCT_ID && (
-						<button
-							onClick={handleSubmitForRating}
-							className={styles.submitButton}
-							disabled={isSubmitting}
-						>
-							{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do rankingów'}
-						</button>
+						<>
+							<button
+								onClick={handleSubmitForRating}
+								className={styles.submitButton}
+								disabled={isSubmitting}
+							>
+								<FaTrophy className={styles.submitIcon} />
+								{isSubmitting ? 'Wysyłanie...' : 'Zgłoś do rankingów'}
+							</button>
+							<p className={styles.submitDescription}>
+								Udostępnij swój budynek innym użytkownikom do oceny i zobacz jak wypada w rankingu. Twoje zgłoszenie będzie widoczne dla innych.
+							</p>
+						</>
 					)}
 					{isSubmitted && submission && (
 						<div className={styles.submittedMessage}>
 							{submission.status === 'PUBLISHED' && (
-								<>✓ Zgłoszono do oceny (ELO: {submission.eloRating})</>
+								<>✅ Zgłoszono do rankingów (ELO: {submission.eloRating})</>
 							)}
 							{submission.status === 'PENDING' && (
 								<>⏳ Oczekuje na moderację</>

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { useRankings } from '@/lib/hooks/useRankings'
-import { useBuildingProducts } from '@/lib/hooks/useBuildingProducts'
+import RankingTypeFilter from '@/app/components/RankingTypeFilter/RankingTypeFilter'
 import FullscreenImage from '@/app/components/FullscreenImage/FullscreenImage'
 import styles from './RankingsContent.module.css'
 
@@ -28,9 +28,6 @@ export default function RankingsContent() {
 	const timeRange = (['daily', 'weekly', 'monthly', 'alltime'].includes(timeRangeParam) 
 		? timeRangeParam 
 		: 'alltime') as 'daily' | 'weekly' | 'monthly' | 'alltime'
-
-	const { products } = useBuildingProducts()
-	const activeProducts = products.filter(p => p.status === 'ACTIVE')
 	
 	const { rankings, total, hasMore, isLoading, isLoadingMore, hasError, error, loadMore, resetPagination } = useRankings({
 		type: selectedProductId ? 'product' : 'global',
@@ -58,12 +55,7 @@ export default function RankingsContent() {
 		router.push(newUrl)
 	}
 
-	const handleGlobalClick = () => {
-		updateUrl(null, timeRange)
-		resetPagination()
-	}
-
-	const handleProductClick = (productId: string) => {
+	const handleProductChange = (productId: string | null) => {
 		updateUrl(productId, timeRange)
 		resetPagination()
 	}
@@ -83,32 +75,10 @@ export default function RankingsContent() {
 		return (
 			<div className={styles.container}>
 				<div className={styles.filters}>
-					<div className={styles.filterGroup}>
-						<label>Typ rankingu:</label>
-						<div className={styles.typeSelector}>
-							<button
-								className={`${styles.globalButton} ${!selectedProductId ? styles.active : ''}`}
-								onClick={handleGlobalClick}
-								title="Globalny"
-							>
-								Globalny
-							</button>
-							{activeProducts.map(product => (
-								<button
-									key={product.id}
-									className={`${styles.productCard} ${selectedProductId === product.id ? styles.active : ''}`}
-									onClick={() => handleProductClick(product.id)}
-									title={product.name}
-								>
-									<img
-										src={product.imageUrl}
-										alt={product.name}
-										className={styles.productThumbnail}
-									/>
-								</button>
-							))}
-						</div>
-					</div>
+					<RankingTypeFilter
+						selectedProductId={selectedProductId}
+						onProductChange={handleProductChange}
+					/>
 					<div className={`${styles.filterGroup} ${styles.timeRangeGroup}`}>
 						<label>Okres:</label>
 						<select
@@ -186,33 +156,10 @@ export default function RankingsContent() {
 	return (
 		<div className={styles.container}>
 			<div className={styles.filters}>
-				<div className={styles.filterGroup}>
-					<label>Typ rankingu:</label>
-					<div className={styles.typeSelector}>
-						<button
-							className={`${styles.globalButton} ${!selectedProductId ? styles.active : ''}`}
-							onClick={handleGlobalClick}
-							title="Globalny"
-						>
-							Globalny
-						</button>
-						{activeProducts.map(product => (
-							<button
-								key={product.id}
-								className={`${styles.productCard} ${selectedProductId === product.id ? styles.active : ''}`}
-								onClick={() => handleProductClick(product.id)}
-								title={product.name}
-							>
-								<img
-									src={product.imageUrl}
-									alt={product.name}
-									className={styles.productThumbnail}
-								/>
-							</button>
-						))}
-					</div>
-				</div>
-
+				<RankingTypeFilter
+					selectedProductId={selectedProductId}
+					onProductChange={handleProductChange}
+				/>
 				<div className={`${styles.filterGroup} ${styles.timeRangeGroup}`}>
 					<label>Okres:</label>
 					<select

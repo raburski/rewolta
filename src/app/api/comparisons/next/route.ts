@@ -10,14 +10,15 @@ import { ensureHttpsUrl } from '@/lib/urlUtils'
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
 
-const handler: APIHandler = async (request, context) => {
-	try {
-		const { session } = context
-		const { searchParams } = new URL(request.url)
-		const excludeIdsParam = searchParams.get('excludeIds')
-		const excludeIds = excludeIdsParam ? excludeIdsParam.split(',') : []
+	const handler: APIHandler = async (request, context) => {
+		try {
+			const { session } = context
+			const { searchParams } = new URL(request.url)
+			const excludeIdsParam = searchParams.get('excludeIds')
+			const excludeIds = excludeIdsParam ? excludeIdsParam.split(',') : []
+			const productId = searchParams.get('product')
 
-		const pair = await selectNextComparisonPair(session.user!.id, excludeIds)
+			const pair = await selectNextComparisonPair(session.user!.id, excludeIds, productId || undefined)
 
 		if (!pair) {
 			return NextResponse.json(

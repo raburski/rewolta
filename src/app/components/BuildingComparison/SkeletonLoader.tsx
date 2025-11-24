@@ -28,12 +28,12 @@ export default function SkeletonLoader() {
 				<div className={styles.imageContainer}>
 					<div className={styles.skeletonImage}></div>
 				</div>
-				<div className={styles.info}>
+				{/* <div className={styles.info}>
 					<div className={styles.skeletonProductName}></div>
 					<div className={styles.skeletonCreator}></div>
-				</div>
+				</div> */}
 				<div className={styles.tagsSection}>
-					<div className={styles.tagsLabel}>Tagi (opcjonalnie):</div>
+					{/* <div className={styles.tagsLabel}>Tagi (opcjonalnie):</div> */}
 					<div className={styles.tagsContainer}>
 						{AVAILABLE_TAGS.map(tag => (
 							<button
@@ -60,12 +60,12 @@ export default function SkeletonLoader() {
 				<div className={styles.imageContainer}>
 					<div className={styles.skeletonImage}></div>
 				</div>
-				<div className={styles.info}>
+				{/* <div className={styles.info}>
 					<div className={styles.skeletonProductName}></div>
 					<div className={styles.skeletonCreator}></div>
-				</div>
+				</div> */}
 				<div className={styles.tagsSection}>
-					<div className={styles.tagsLabel}>Tagi (opcjonalnie):</div>
+					{/* <div className={styles.tagsLabel}>Tagi (opcjonalnie):</div> */}
 					<div className={styles.tagsContainer}>
 						{AVAILABLE_TAGS.map(tag => (
 							<button

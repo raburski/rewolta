@@ -8,7 +8,8 @@ interface ComparisonPair {
 
 export async function selectNextComparisonPair(
 	userId: string,
-	excludeIds: string[] = []
+	excludeIds: string[] = [],
+	productId?: string | null
 ): Promise<ComparisonPair | null> {
 	// 1. Get all published submissions user hasn't compared
 	const comparedPairs = await prisma.comparison.findMany({
@@ -25,11 +26,18 @@ export async function selectNextComparisonPair(
 	)
 	
 	// 2. Get candidate submissions (allow comparing own submissions)
+	const whereClause: any = {
+		status: 'PUBLISHED',
+		id: { notIn: excludeIds }
+	}
+	
+	// Filter by product if specified
+	if (productId) {
+		whereClause.productId = productId
+	}
+	
 	const candidates = await prisma.buildingSubmission.findMany({
-		where: {
-			status: 'PUBLISHED',
-			id: { notIn: excludeIds }
-		},
+		where: whereClause,
 		orderBy: { totalComparisons: 'asc' } // Prioritize low comparison count
 	})
 	

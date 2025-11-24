@@ -45,6 +45,19 @@
 	cursor: not-allowed;
 }
 
+.submitIcon {
+	width: 14px;
+	height: 14px;
+}
+
+.submitDescription {
+	margin: 0.25rem 0 0.5rem 0;
+	font-size: 0.8rem;
+	line-height: 1.5;
+	color: #666;
+	text-align: center;
+}
+
 .submittedMessage {
 	padding: 0.75rem 1rem;
 	background: #d1fae5;
@@ -91,19 +104,20 @@
 	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.75rem 1rem;
-	background: var(--accent);
-	color: white;
-	border: none;
+	background: transparent;
+	color: rgb(var(--foreground-rgb));
+	border: 1px solid rgba(var(--card-border-rgb), 0.3);
 	border-radius: var(--border-radius);
 	font-size: 0.875rem;
 	font-weight: 500;
 	cursor: pointer;
-	transition: background 0.2s ease;
+	transition: background 0.2s ease, border-color 0.2s ease;
 	width: 100%;
 }
 
 .downloadButton:hover {
-	background: var(--accent-hover);
+	background: rgba(var(--card-border-rgb), 0.1);
+	border-color: rgba(var(--card-border-rgb), 0.4);
 }
 
 .shareIcon,

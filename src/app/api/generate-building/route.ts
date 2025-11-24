@@ -16,7 +16,7 @@ const CALL_PROMPT = `You are an expert in architectural visualization.
 Your task is to apply the visual style of Image B (facade material, textures, window style, surface detailing) to the structure of Image A, while strictly preserving all aspects of Image A's physical form.
 
 Instructions:
-	•	Use Image A (the museum render) as the base.
+	•	Use Image A as the base.
 	•	Do not change its structure: keep the number of storeys, all window placements, proportions, and especially the asymmetrical massing — with receding upper floors on one side and a flat facade on the other.
 	•	Ignore any temporary exhibits, sculptural fragments, or free-standing objects visible in front of or next to the building — they are not part of the architectural structure and should be excluded from the style transfer.
 	•	Apply only visual changes from Image B:

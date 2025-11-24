@@ -1,0 +1,85 @@
+.filterGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	min-width: 200px;
+}
+
+.filterGroup label {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: rgb(var(--foreground-rgb));
+}
+
+.typeSelector {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.globalButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border: 2px solid #ddd;
+	border-radius: 8px;
+	background: white;
+	color: #333;
+	cursor: pointer;
+	font-size: 0.75rem;
+	font-weight: 500;
+	transition: all 0.2s;
+	padding: 0;
+}
+
+.globalButton:hover {
+	border-color: var(--accent);
+	background: var(--accent-lighter);
+}
+
+.globalButton.active {
+	border-color: var(--accent);
+	background: var(--accent);
+	color: white;
+}
+
+.productCard {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	padding: 0.1rem;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: white;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.productCard:hover {
+	border-color: var(--accent);
+	background: var(--accent-lighter);
+	transform: translateY(-2px);
+	box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.2);
+}
+
+.productCard.active {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+.productThumbnail {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.productCard.active .productThumbnail {
+	border: 2px solid white;
+}
+

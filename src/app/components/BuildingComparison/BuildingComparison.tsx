@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useNextComparison } from '@/lib/hooks/useNextComparison'
 import { useSubmitComparison } from '@/lib/hooks/useSubmitComparison'
+import RankingTypeFilter from '@/app/components/RankingTypeFilter/RankingTypeFilter'
 import SkeletonLoader from './SkeletonLoader'
 import styles from './BuildingComparison.module.css'
 
@@ -38,12 +39,34 @@ interface Submission {
 
 export default function BuildingComparison() {
 	const router = useRouter()
+	const searchParams = useSearchParams()
+	const pathname = usePathname()
 	const [tagsForA, setTagsForA] = useState<string[]>([])
 	const [tagsForB, setTagsForB] = useState<string[]>([])
 	const [comparisonCount, setComparisonCount] = useState(0)
 	
-	const { comparison, isLoading, hasError, error, isNoMoreComparisons, refresh } = useNextComparison()
+	const selectedProductId = searchParams.get('product')
+	
+	const { comparison, isLoading, hasError, error, isNoMoreComparisons, refresh } = useNextComparison([], selectedProductId)
 	const { submitComparison, isSubmitting, error: submitError } = useSubmitComparison()
+	
+	const updateUrl = (productId: string | null) => {
+		const params = new URLSearchParams(searchParams.toString())
+		
+		if (productId) {
+			params.set('product', productId)
+		} else {
+			params.delete('product')
+		}
+		
+		const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname
+		router.push(newUrl)
+	}
+	
+	const handleProductChange = (productId: string | null) => {
+		updateUrl(productId)
+		refresh()
+	}
 
 	const toggleTag = (side: 'A' | 'B', tag: string) => {
 		if (side === 'A') {
@@ -110,17 +133,20 @@ export default function BuildingComparison() {
 		return () => window.removeEventListener('keydown', handleKeyPress)
 	}, [comparison, isSubmitting, handleChoose])
 
-	if (isLoading) {
-		return (
-			<div className={styles.container}>
-				<SkeletonLoader />
+	return (
+		<div className={styles.container}>
+			<div className={styles.filters}>
+				<RankingTypeFilter
+					selectedProductId={selectedProductId}
+					onProductChange={handleProductChange}
+				/>
 			</div>
-		)
-	}
+			
+			{isLoading && (
+				<SkeletonLoader />
+			)}
 
-	if (hasError) {
-		return (
-			<div className={styles.container}>
+			{hasError && !isLoading && (
 				<div className={styles.error}>
 					<p>{error || 'Błąd podczas ładowania'}</p>
 					{isNoMoreComparisons && (
@@ -128,39 +154,28 @@ export default function BuildingComparison() {
 							Sprawdź ponownie później, gdy pojawią się nowe zgłoszenia!
 						</p>
 					)}
-					<button onClick={() => router.push('/')} className={styles.backButton}>
+					<button onClick={() => router.push('/ai')} className={styles.backButton}>
 						Powrót
 					</button>
 				</div>
-			</div>
-		)
-	}
+			)}
 
-	if (!comparison) {
-		return (
-			<div className={styles.container}>
+			{!comparison && !isLoading && !hasError && (
 				<div className={styles.empty}>
 					<p>Brak dostępnych porównań</p>
-					<button onClick={() => router.push('/')} className={styles.backButton}>
+					<button onClick={() => router.push('/ai')} className={styles.backButton}>
 						Powrót
 					</button>
 				</div>
-			</div>
-		)
-	}
+			)}
 
-	if (isSubmitting) {
-		return (
-			<div className={styles.container}>
+			{isSubmitting && !isLoading && (
 				<SkeletonLoader />
-			</div>
-		)
-	}
+			)}
 
-	return (
-		<>
-			<div className={styles.container}>
-				<div className={styles.comparison}>
+			{comparison && !isLoading && !hasError && !isSubmitting && (
+				<>
+					<div className={styles.comparison}>
 					<div className={styles.building}>
 						<div className={styles.imageContainer}>
 							{comparison.submissionA.imageUrl ? (
@@ -174,12 +189,12 @@ export default function BuildingComparison() {
 								<div className={styles.imagePlaceholder}>Ładowanie obrazu...</div>
 							)}
 						</div>
-						<div className={styles.info}>
-							<h3 className={styles.productName}>{comparison.submissionA.productName}</h3>
-							<p className={styles.creator}>by {comparison.submissionA.userName || 'Anonymous'}</p>
-						</div>
+						{/* <div className={styles.info}> */}
+							{/* <h3 className={styles.productName}>{comparison.submissionA.productName}</h3> */}
+							{/* <p className={styles.creator}>by {comparison.submissionA.userName || 'Anonymous'}</p> */}
+						{/* </div> */}
 						<div className={styles.tagsSection}>
-							<div className={styles.tagsLabel}>Tagi (opcjonalnie):</div>
+							{/* <div className={styles.tagsLabel}>Tagi (opcjonalnie):</div> */}
 							<div className={styles.tagsContainer}>
 								{AVAILABLE_TAGS.map(tag => (
 									<button
@@ -217,12 +232,12 @@ export default function BuildingComparison() {
 								<div className={styles.imagePlaceholder}>Ładowanie obrazu...</div>
 							)}
 						</div>
-						<div className={styles.info}>
-							<h3 className={styles.productName}>{comparison.submissionB.productName}</h3>
-							<p className={styles.creator}>by {comparison.submissionB.userName || 'Anonymous'}</p>
-						</div>
+						{/* <div className={styles.info}> */}
+							{/* <h3 className={styles.productName}>{comparison.submissionB.productName}</h3> */}
+							{/* <p className={styles.creator}>by {comparison.submissionB.userName || 'Anonymous'}</p> */}
+						{/* </div> */}
 						<div className={styles.tagsSection}>
-							<div className={styles.tagsLabel}>Tagi (opcjonalnie):</div>
+							{/* <div className={styles.tagsLabel}>Tagi (opcjonalnie):</div> */}
 							<div className={styles.tagsContainer}>
 								{AVAILABLE_TAGS.map(tag => (
 									<button
@@ -246,19 +261,20 @@ export default function BuildingComparison() {
 							Wybierz B
 						</button>
 					</div>
-				</div>
-
-				{submitError && (
-					<div className={styles.errorMessage}>
-						Błąd: {submitError}
 					</div>
-				)}
 
-				<div className={styles.hint}>
-					Użyj klawiszy <kbd>A</kbd> i <kbd>D</kbd> aby wybrać
-				</div>
-			</div>
-		</>
+					{submitError && (
+						<div className={styles.errorMessage}>
+							Błąd: {submitError}
+						</div>
+					)}
+
+					<div className={styles.hint}>
+						Użyj klawiszy <kbd>A</kbd> i <kbd>D</kbd> aby wybrać
+					</div>
+				</>
+			)}
+		</div>
 	)
 }
 

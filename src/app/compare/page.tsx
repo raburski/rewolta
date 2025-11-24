@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Layout from '@/app/components/Layout/Layout'
 import PageContent from '@/app/components/PageContent/PageContent'
 import BuildingComparison from '@/app/components/BuildingComparison/BuildingComparison'
@@ -9,7 +10,9 @@ export default function ComparePage() {
 			subtitle="Porównaj i oceń wygenerowane budynki"
 		>
 			<PageContent>
-				<BuildingComparison />
+				<Suspense fallback={<div>Ładowanie...</div>}>
+					<BuildingComparison />
+				</Suspense>
 			</PageContent>
 		</Layout>
 	)
