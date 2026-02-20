@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { APIHandler } from '@raburski/next-api-middleware'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 export const GET: APIHandler = async (request, context) => {
 	try {
 		const products = await prisma.buildingProduct.findMany({
@@ -22,4 +24,3 @@ export const GET: APIHandler = async (request, context) => {
 		)
 	}
 }
-
