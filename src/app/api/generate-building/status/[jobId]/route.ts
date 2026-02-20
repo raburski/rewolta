@@ -7,10 +7,10 @@ import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
+const isProduction = process.env.NODE_ENV === 'production'
 
 const handler: APIHandler = async (request, context) => {
 	try {
-		const { session } = context
 		const params = await context.params
 		const { jobId } = params as { jobId: string }
 
@@ -29,7 +29,9 @@ const handler: APIHandler = async (request, context) => {
 			)
 		}
 
-		console.log(`Checking status for job: ${jobId}`)
+		if (!isProduction) {
+			console.log(`Checking status for job: ${jobId}`)
+		}
 
 		const response = await fetch(`${IMGEN_PROXY_URL}/api/v1/images/job/${jobId}`, {
 			method: 'GET',
@@ -41,13 +43,17 @@ const handler: APIHandler = async (request, context) => {
 		})
 
 		if (!response.ok) {
-			const errorData = await response.json()
-			console.error('imgen-proxy status check error:', errorData)
+			console.error('imgen-proxy status check error:', response.status)
 			throw new Error(`imgen-proxy error: ${response.status}`)
 		}
 
 		const data = await response.json()
-		console.log('Job status received:', data)
+		if (!isProduction) {
+			console.log('Job status received:', {
+				jobId,
+				status: data?.data?.status
+			})
+		}
 
 		if (!data.success) {
 			throw new Error('Invalid response from imgen-proxy')

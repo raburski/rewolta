@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 		// Fetch image data for metadata
 		const baseUrl = process.env.NEXTAUTH_URL || 'https://rewolta.org'
 		const response = await fetch(`${baseUrl}/api/images/${imageId}`, {
-			next: { revalidate: 3600 * 24 * 30 } // Cache for month
+			cache: 'no-store'
 		})
 
 		if (response.ok) {

@@ -7,6 +7,7 @@ import { ensureHttpsUrl } from '@/lib/urlUtils'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
+const isProduction = process.env.NODE_ENV === 'production'
 
 export const GET: APIHandler = async (request, context) => {
 	try {
@@ -28,7 +29,9 @@ export const GET: APIHandler = async (request, context) => {
 			)
 		}
 
-		console.log(`Fetching image with ID: ${imageId}`)
+		if (!isProduction) {
+			console.log(`Fetching image with ID: ${imageId}`)
+		}
 
 		// Fetch image from imgen-proxy
 		const response = await fetch(`${IMGEN_PROXY_URL}/api/v1/images/id/${imageId}`, {
@@ -41,13 +44,17 @@ export const GET: APIHandler = async (request, context) => {
 		})
 
 		if (!response.ok) {
-			const errorData = await response.json()
-			console.error('imgen-proxy image fetch error:', errorData)
+			console.error('imgen-proxy image fetch error:', response.status)
 			throw new Error(`imgen-proxy error: ${response.status}`)
 		}
 
 		const data = await response.json()
-		console.log('Image fetched successfully:', data)
+		if (!isProduction) {
+			console.log('Image fetched successfully:', {
+				imageId,
+				hasData: Boolean(data?.data)
+			})
+		}
 
 		if (!data.success) {
 			throw new Error('Invalid response from imgen-proxy')

@@ -10,6 +10,7 @@ import { CUSTOM_PRODUCT_ID } from '@/lib/constants'
 
 const IMGEN_PROXY_URL = ensureHttpsUrl(process.env.IMGEN_PROXY_URL || 'https://your-imgen-proxy-url.com')
 const IMGEN_PROXY_API_KEY = process.env.IMGEN_PROXY_API_KEY
+const isProduction = process.env.NODE_ENV === 'production'
 
 const CALL_PROMPT = `You are an expert in architectural visualization.
 
@@ -127,7 +128,9 @@ Keep the lighting, camera perspective, and urban context from Image A. The resul
 			aspectRatio: '3:2' // Set aspect ratio to 3:2 (landscape)
 		}
 
-		console.log('Starting image generation job with imgen-proxy...')
+		if (!isProduction) {
+			console.log('Starting image generation job with imgen-proxy...')
+		}
 		
 		const response = await fetch(`${IMGEN_PROXY_URL}/api/v1/images/generate`, {
 			method: 'POST',
@@ -139,13 +142,17 @@ Keep the lighting, camera perspective, and urban context from Image A. The resul
 		})
 
 		if (!response.ok) {
-			const errorData = await response.json()
-			console.error('imgen-proxy error:', errorData)
+			console.error('imgen-proxy error while starting job:', response.status)
 			throw new Error(`imgen-proxy error: ${response.status}`)
 		}
 
 		const data = await response.json()
-		console.log('Job started successfully:', data)
+		if (!isProduction) {
+			console.log('Job started successfully:', {
+				jobId: data?.data?.jobId,
+				status: data?.data?.status
+			})
+		}
 
 		if (!data.success || !data.data?.jobId) {
 			throw new Error('Invalid response from imgen-proxy')
